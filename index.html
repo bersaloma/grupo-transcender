@@ -1162,9 +1162,9 @@ const ROTEIROS = {
     passos:[
       abertura(`Esta é a reunião administrativa do Grupo Transcender, espaço da nossa consciência de grupo.`),
       B.oracao(),
+      {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">Deus, conceda-nos a sabedoria para servirmos de acordo com os Seus divinos preceitos. Inspire em nós um sentido do Seu propósito. Faça-nos servidores da Sua vontade e conceda-nos um laço de abnegação, para que esta seja verdadeiramente a Sua obra, não a nossa, para que nenhum adicto, em nenhum lugar, precise morrer dos horrores da adicção.</div>`},
       B.quemSomos(),
       B.acolhimento(),
-      {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">Deus, conceda-nos a sabedoria para servirmos de acordo com os Seus divinos preceitos. Inspire em nós um sentido do Seu propósito. Faça-nos servidores da Sua vontade e conceda-nos um laço de abnegação, para que esta seja verdadeiramente a Sua obra, não a nossa, para que nenhum adicto, em nenhum lugar, precise morrer dos horrores da adicção.</div>`},
       {k:"Leitura", t:"As 12 Tradições de NA", html:`<ol class="lista">${TRADICOES.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html:`<ol class="lista">${CONCEITOS.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {t:"Consciência de grupo", azul:true, html: din([["Relatórios<br>de serviço",""],["7ª<br>Tradição",""],["Encargos<br>e eletivas",""],["Decisões<br>do grupo",""]],"tri quad")},
