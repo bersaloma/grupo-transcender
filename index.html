@@ -722,6 +722,16 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .sheet.tela .presets button{flex:none!important}
 .tela-linha{flex-wrap:nowrap;white-space:nowrap}
 .sheet.tela .presets,.tela-linha .sep{display:none!important}
+/* timer no canto superior direito, botões maiores */
+.tela-pill{top:max(18px,env(safe-area-inset-top))!important;right:22px!important;left:auto!important;transform:none!important;text-align:right!important}
+.tela-linha{justify-content:flex-end!important;gap:6px!important;opacity:.85!important}
+.tela-linha .ic{display:grid!important;place-items:center;width:44px!important;height:44px!important;padding:0!important;border-radius:50%!important;opacity:.85!important;background:rgba(255,255,255,.08)!important}
+.tela-linha .ic:hover{opacity:1!important;background:rgba(255,255,255,.18)!important}
+.tela-linha .ic svg{width:22px;height:22px}
+@media (max-width:700px) and (orientation:portrait){
+  .tela-pill{right:16px!important}
+  .sheet.tela .visor{font-size:11vw!important}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -905,9 +915,9 @@ Senha: 000000
     <div class="tela-linha">
       <div class="presets" id="presets"></div>
       <span class="sep"></span>
-      <button class="ic" id="t-go" aria-label="Iniciar">Iniciar</button>
-      <button class="ic" id="t-zera" aria-label="Zerar">↺</button>
-      <button class="ic" id="t-fechar" aria-label="Fechar">✕</button>
+      <button class="ic" id="t-go" aria-label="Iniciar"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M7 5v14l12-7z"/></svg></button>
+      <button class="ic" id="t-zera" aria-label="Zerar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+      <button class="ic" id="t-fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="status" id="status" hidden></div>
   </div>
@@ -1299,7 +1309,8 @@ function render(){
   $("#timer-fab-txt").textContent = tick ? fmt(resta) : "Cronômetro";
   fab.classList.toggle("rodando",!!tick);
   fab.classList.toggle("alerta",!!tick && resta<=120);
-  $("#t-go").textContent = tick ? "❚❚" : "▶";
+  $("#t-go").innerHTML = tick ? '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>' : '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M7 5v14l12-7z"/></svg>';
+  $("#t-go").setAttribute("aria-label", tick ? "Pausar" : "Iniciar");
   $("#sheet").classList.toggle("rodando",!!tick);
 }
 function iniciar(){
