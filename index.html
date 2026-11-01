@@ -1034,9 +1034,11 @@ const B = {
     <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>`}),
   t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
   conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
-    <div class="citacao" style="color:var(--rosa-forte);font-weight:700">💙 Momento da troca de fichas 💙</div>
-    <div class="fala" style="text-align:center"><p>Alguém vai trocar de ficha hoje?</p></div>
-    <div class="acoes-passo" style="justify-content:center"><button class="pill rosa" data-ir="fichas">Abrir fichas de tempo limpo</button></div>`}),
+    <div class="fala">
+      <p>Agora é o momento da troca de fichas. Alguém vai trocar de ficha hoje? Conte para a gente de quanto tempo é a conquista e quem vai entregar.</p>
+      <p>Parabéns pela sua conquista de tempo limpo! Cada dia limpo é uma vitória que celebramos em grupo.</p>
+    </div>
+    <div class="acoes-passo"><button class="pill rosa" data-ir="fichas">Abrir fichas de tempo limpo</button></div>`}),
   evite: () => ({k:"Para lembrar", t:"Evite e Procure", html:`
     <div class="ep">
       <div class="ep-card ep-evite"><h4>Evite</h4><ul>${EVITE.map(x=>`<li>${x}</li>`).join("")}</ul></div>
