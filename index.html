@@ -690,6 +690,15 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .timer-fab svg{width:22px!important;height:22px!important}
 .timer-fab.rodando{width:auto!important;padding:0 14px!important;border-radius:999px!important;opacity:1}
 .timer-fab.rodando #timer-fab-txt{display:inline;font-size:14px}
+/* modal da ficha branca */
+.ficha-modal{position:fixed;inset:0;z-index:65;background:rgba(23,74,107,.45);display:grid;place-items:center;padding:20px}
+.ficha-modal[hidden]{display:none}
+.fm-card{position:relative;background:#fff;border-radius:26px;padding:26px 24px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 70px -20px rgba(23,74,107,.5)}
+.fm-card img{height:min(42vh,300px);width:auto;max-width:100%;margin:0 auto 12px;display:block;mix-blend-mode:multiply}
+.fm-card h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:30px;color:var(--titulo)}
+.fm-sub{font-weight:700;color:var(--rosa-forte);margin-top:2px}
+.fm-card p:last-child{margin-top:10px;font-size:17px;line-height:1.5;color:var(--indigo)}
+.fm-x{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;background:var(--rosa-claro);color:var(--indigo);font-size:17px;display:grid;place-items:center}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -887,6 +896,15 @@ Senha: 000000
     <button class="pill" id="ov-ok">Ok, continuar</button>
   </div>
 </div>
+<div class="ficha-modal" id="ficha-modal" role="dialog" aria-label="Ficha branca" hidden>
+  <div class="fm-card">
+    <button class="fm-x" data-fm-fechar aria-label="Fechar">✕</button>
+    <img src="assets/ficha-branca.jpg" alt="Ficha branca de boas-vindas">
+    <h3>Ficha branca</h3>
+    <p class="fm-sub">Boas-vindas · Ingresso</p>
+    <p>Esta ficha é para quem está chegando. Ela representa o desejo de parar de usar. Que bom ter você aqui em Narcóticos Anônimos!</p>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -992,7 +1010,7 @@ const B = {
       <p>Se for o seu caso, abra o áudio ou escreva no chat. Este é o momento especial de acolhimento que mencionamos no início, e será uma alegria receber você.</p>
     </div>
     <div class="nota azul">Se houver ingressos, leremos o IP nº 22, Bem-vindo a Narcóticos Anônimos. O link estará no chat.</div>
-    <div class="acoes-passo"><a class="pill claro js-link" data-link="IP22_URL" href="#" target="_blank" rel="noopener">📄 Literatura de NA (IP nº 22)</a></div>`}),
+    <div class="acoes-passo"><a class="pill claro js-link" data-link="IP22_URL" href="#" target="_blank" rel="noopener">📄 Literatura de NA (IP nº 22)</a><button class="pill claro" data-ficha-branca>🤍 Ficha branca</button></div>`}),
   t7: () => ({k:"Tradição", t:"7ª Tradição", azul:true, html:`
     <div class="citacao">${T7}</div>
     <div class="pix">
@@ -1510,6 +1528,13 @@ $("#lista-servidores").innerHTML = `
   esconder(); atualizar();
 })();
 window.__topo && window.__topo();
+
+/* ---------- ficha branca ---------- */
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-ficha-branca]")){ $("#ficha-modal").hidden=false; return; }
+  if(e.target.closest("[data-fm-fechar]") || e.target.id==="ficha-modal"){ $("#ficha-modal").hidden=true; }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") $("#ficha-modal").hidden=true; });
 
 /* ---------- start ---------- */
 aplicarAta();
