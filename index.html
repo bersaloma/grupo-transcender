@@ -707,6 +707,20 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .tela-linha .sep{background:#fff!important;opacity:.4}
 .visor-in{border-bottom-color:rgba(255,255,255,.6)!important}
 .sheet.tela.rodando .tela-pill{background:rgba(0,0,0,.35)!important}
+/* cronômetro: tela preta só com o timer pequeno */
+.sheet.tela{background:#000!important;width:100vw!important;height:100vh!important;height:100dvh!important;aspect-ratio:auto!important;border-radius:0!important;box-shadow:none!important}
+.tela-pill{top:50%!important;left:50%!important;right:auto!important;transform:translate(-50%,-50%);background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:0!important}
+.sheet.tela .visor{font-size:clamp(34px,5vw,64px)!important}
+.tela-linha{margin-top:8px!important;opacity:.7}
+.tela-linha:hover{opacity:1}
+@media (max-width:700px) and (orientation:portrait){
+  .sheet.tela.on{transform:translate(-50%,-50%) scale(1)!important}
+  .sheet.tela .visor{font-size:12vw!important}
+  .sheet.tela .presets button,.tela-linha .ic{font-size:16px!important;padding:6px 8px!important}
+}
+.sheet.tela .presets{flex-wrap:nowrap!important;flex-direction:row!important}
+.sheet.tela .presets button{flex:none!important}
+.tela-linha{flex-wrap:nowrap;white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -1305,8 +1319,7 @@ function mostrar(t,s){
   try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
 }
 $("#ov-ok").onclick=()=>$("#overlay").classList.remove("on");
-const FUNDOS=["timer-bg2.jpg","timer-bg3.jpg"]; let fundoI=-1;
-function abrirSheet(){ fundoI=(fundoI+1)%FUNDOS.length; $("#sheet").style.backgroundImage=`url(assets/${FUNDOS[fundoI]})`; $("#sheet").classList.add("on"); $("#sheet-bg").classList.add("on"); }
+function abrirSheet(){ $("#sheet").classList.add("on"); $("#sheet-bg").classList.add("on"); }
 /* editar tempo clicando no número */
 $("#visor").title="Toque para digitar outro tempo";
 $("#visor").addEventListener("click",()=>{
