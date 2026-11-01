@@ -674,6 +674,10 @@ a{color:inherit}
 /* botões da home brancos como os cards */
 .home-left .atalhos .pill{background:rgba(255,255,255,.94)!important;border:2px solid #fff!important;color:var(--indigo)!important;box-shadow:var(--sombra)!important}
 .home-left .atalhos .pill:hover{background:#fff!important}
+/* barra superior que se esconde ao rolar */
+.topo{transition:transform .28s ease}
+.topo.escondida{transform:translateY(-110%)}
+.topo-gatilho{position:fixed;top:0;left:0;right:0;height:18px;z-index:19}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -1474,6 +1478,24 @@ $("#lista-servidores").innerHTML = `
         <div class="dia-l"><span>Apoio</span><div class="q-p">${pessoa(a[0],a[1])}</div></div>
       </div>`).join("")}</div>
   </article>`;
+
+/* ---------- barra superior: some ao descer, volta ao subir ou com o mouse no topo ---------- */
+(function(){
+  const gat=document.createElement("div"); gat.className="topo-gatilho"; document.body.appendChild(gat);
+  let ultimo=window.scrollY, travada=false;
+  const barra=()=>document.querySelector(".view.ativa .topo");
+  const mostrar=()=>{const t=barra(); if(t) t.classList.remove("escondida");};
+  const esconder=()=>{const t=barra(); if(t && !travada) t.classList.add("escondida");};
+  window.addEventListener("scroll",()=>{
+    const y=window.scrollY, d=y-ultimo;
+    if(y<80) mostrar(); else if(d>6) esconder(); else if(d<-6) mostrar();
+    ultimo=y;
+  },{passive:true});
+  gat.addEventListener("mouseenter",mostrar);
+  document.addEventListener("mouseover",e=>{ const t=barra(); if(t && t.contains(e.target)){ travada=true; mostrar(); } });
+  document.addEventListener("mouseout",e=>{ const t=barra(); if(t && t.contains(e.target) && !t.contains(e.relatedTarget)) travada=false; });
+  window.addEventListener("hashchange",()=>{ ultimo=0; mostrar(); });
+})();
 
 /* ---------- start ---------- */
 aplicarAta();
