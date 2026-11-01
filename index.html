@@ -721,6 +721,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .sheet.tela .presets{flex-wrap:nowrap!important;flex-direction:row!important}
 .sheet.tela .presets button{flex:none!important}
 .tela-linha{flex-wrap:nowrap;white-space:nowrap}
+.sheet.tela .presets,.tela-linha .sep{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -1097,7 +1098,7 @@ const din = (itens,cls="") => `<div class="dinamica ${cls}">${itens.map(([b,s])=
 /* ---------- roteiros ---------- */
 const ROTEIROS = {
   estudo: {
-    nome:"Reunião de Estudo", sub:"Meditação Diária, leitura de um trecho e partilhas.", timer:[3,7,10],
+    nome:"Reunião de Estudo", sub:"Meditação Diária, leitura de um trecho e partilhas.", timer:[10],
     passos:[
       abertura(FECHADA("reunião de estudo fechada")),
       B.oracao(),
@@ -1123,7 +1124,7 @@ const ROTEIROS = {
   },
 
   fechada: {
-    nome:"Reunião Fechada", sub:"Literatura de NA, partilhas e melhores momentos.", timer:[3,7,10],
+    nome:"Reunião Fechada", sub:"Literatura de NA, partilhas e melhores momentos.", timer:[10],
     passos:[
       abertura(FECHADA("reunião fechada")),
       B.oracao(),
@@ -1151,7 +1152,7 @@ const ROTEIROS = {
   },
 
   tematica: {
-    nome:"Reunião Temática", sub:"Só por Hoje e partilha temática 25+5.", timer:[3,7,10,25],
+    nome:"Reunião Temática", sub:"Só por Hoje e partilha temática 25+5.", timer:[10],
     passos:[
       abertura(FECHADA("reunião temática")),
       B.oracao(),
@@ -1163,8 +1164,8 @@ const ROTEIROS = {
       B.meditacao(),
       B.t1(),
       {k:"Temática", t:"Início da Temática", html:`<div class="citacao" style="font-style:normal;font-weight:700">Agora é o momento da partilha temática <span style="color:var(--rosa-forte)">(25+5)</span></div>
-        <div class="nota azul">Use o cronômetro: 25 minutos para a temática e 5, 7 ou 10 minutos para cada partilha. Ele avisa quando faltam 2 minutos e quando o tempo se esgota.</div>
-        <div class="acoes-passo" style="justify-content:center"><button class="pill" data-timer="25">Iniciar 25 min</button><button class="pill claro" data-timer="5">5 min</button></div>`},
+        <div class="nota azul">O cronômetro começa em 10 minutos. Toque no número para mudar o tempo, por exemplo 25 para a temática. Ele avisa quando faltam 2 minutos e quando o tempo se esgota.</div>
+        `},
       FASE("Melhores Momentos"),
       B.t3(),
       B.conquistas(),
@@ -1285,7 +1286,7 @@ function setupTimer(presets){
   if(!presets){ fab.hidden=true; return; }
   fab.hidden=false;
   $("#presets").innerHTML = presets.map(m=>`<button data-min="${m}" aria-label="${m} minutos">${m}</button>`).join("");
-  if(!tick) escolher(presets.includes(3)?3:presets[0]);
+  if(!tick) escolher(10);
 }
 function escolher(m){
   parar(); total=resta=m*60; avisou=false;
