@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/logo.png">
+<title>Grupo Transcender de NA · Roteiros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+/* ============ CONFIGURAÇÃO RÁPIDA ============
+   Troque os valores em CONFIG, no começo do <script>.
+   ============================================ */
+:root{
+  --rosa-bg:#FEE3F1;
+  --rosa-claro:#FFF0F7;
+  --azul-bg:#DCEEF4;
+  --rosa:#C94F78;
+  --titulo:#1A78AE;     /* títulos */
+  --rosa-forte:#B03A63;
+  --azul:#2BA3DB;
+  --azul-forte:#1A7FB0;
+  --indigo:#174A6B;     /* texto principal */
+  --indigo-2:#285F82;   /* texto de apoio, sempre escuro */
+  --branco:#FFFFFF;
+  --sombra:0 10px 30px -12px rgba(120,40,110,.35);
+  --raio:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:"Atkinson Hyperlegible",system-ui,sans-serif;
+  color:var(--indigo);
+  background:var(--rosa-bg);
+  background-image:
+    radial-gradient(60% 40% at 15% 30%, rgba(255,255,255,.75), transparent 70%),
+    radial-gradient(50% 35% at 85% 60%, rgba(214,235,245,.9), transparent 70%),
+    radial-gradient(70% 40% at 50% 100%, rgba(255,255,255,.8), transparent 70%);
+  background-attachment:fixed;
+  min-height:100vh;
+  font-size:18px;line-height:1.55;
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+a{color:inherit}
+.serif{font-family:"DM Serif Display",Georgia,serif;font-weight:400}
+
+/* ============ HOME ============ */
+#home{position:relative;overflow:hidden;padding-bottom:40px}
+.hero-wrap{
+  position:relative;max-width:1180px;margin:0 auto;
+  display:grid;grid-template-columns:1.05fr 1fr;align-items:center;min-height:min(88vh,760px);
+}
+.capa{
+  order:2;align-self:stretch;min-height:420px;
+  background:url(assets/capa.jpg) center left/cover no-repeat;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 82%,transparent),linear-gradient(#000 80%,transparent);
+  -webkit-mask-composite:source-in;
+          mask-image:linear-gradient(90deg,transparent 0,#000 22%,#000 82%,transparent),linear-gradient(#000 80%,transparent);
+          mask-composite:intersect;
+}
+.hero{order:1;padding:40px 20px 0;text-align:center;position:relative;z-index:1}
+@media (max-width:760px){
+  .hero-wrap{grid-template-columns:1fr;min-height:0}
+  .capa{order:0;min-height:0;height:58vw;max-height:380px;background-position:center 20%;
+    -webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
+  .hero{padding-top:0;margin-top:-56px}
+  .hero .logo{width:120px}
+}
+.logo{
+  width:clamp(130px,26vw,190px);aspect-ratio:1;margin:4px auto 0;
+  background:url(assets/logo.png) center/contain no-repeat;
+}
+.hero .pre{font-weight:700;color:var(--titulo);font-size:clamp(18px,3.4vw,24px);margin-top:6px;letter-spacing:.02em}
+.hero h1{
+  font-family:"DM Serif Display",Georgia,serif;font-weight:400;
+  color:var(--titulo);font-size:clamp(52px,12vw,104px);line-height:.95;margin-top:2px;
+  letter-spacing:-.01em;
+}
+.hero .pos{
+  font-weight:600;color:var(--indigo);
+  font-size:clamp(17px,3.2vw,22px);letter-spacing:.18em;margin-top:12px;
+}
+.hero .boas{margin:22px auto 0;max-width:560px;font-size:18px;color:var(--indigo-2);font-weight:500}
+
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:760px;margin:30px auto 0;padding:0 20px}
+.btn-reuniao{
+  position:relative;text-align:left;
+  background:rgba(255,255,255,.82);
+  border:2px solid #fff;border-radius:var(--raio);
+  padding:20px 18px 18px;min-height:150px;
+  box-shadow:var(--sombra);
+  display:flex;flex-direction:column;justify-content:space-between;gap:12px;
+  transition:transform .2s ease, box-shadow .2s ease;
+  overflow:hidden;
+}
+.btn-reuniao::after{
+  content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;
+  background:conic-gradient(from 200deg,#5BCEFA,#F5A9B8,#fff,#5BCEFA);opacity:.35;width:90px;height:90px;
+}
+.btn-reuniao:hover,.btn-reuniao:focus-visible{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(120,40,110,.45);outline:none}
+.btn-reuniao .tag{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--azul-forte);position:relative;z-index:1}
+.btn-reuniao .nome{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(26px,5.4vw,36px);line-height:1;color:var(--titulo);position:relative;z-index:1}
+.btn-reuniao .desc{position:relative;z-index:1;padding-right:24px;font-size:15px;font-weight:600;color:var(--indigo-2);line-height:1.35}
+.btn-reuniao .seta{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:14px;color:var(--indigo)}
+
+.atalhos{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:22px auto 0;padding:0 20px}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--indigo);color:#fff;font-weight:700;font-size:16px;
+  padding:13px 20px;border-radius:999px;text-decoration:none;
+  box-shadow:0 8px 20px -10px rgba(23,74,107,.6);
+}
+.pill.claro{background:#fff;color:var(--indigo);border:2px solid var(--indigo)}
+.pill.rosa{background:var(--rosa);}
+
+.ilu-home{max-width:520px;margin:34px auto 0;padding:0 20px}
+.ilu-home img{
+  width:100%;border-radius:28px;
+  -webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent);
+          mask-image:radial-gradient(closest-side,#000 70%,transparent);
+}
+.rodape{text-align:center;font-size:15px;color:var(--indigo-2);font-weight:600;margin-top:10px;padding:0 20px}
+.rodape .serif{font-size:20px;color:var(--titulo)}
+
+/* ============ ROTEIRO ============ */
+.view{display:none}
+.view.ativa{display:block}
+.topo{
+  position:sticky;top:0;z-index:20;
+  background:rgba(254,227,241,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:2px solid #fff;
+}
+.topo-in{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.voltar{width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none;box-shadow:var(--sombra)}
+.voltar svg{width:22px;height:22px}
+.topo-tit{flex:1;min-width:0}
+.topo-tit small{display:block;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--azul-forte)}
+.topo-tit strong{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:24px;line-height:1.05;color:var(--titulo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-ata{
+  flex:none;display:inline-flex;align-items:center;gap:7px;
+  background:var(--rosa);color:#fff;font-weight:800;font-size:15px;
+  padding:11px 15px;border-radius:999px;text-decoration:none;box-shadow:0 8px 18px -10px rgba(176,58,99,.8)
+}
+.btn-ata svg{width:18px;height:18px}
+.progresso{height:4px;background:rgba(255,255,255,.7)}
+.progresso i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5BCEFA,#F5A9B8);transition:width .3s}
+
+.cab-roteiro{max-width:880px;margin:0 auto;padding:26px 20px 6px;text-align:center}
+.cab-roteiro .logo{width:110px}
+.cab-roteiro h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;color:var(--titulo);font-size:clamp(36px,8vw,58px);line-height:1;margin-top:6px}
+.cab-roteiro p{font-weight:600;color:var(--indigo-2);margin-top:8px}
+
+.mod-nome{max-width:880px;margin:16px auto 0;padding:0 20px}
+.mod-nome label{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:#fff;border-radius:16px;padding:12px 16px;box-shadow:var(--sombra);
+  font-weight:700;font-size:16px;color:var(--indigo)
+}
+.mod-nome input{
+  flex:1;min-width:160px;border:0;border-bottom:2px dashed var(--rosa);
+  font:inherit;font-weight:600;color:var(--indigo);padding:4px 2px;background:transparent;outline:none
+}
+
+.passos{max-width:880px;margin:18px auto 0;padding:0 16px 40px;display:flex;flex-direction:column;gap:16px;counter-reset:passo}
+.passo{
+  position:relative;background:rgba(255,255,255,.88);border:2px solid #fff;border-radius:var(--raio);
+  padding:22px 20px 18px;box-shadow:var(--sombra);
+}
+.passo.azul{background:rgba(232,245,250,.95)}
+.passo-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.num{
+  flex:none;width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,#5BCEFA,#F5A9B8);color:#fff;font-weight:800;font-size:16px;
+  display:grid;place-items:center;
+}
+.passo h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(26px,5.6vw,34px);line-height:1.05;color:var(--titulo);padding-top:3px;flex:1}
+.passo .kicker{display:block;font-family:"Atkinson Hyperlegible",sans-serif;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--azul-forte);margin-bottom:3px}
+.check{
+  flex:none;width:40px;height:40px;border-radius:50%;border:2px solid var(--indigo);
+  display:grid;place-items:center;background:#fff;transition:all .2s
+}
+.check svg{width:20px;height:20px;opacity:0}
+.passo.feito .check{background:var(--indigo)}
+.passo.feito .check svg{opacity:1}
+.passo.feito{border-color:#5BCEFA}
+.passo.feito .num{background:var(--indigo)}
+
+.fala{font-size:19px;line-height:1.65;color:var(--indigo)}
+.fala p+p{margin-top:12px}
+.fala b,.fala strong{font-weight:700}
+.fala .rosa{color:var(--rosa-forte);font-weight:700}
+.citacao{
+  font-weight:400;font-size:clamp(20px,4.4vw,24px);line-height:1.55;
+  text-align:center;color:var(--indigo);padding:6px 4px
+}
+.oracao{font-weight:400;font-size:clamp(20px,4.4vw,25px);line-height:1.6;letter-spacing:.04em;text-align:center;color:var(--indigo);padding:4px 0}
+.nota{
+  margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--rosa-claro);
+  font-size:16px;font-weight:600;color:var(--indigo);border-left:5px solid var(--rosa)
+}
+.nota.azul{background:#E6F4FB;border-left-color:var(--azul)}
+.nota b{font-weight:800}
+.perguntas{display:flex;flex-direction:column;gap:14px}
+.perguntas div b{display:block;font-weight:700;font-size:19px;line-height:1.4}
+.perguntas div span{display:block;font-size:17px;margin-top:2px}
+.bv{text-align:center;font-weight:800;font-size:21px;color:var(--rosa-forte);margin-top:16px}
+
+.dinamica{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.din{
+  background:#fff;border-radius:18px;padding:16px;text-align:center;
+  border:3px solid transparent;
+  background-image:linear-gradient(#fff,#fff),conic-gradient(#5BCEFA,#F5A9B8,#fff,#5BCEFA);
+  background-origin:border-box;background-clip:padding-box,border-box;
+}
+.din .din-t{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;line-height:1.1;color:var(--azul-forte)}
+.din span{display:block;font-size:15px;font-weight:600;color:var(--indigo-2);margin-top:6px;line-height:1.4}
+
+.evite{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.evite h4{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:28px;color:var(--titulo);text-align:center}
+.evite ul{list-style:none;text-align:center;font-weight:600;font-size:16px;letter-spacing:.06em;line-height:1.7;color:var(--indigo)}
+.alerta{text-align:center;font-family:"DM Serif Display",Georgia,serif;font-size:26px;color:var(--titulo);margin-top:14px}
+
+.lista{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.lista li{font-size:17px;line-height:1.5;color:var(--indigo);padding-left:44px;position:relative}
+.lista li .n{position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--rosa-claro);color:var(--rosa-forte);font-weight:800;font-size:14px;display:grid;place-items:center}
+
+.pix{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.pix img{width:170px;border-radius:16px;box-shadow:var(--sombra);background:#fff;padding:6px}
+.pix .dados{text-align:center;flex:1;min-width:220px}
+.pix .dados small{display:block;font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:13px;color:var(--azul-forte)}
+.pix .dados strong{display:block;font-weight:700;font-size:clamp(21px,5.4vw,32px);line-height:1.25;overflow-wrap:normal;margin:6px 0 8px;background:#fff;border-radius:14px;padding:10px 14px;letter-spacing:.01em}
+.pix .pix-lab{font-size:15px;font-weight:700;color:var(--azul-forte)}
+.copiar{margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--indigo);color:#fff;font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px}
+
+.acoes-passo{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.acoes-passo .pill{font-size:15px;padding:11px 16px}
+
+.fim{max-width:880px;margin:0 auto;padding:0 16px 60px;text-align:center}
+.fim .card{background:#E3F6FE;border:2px solid #5BCEFA;color:var(--indigo);border-radius:var(--raio);padding:26px 20px;box-shadow:var(--sombra)}
+.fim h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:30px;color:var(--titulo)}
+.fim p{font-weight:500;margin-top:6px}
+.fim .pill{background:#fff;color:var(--indigo);margin-top:16px}
+
+/* ============ TIMER ============ */
+.timer-fab{
+  position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;
+  display:flex;align-items:center;gap:8px;
+  background:#fff;color:var(--indigo);font-weight:800;font-size:16px;
+  padding:13px 18px;border-radius:999px;border:2px solid var(--indigo);
+  box-shadow:0 12px 26px -12px rgba(23,74,107,.55)
+}
+.timer-fab svg{width:20px;height:20px}
+.timer-fab.rodando{background:var(--indigo);color:#fff}
+.timer-fab.alerta{background:var(--rosa);border-color:var(--rosa);color:#fff;animation:pulsa 1s infinite}
+@keyframes pulsa{50%{transform:scale(1.06)}}
+.sheet-bg{position:fixed;inset:0;background:rgba(23,74,107,.35);z-index:40;display:none}
+.sheet-bg.on{display:block}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--rosa-claro);
+  border-radius:26px 26px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(105%);visibility:hidden;transition:transform .3s ease,visibility .3s;max-width:640px;margin:0 auto;
+  box-shadow:0 -10px 40px -10px rgba(23,74,107,.4)
+}
+.sheet.on{transform:none;visibility:visible}
+.sheet h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:30px;color:var(--titulo);text-align:center}
+.sheet .visor{font-family:"DM Serif Display",Georgia,serif;font-size:76px;line-height:1;text-align:center;color:var(--indigo);margin:12px 0 4px;font-variant-numeric:tabular-nums}
+.sheet .status{text-align:center;font-weight:700;color:var(--indigo-2);min-height:26px}
+.presets{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+.presets button{background:#fff;border:2px solid var(--indigo);color:var(--indigo);font-weight:800;padding:12px 16px;border-radius:999px;font-size:16px}
+.presets button.sel{background:var(--indigo);color:#fff}
+.ctrl{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.ctrl button{flex:1;max-width:200px;padding:15px;border-radius:999px;font-weight:800;font-size:17px}
+.ctrl .go{background:var(--rosa);color:#fff}
+.ctrl .zera{background:#fff;color:var(--indigo);border:2px solid var(--indigo)}
+
+.overlay-tempo{
+  position:fixed;inset:0;z-index:60;display:none;place-items:center;text-align:center;padding:24px;
+  background:var(--rosa-bg);
+  background-image:radial-gradient(60% 50% at 30% 30%,#fff,transparent 70%),radial-gradient(60% 50% at 70% 80%,#D6EBF5,transparent 70%);
+}
+.overlay-tempo.on{display:grid}
+.overlay-tempo h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;color:var(--azul);font-size:clamp(64px,16vw,170px);line-height:.9;text-transform:uppercase}
+.overlay-tempo p{font-weight:700;font-size:22px;color:var(--indigo);margin-top:16px}
+.overlay-tempo button{margin-top:26px}
+
+/* ============ FICHAS ============ */
+.fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;max-width:880px;margin:20px auto 0;padding:0 16px}
+.ficha{
+  background:rgba(255,255,255,.9);border:2px solid #fff;border-radius:20px;padding:16px 14px;text-align:center;box-shadow:var(--sombra)
+}
+.keytag{
+  width:72px;height:104px;margin:0 auto 12px;border-radius:14px 14px 36px 36px;position:relative;
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.08),0 6px 14px -6px rgba(0,0,0,.35);
+  border:2px solid rgba(0,0,0,.12)
+}
+.keytag::before{content:"";position:absolute;top:10px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--rosa-bg);border:2px solid rgba(0,0,0,.15)}
+.keytag::after{content:"NA";position:absolute;left:0;right:0;bottom:22px;font-weight:800;font-size:15px;letter-spacing:.06em;color:rgba(0,0,0,.55)}
+.keytag.escura::after{color:rgba(255,255,255,.85)}
+.keytag.brilha{background:linear-gradient(160deg,#F4FFD8,#D9F7B0 60%,#C8F09A);box-shadow:0 0 22px 2px rgba(190,255,120,.75),inset 0 -6px 0 rgba(0,0,0,.06)}
+.ficha b{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:24px;color:var(--titulo);line-height:1.05}
+.ficha span{display:block;font-size:15px;font-weight:700;color:var(--indigo);margin-top:4px}
+
+.calc{max-width:880px;margin:22px auto 0;padding:0 16px}
+.calc .card{background:#fff;border-radius:var(--raio);padding:20px;box-shadow:var(--sombra)}
+.calc h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:28px;color:var(--titulo)}
+.calc p{font-weight:600;color:var(--indigo-2);font-size:16px}
+.calc input{
+  margin-top:12px;width:100%;font:inherit;font-weight:700;font-size:18px;color:var(--indigo);
+  padding:13px 14px;border-radius:14px;border:2px solid var(--indigo);background:var(--rosa-claro)
+}
+.calc .res{margin-top:14px;font-size:18px;font-weight:600;color:var(--indigo);line-height:1.5}
+.calc .res strong{color:var(--rosa-forte)}
+
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--indigo);color:#fff;font-weight:700;padding:12px 18px;border-radius:999px;z-index:70;transition:all .25s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+
+@media (max-width:520px){
+  .menu{grid-template-columns:1fr}
+  .btn-reuniao{min-height:0}
+  .btn-ata span{display:none}
+  .btn-ata{padding:12px}
+  .evite{grid-template-columns:1fr 1fr;gap:8px}
+  .evite ul{font-size:15px;letter-spacing:.02em}
+}
+
+/* ===== HOME (tela única) ===== */
+#home{padding:0 0 24px}
+.home-top{display:flex;align-items:center;justify-content:center;gap:14px;max-width:1180px;margin:0 auto;padding:22px 20px 8px}
+.home-top .logo{width:64px;margin:0;flex:none}
+.home-top h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;color:var(--titulo);white-space:nowrap;
+  font-size:clamp(17px,3.6vw,46px);line-height:1.1}
+.home-grid{max-width:1180px;margin:0 auto;padding:10px 20px 0;display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:center}
+.home-left .menu{padding:0;margin:0;max-width:none}
+.home-left .atalhos{justify-content:flex-start;padding:0;margin-top:16px;gap:8px}
+.home-left .atalhos .pill{font-size:15px;padding:12px 15px}
+.btn-reuniao{min-height:0;padding:18px 18px 16px;gap:8px}
+.home-left .btn-reuniao .nome{font-size:clamp(24px,2.3vw,30px)}
+.home-arte{position:relative;height:min(68vh,560px)}
+.home-arte .capa{position:absolute;inset:0;min-height:0;order:0;
+  background:url(assets/capa.jpg) center 30%/cover no-repeat;
+  -webkit-mask-image:radial-gradient(70% 70% at 55% 45%,#000 55%,transparent);mask-image:radial-gradient(70% 70% at 55% 45%,#000 55%,transparent)}
+.home-arte img{position:absolute;left:-6%;bottom:-2%;width:52%;border-radius:24px;
+  -webkit-mask-image:radial-gradient(closest-side,#000 68%,transparent);mask-image:radial-gradient(closest-side,#000 68%,transparent)}
+@media (max-width:860px){
+  .home-grid{grid-template-columns:1fr}
+  .home-arte{height:74vw;max-height:420px}
+  .home-left .atalhos{justify-content:center}
+}
+@media (max-width:520px){
+  .home-top{flex-direction:column;gap:6px;padding-top:18px}
+  .home-top .logo{width:72px}
+  .home-top h1{font-size:4.9vw}
+}
+.logo-grande{width:100%;max-width:420px;aspect-ratio:1;margin:0 auto;
+  background:url(assets/logo.png) center/contain no-repeat;filter:drop-shadow(0 18px 40px rgba(201,79,120,.25))}
+@media (min-width:861px){.home-top .logo{display:none}}
+@media (max-width:860px){.logo-grande{display:none}}
+
+/* ===== DIRETRIZES ===== */
+.dir-intro{max-width:880px;margin:14px auto 0;padding:0 20px}
+.dir-intro p{background:#fff;border-radius:var(--raio);padding:18px 20px;box-shadow:var(--sombra);font-weight:500;font-size:17px;line-height:1.6;color:var(--indigo)}
+.dir-indice{max-width:880px;margin:18px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.dir-indice a{display:flex;align-items:center;gap:10px;text-decoration:none;background:rgba(255,255,255,.85);border:2px solid #fff;border-radius:14px;padding:10px 12px;font-weight:700;font-size:15px;color:var(--indigo)}
+.dir-indice a span{flex:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#5BCEFA,#F5A9B8);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center}
+.dir-txt{font-size:17px;line-height:1.6;color:var(--indigo)}
+.dir-txt p{margin-top:10px}
+.dir-txt p:first-child{margin-top:0}
+.dir-txt h4{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:23px;color:var(--titulo);margin-top:18px}
+.dir-txt ul{margin:8px 0 0 22px}
+.dir-txt li{margin-top:4px}
+.dir-txt .ref{font-size:14px;font-weight:700;color:var(--indigo-2);margin-top:8px;padding-left:10px;border-left:3px solid #5BCEFA}
+
+/* ===== INFO CARD ===== */
+.info-card{margin-top:14px;background:rgba(255,255,255,.88);border:2px solid #fff;border-radius:var(--raio);padding:14px 16px;box-shadow:var(--sombra)}
+.info-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.info-card h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:24px;line-height:1.1;color:var(--titulo)}
+.info-card p{font-size:15px;font-weight:600;color:var(--indigo-2)}
+.info-card .pill{font-size:15px;padding:11px 15px}
+.info-card summary{margin-top:10px;cursor:pointer;font-weight:800;font-size:15px;color:var(--indigo)}
+.info-card pre{margin-top:10px;white-space:pre-wrap;word-break:break-word;font-family:"Atkinson Hyperlegible",sans-serif;font-size:15px;line-height:1.5;color:var(--indigo);background:var(--rosa-claro);border-radius:14px;padding:12px 14px}
+
+/* ===== leitura sem negrito ===== */
+.fala b,.fala strong,.nota b,.lista b,.dir-txt b,.dir-txt strong,.citacao b,.calc .res strong{font-weight:inherit}
+.fala .rosa{font-weight:inherit}
+.perguntas div{font-size:20px;line-height:1.45}
+.perguntas div span{color:var(--indigo-2)}
+.bv{font-weight:400;font-size:22px}
+.nota{font-weight:400}
+.evite ul{font-weight:400;letter-spacing:0}
+.btn-reuniao .desc{font-weight:400;font-size:16px}
+.dir-intro p{font-weight:400}
+.din span{font-weight:400}
+.citacao[style*="font-weight:700"],.citacao[style*="font-weight:800"]{font-weight:400!important}
+
+/* ===== fases e retorno ===== */
+.dinamica.tri.quad{grid-template-columns:repeat(4,1fr)}
+@media (max-width:620px){.dinamica.tri.quad{grid-template-columns:repeat(2,1fr)}}
+
+.dinamica.tri{grid-template-columns:repeat(3,1fr);gap:8px}
+.dinamica.tri .din{padding:16px 6px;display:grid;place-items:center;min-height:96px}
+.dinamica.tri .din-t{font-size:clamp(18px,5vw,26px)}
+
+.linha-nome{display:inline-block;width:7em;height:1em;border-bottom:2px solid currentColor;vertical-align:-0.15em;margin:0 2px}
+.ref-cit{text-align:center;font-size:15px;color:var(--indigo-2);margin-top:6px}
+.fase{display:flex;align-items:center;gap:14px;margin:10px 4px 0}
+.fase::before,.fase::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,transparent,#5BCEFA,#F5A9B8,transparent)}
+.fase span{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(22px,6vw,30px);white-space:nowrap;color:var(--titulo);line-height:1}
+.info-pre{margin-top:12px;white-space:pre-wrap;word-break:break-word;font-family:"Atkinson Hyperlegible",sans-serif;font-size:16px;line-height:1.5;color:var(--indigo);background:#fff;border-radius:14px;padding:14px 16px}
+
+/* ===== quadro de servidores ===== */
+.q-p{text-align:right}
+.q-p b{display:block;font-weight:700}
+.q-p b.vago{font-weight:400;color:var(--rosa-forte)}
+.q-p small{display:block;font-size:14px;color:var(--indigo-2)}
+.dias{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.dia{background:#fff;border-radius:16px;padding:12px 14px}
+.dia h4{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;color:var(--titulo);margin-bottom:4px}
+.dia-l{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:6px 0;border-top:1px solid rgba(23,74,107,.12);font-size:16px;color:var(--indigo)}
+.dia-l:first-of-type{border-top:0}
+
+.quadro{list-style:none;display:flex;flex-direction:column}
+.quadro li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid rgba(23,74,107,.15);font-size:17px;color:var(--indigo)}
+.quadro li:first-child{border-top:0}
+.quadro b{font-weight:700;text-align:right}
+.quadro b.vago{font-weight:400;color:var(--rosa-forte)}
+
+/* ===== evite e procure ===== */
+.ep{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ep-card{border-radius:18px;padding:14px 12px}
+.ep-evite{background:#FFE9F0;border:2px solid #F5A9B8}
+.ep-procure{background:#E3F6FE;border:2px solid #5BCEFA}
+.ep-card h4{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:26px;line-height:1;text-align:center;margin-bottom:10px}
+.ep-evite h4{color:var(--rosa-forte)}
+.ep-procure h4{color:var(--azul-forte)}
+.ep-card ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ep-card li{background:#fff;border-radius:999px;padding:5px 10px;font-size:14px;line-height:1.25;color:var(--indigo);text-align:center}
+@media (max-width:520px){.ep{gap:8px}.ep-card{padding:12px 8px}.ep-card ul{gap:5px}.ep-card li{font-size:13px;padding:4px 9px}}
+
+/* ===== ilustrações nos passos ===== */
+.passo-ilu{float:right;width:min(42%,300px);margin:0 0 10px 18px;shape-outside:margin-box}
+.passo-ilu img{width:100%;border-radius:22px;
+  -webkit-mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent),linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent),linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-composite:intersect}
+.passo-ilu.larga{float:none;width:100%;margin:0 0 14px}
+.passo-ilu.larga img{border-radius:18px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.passo::after{content:"";display:block;clear:both}
+@media (max-width:520px){
+  .passo-ilu{float:none;width:56%;margin:0 auto 10px}
+}
+
+/* ===== fundo da home ===== */
+#home{position:relative;min-height:100vh;isolation:isolate;overflow:hidden}
+#home::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:42%;right:0;
+  background:url(assets/bg-porta.jpg) 50% 100%/cover no-repeat;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 30%);mask-image:linear-gradient(90deg,transparent,#000 30%)}
+.logo-grande{display:none!important}
+.home-top .logo{display:block!important}
+.btn-reuniao{background:rgba(255,255,255,.94)}
+@media (max-width:860px){
+  #home::before{left:0;top:auto;height:62vh;
+    -webkit-mask-image:linear-gradient(transparent,#000 45%);mask-image:linear-gradient(transparent,#000 45%)}
+  #home{padding-bottom:46vh}
+}
+
+/* ===== botões rosa claro ===== */
+.pill,.pill.claro,.pill.rosa,.copiar,.timer-fab,.ctrl .go,.ctrl .zera,.presets button,#ov-ok{
+  background:#FAD3DE!important;color:var(--indigo)!important;border:2px solid #F5A9B8!important;
+  box-shadow:0 8px 18px -12px rgba(201,79,120,.55)!important}
+.pill:hover,.copiar:hover,.timer-fab:hover{background:#F7BFCF!important}
+.presets button.sel,.timer-fab.rodando{background:#F5A9B8!important}
+.timer-fab.alerta{background:#F5A9B8!important}
+.timer-fab svg{stroke:var(--indigo)}
+
+/* ===== título da home em duas linhas ===== */
+.home-top{flex-direction:row!important;justify-content:center;gap:16px}
+.home-top .logo{width:clamp(64px,9vw,96px)!important}
+.home-top h1{white-space:normal!important;text-align:left;line-height:1.05}
+.home-top h1 .h1-a{display:block;font-size:clamp(30px,4.6vw,56px)}
+.home-top h1 .h1-b{display:block;font-size:clamp(17px,2.3vw,28px);margin-top:2px}
+
+/* ===== cabeçalho compacto das páginas ===== */
+.cab-roteiro{display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;column-gap:14px;text-align:left;padding:16px 20px 2px}
+.cab-roteiro .logo{grid-row:span 2;width:64px!important;margin:0!important}
+.cab-roteiro h2{margin:0;font-size:clamp(26px,5vw,40px)}
+.cab-roteiro p{margin:2px 0 0;font-size:15px}
+#r-sub{grid-row:span 2;margin:0}
+#r-sub .sub-a{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(24px,4.4vw,34px);line-height:1.05;color:var(--titulo)}
+#r-sub .sub-b{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(15px,2.4vw,19px);color:var(--titulo)}
+
+/* ===== home desktop organizada ===== */
+@media (min-width:861px){
+  #home{display:none;padding:0}
+  #home.ativa{display:flex;align-items:center;min-height:100vh}
+  #home::before{left:50%!important}
+  .home-grid{width:100%;max-width:1240px;margin:0 auto;padding:40px 48px;grid-template-columns:minmax(0,640px) 1fr!important;gap:0}
+  .home-top{justify-content:flex-start!important;padding:0 0 24px!important;margin:0!important;max-width:none}
+  .home-left .menu{grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:16px}
+  .btn-reuniao{padding:22px 22px 18px;justify-content:flex-start}
+  .btn-reuniao::after{width:70px;height:70px;right:-24px;top:-24px;opacity:.25}
+  .home-left .btn-reuniao .nome{font-size:clamp(22px,1.9vw,27px);white-space:nowrap}
+  .btn-reuniao .desc{flex:1}
+  .home-left .atalhos{margin-top:20px;gap:10px}
+}
+@media (max-width:520px){
+  .home-top h1 .h1-a{font-size:7.6vw;white-space:nowrap}
+  .home-top h1 .h1-b{font-size:4.4vw;white-space:nowrap}
+  .home-top .logo{width:68px!important}
+}
+
+
+
+/* ===== cronômetro minimalista 16:9 ===== */
+.sheet.tela{left:50%;right:auto;top:50%;bottom:auto;width:min(96vw,calc(92vh*16/9),1400px);aspect-ratio:16/9;max-width:none;
+  transform:translate(-50%,-46%) scale(.97);opacity:0;visibility:hidden;transition:transform .25s,opacity .25s,visibility .25s;
+  border-radius:22px;padding:0;overflow:hidden;background:url(assets/timer-bg2.jpg) center/cover no-repeat;box-shadow:0 30px 80px -20px rgba(23,74,107,.55)}
+.sheet.tela.on{transform:translate(-50%,-50%) scale(1);opacity:1;visibility:visible}
+.tela-pill{position:absolute;top:4.5%;right:3%;text-align:center;padding:1% 1.6% .8%;border-radius:18px;
+  background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.sheet.tela .visor{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(30px,5.4vw,84px);line-height:1;margin:0;color:var(--indigo);font-variant-numeric:tabular-nums}
+.tela-linha{display:flex;align-items:center;justify-content:center;gap:clamp(4px,.6vw,10px);margin-top:4px}
+.sheet.tela .presets{display:flex;flex-direction:row;gap:clamp(4px,.6vw,10px);margin:0}
+.sheet.tela .presets button,.tela-linha .ic{all:unset;cursor:pointer;font-family:"Atkinson Hyperlegible",sans-serif;font-size:clamp(11px,1vw,15px);color:var(--indigo);opacity:.55;padding:2px 4px;border-radius:6px}
+.sheet.tela .presets button::after{content:"′"}
+.sheet.tela .presets button.sel,.tela-linha .ic:hover,.sheet.tela .presets button:hover{opacity:1;font-weight:700}
+.tela-linha .sep{width:1px;height:1em;background:var(--indigo);opacity:.25}
+.sheet.tela.rodando .tela-pill{background:rgba(255,255,255,.4)}
+@media (max-width:700px) and (orientation:portrait){
+  .sheet.tela{border-radius:16px}
+  .tela-pill{top:3%;right:2%;padding:4px 8px;border-radius:12px}
+  .sheet.tela .visor{font-size:9vw}
+  .sheet.tela .presets button,.tela-linha .ic{font-size:11px;opacity:.7}
+}
+.sheet.tela .presets button,.sheet.tela .presets button.sel,.sheet.tela .ctrl button{background:none!important;border:0!important;box-shadow:none!important;color:var(--indigo)!important}
+.sheet.tela .presets button.sel{text-decoration:underline;text-underline-offset:4px}
+.tela-pill{top:3.5%!important}
+.sheet.tela .visor{cursor:text}
+.visor-in{all:unset;width:4.2ch;text-align:center;font:inherit;color:inherit;border-bottom:2px dashed rgba(23,74,107,.4)}
+
+/* ===== home cabe 100% na tela (desktop) ===== */
+@media (min-width:861px){
+  #home.ativa{height:100vh;height:100dvh;min-height:0;overflow:hidden}
+  .home-grid{height:100%;padding:3.5vh 48px!important;align-content:center}
+  .home-left{display:flex;flex-direction:column;justify-content:center;max-height:100%}
+  .home-top{padding:0 0 2.6vh!important;gap:14px}
+  .home-top .logo{width:min(9vw,11vh)!important}
+  .home-top h1 .h1-a{font-size:min(4.6vw,7vh)}
+  .home-top h1 .h1-b{font-size:min(2.3vw,3.6vh)}
+  .home-left .menu{gap:min(16px,2vh)}
+  .btn-reuniao{padding:min(22px,2.6vh) 22px min(18px,2.2vh);gap:min(8px,1vh)}
+  .home-left .btn-reuniao .nome{font-size:min(1.9vw,3.6vh)}
+  .btn-reuniao .desc{font-size:min(16px,2.4vh);line-height:1.35}
+  .btn-reuniao .seta{font-size:min(14px,2.1vh)}
+  .home-left .atalhos{margin-top:min(20px,2.4vh);justify-content:flex-start!important}
+  .home-left .atalhos .pill{font-size:min(15px,2.3vh);padding:min(12px,1.6vh) 15px}
+  #home::before{background-position:50% 100%;background-size:auto 100%}
+}
+
+/* ===== home 100%: escala maior ===== */
+@media (min-width:861px){
+  .home-left .atalhos{margin-left:0!important;margin-right:0!important}
+  .home-grid{padding:4vh 4vw!important;grid-template-columns:minmax(0,1.15fr) 1fr!important}
+  .home-top{padding:0 0 3.2vh!important}
+  .home-top .logo{width:min(10vw,14vh)!important}
+  .home-top h1 .h1-a{font-size:min(5.4vw,10vh)}
+  .home-top h1 .h1-b{font-size:min(2.6vw,4.6vh)}
+  .home-left .menu{gap:min(20px,2.6vh)}
+  .btn-reuniao{padding:min(26px,3.2vh) min(26px,2vw) min(22px,2.8vh);gap:min(10px,1.3vh)}
+  .home-left .btn-reuniao .nome{font-size:min(2.2vw,4.6vh)}
+  .btn-reuniao .desc{font-size:min(17px,3vh)}
+  .btn-reuniao .seta{font-size:min(15px,2.6vh)}
+  .home-left .atalhos{margin-top:min(24px,3.2vh)}
+  .home-left .atalhos .pill{font-size:min(16px,2.8vh);padding:min(13px,2vh) min(18px,1.4vw)}
+}
+@media (min-width:861px){
+  .home-grid{max-width:1500px!important}
+  .home-left .atalhos{flex-wrap:nowrap}
+  .home-top{padding:0 0 2.4vh!important}
+  .home-top .logo{width:min(9vw,12vh)!important}
+  .home-top h1 .h1-a{font-size:min(5vw,8.4vh)}
+  .home-top h1 .h1-b{font-size:min(2.4vw,4vh)}
+  .home-left .menu{gap:min(18px,2.2vh)}
+  .btn-reuniao{padding:min(24px,2.8vh) min(24px,1.8vw) min(20px,2.4vh);gap:min(8px,1vh)}
+  .home-left .btn-reuniao .nome{font-size:min(2.1vw,4.2vh)}
+  .btn-reuniao .desc{font-size:min(16px,2.6vh);padding-right:0}
+  .btn-reuniao .seta{font-size:min(15px,2.4vh)}
+  .home-left .atalhos{margin-top:min(22px,2.6vh)}
+  .home-left .atalhos .pill{font-size:min(16px,2.5vh);padding:min(12px,1.7vh) min(16px,1.2vw);white-space:nowrap}
+}
+@media (min-width:861px){
+  .home-top{gap:min(22px,1.6vw)!important;padding:0 0 3vh!important}
+  .home-top .logo{width:min(13vw,19vh)!important}
+  .home-top h1 .h1-a{font-size:min(6.4vw,12vh);line-height:1}
+  .home-top h1 .h1-b{font-size:min(3vw,5.4vh);margin-top:.15em}
+}
+@media (min-width:861px){.home-grid{padding-top:2.5vh!important;padding-bottom:2.5vh!important}}
+@media (min-width:861px) and (max-width:1100px){.home-top h1 .h1-a{font-size:min(5.6vw,11vh)}.home-top .logo{width:min(11vw,16vh)!important}}
+@media (min-width:861px){
+  .home-top h1 .h1-a{white-space:nowrap;font-size:min(4.7vw,11vh)}
+  .home-top h1 .h1-b{white-space:nowrap;font-size:min(2.25vw,5vh)}
+}
+@media (min-width:861px){
+  .home-top{padding-bottom:2.6vh!important}
+  .home-top .logo{width:min(10vw,15vh)!important}
+  .home-top h1 .h1-a{font-size:min(4vw,9vh)}
+  .home-top h1 .h1-b{font-size:min(2vw,4.4vh)}
+  .home-grid{grid-template-columns:minmax(0,1.35fr) 1fr!important}
+  .home-left .menu{gap:min(20px,2.6vh)}
+  .btn-reuniao{padding:min(30px,3.6vh) min(28px,2vw) min(26px,3.2vh);gap:min(10px,1.4vh)}
+  .home-left .btn-reuniao .nome{font-size:min(2.4vw,5vh)}
+  .btn-reuniao .desc{font-size:min(18px,3vh)}
+  .btn-reuniao .seta{font-size:min(16px,2.7vh)}
+  .home-left .atalhos{margin-top:min(24px,3vh);gap:12px}
+  .home-left .atalhos .pill{font-size:min(18px,2.9vh);padding:min(15px,2.2vh) min(22px,1.6vw)}
+}
+@media (min-width:861px) and (max-width:1180px){
+  .home-left .atalhos .pill{font-size:min(15px,2.5vh);padding:min(12px,1.8vh) 14px}
+  .btn-reuniao{padding:min(22px,2.8vh) 18px min(20px,2.4vh)}
+  .home-left .btn-reuniao .nome{font-size:min(2.3vw,4.2vh)}
+  .btn-reuniao .desc{font-size:min(16px,2.6vh)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ================= HOME ================= -->
+<section id="home" class="view ativa" aria-label="Início">
+  <div class="home-grid">
+  <div class="home-left">
+  <header class="home-top">
+    <div class="logo" role="img" aria-label="Borboleta do Grupo Transcender"></div>
+    <h1><span class="h1-a">Grupo Transcender</span><span class="h1-b">de Narcóticos Anônimos</span></h1>
+  </header>
+  <nav class="menu" aria-label="Reuniões">
+    <button class="btn-reuniao" data-ir="fechada">
+      <div class="nome">Reunião Fechada</div>
+      <div class="desc">Reunião só para pessoas adictas, com literatura de NA e partilhas.</div>
+      <span class="seta">Abrir roteiro →</span>
+    </button>
+    <button class="btn-reuniao" data-ir="estudo">
+      <div class="nome">Reunião de Estudo</div>
+      <div class="desc">Estudo de um trecho da literatura de NA, seguido de partilhas.</div>
+      <span class="seta">Abrir roteiro →</span>
+    </button>
+    <button class="btn-reuniao" data-ir="tematica">
+      <div class="nome">Reunião Temática</div>
+      <div class="desc">Um tema conduz as partilhas, com espaço para perguntas.</div>
+      <span class="seta">Abrir roteiro →</span>
+    </button>
+    <button class="btn-reuniao" data-ir="administrativa">
+      <div class="nome">Reunião Administrativa</div>
+      <div class="desc">A reunião em que a consciência de grupo decide os rumos do serviço.</div>
+      <span class="seta">Abrir roteiro →</span>
+    </button>
+  </nav>
+
+  <div class="atalhos">
+    <a class="pill claro js-ata" href="#" target="_blank" rel="noopener">📝 Registrar ata</a>
+    <button class="pill claro" data-ir="diretrizes">📘 Diretrizes do grupo</button>
+    <button class="pill claro" data-ir="servidores">👥 Quadro de servidores</button>
+  </div>
+  <pre id="info-texto" hidden>🦋✨ GRUPO TRANSCENDER NARCÓTICOS ANÔNIMOS ✨🦋
+
+Grupo de interesse especial em acolher pessoas trans, travestis, não-bináries e dissidentes de gênero.
+
+🔗 Link do Grupo Transcender no WhatsApp: https://chat.whatsapp.com/BNd0R3SvYSy0ysDapaeBxs?s=cl&amp;p=i&amp;mlu=4
+
+🔗Link da Reunião no Zoom:
+https://us05web.zoom.us/j/5794524106?pwd=1LBbuRzFdPsYLTiqilBl5dRQbItU27.1
+ID: 579 452 4106
+Senha: 000000
+
+💖 7ª Tradição: grupotranscenderna@gmail.com
+
+📅 Reuniões todos os dias às 19h.</pre>
+  </div>
+  <div class="logo-grande" role="img" aria-label="Logo do Grupo Transcender"></div>
+  </div>
+</section>
+
+<!-- ================= ROTEIRO (preenchido via JS) ================= -->
+<section id="roteiro" class="view" aria-live="polite">
+  <header class="topo">
+    <div class="topo-in">
+      <button class="voltar" data-ir="home" aria-label="Voltar ao início">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#174A6B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topo-tit"><strong id="r-titulo">Reunião</strong></div>
+    </div>
+  </header>
+
+  <div class="cab-roteiro">
+    <div class="logo" role="presentation"></div>
+    <p id="r-sub"></p>
+  </div>
+
+
+  <div class="passos" id="r-passos"></div>
+
+  <div class="fim">
+    <div class="card">
+      <h3>Reunião encerrada 💙</h3>
+      <p>Agora é só registrar a ata no formulário do grupo.</p>
+      <a class="pill js-ata" href="#" target="_blank" rel="noopener">📝 Abrir formulário da ata</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FICHAS ================= -->
+<section id="fichas" class="view">
+  <header class="topo">
+    <div class="topo-in">
+      <button class="voltar" data-ir="voltar" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#174A6B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topo-tit"><strong>Fichas de tempo limpo</strong></div>
+    </div>
+  </header>
+
+  <div class="cab-roteiro">
+    <div class="logo" role="presentation"></div>
+    <h2>Conquistas de Tempo Limpo</h2>
+    <p>Grupo Transcender de Narcóticos Anônimos</p>
+  </div>
+
+  <div class="fichas" id="lista-fichas"></div>
+
+  <div class="calc">
+    <div class="card">
+      <h3>Qual ficha é a próxima?</h3>
+      <p>Informe a data limpa para ver o tempo limpo e a ficha que a pessoa pode receber.</p>
+      <input type="date" id="data-limpa" aria-label="Data limpa">
+      <div class="res" id="calc-res"></div>
+    </div>
+  </div>
+
+  <div class="passos" style="margin-top:22px">
+    <div class="passo azul">
+      <div class="passo-head"><h3>Como conduzir a troca</h3></div>
+      <div class="fala">
+        <p>Alguém vai trocar de ficha hoje? De quanto tempo e quem vai entregar?</p>
+      </div>
+      <div class="nota azul">Quem entrega a ficha costuma ser a pessoa que apadrinha ou alguém escolhido por quem vai receber. Depois, todo o grupo celebra. Registre as trocas na ata.</div>
+    </div>
+  </div>
+  <div style="height:70px"></div>
+</section>
+
+<!-- ================= DIRETRIZES ================= -->
+<section id="diretrizes" class="view">
+  <header class="topo">
+    <div class="topo-in">
+      <button class="voltar" data-ir="home" aria-label="Voltar ao início">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#174A6B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topo-tit"><strong>Diretrizes do grupo</strong></div>
+    </div>
+  </header>
+  <div class="cab-roteiro">
+    <div class="logo" role="presentation"></div>
+    <h2>Diretrizes de Serviço</h2>
+    <p>Grupo Transcender de Narcóticos Anônimos</p>
+  </div>
+  <div class="dir-intro">
+    <p>Este é o manual de procedimentos do Grupo Transcender. Ele existe para facilitar o serviço, preservar a unidade do grupo e oferecer uma referência simples para servidores e membros. As diretrizes se baseiam nas decisões da consciência de grupo registradas nas reuniões administrativas e nas práticas em vigor.</p>
+  </div>
+  <nav class="dir-indice" id="dir-indice" aria-label="Seções"></nav>
+  <div class="passos" id="dir-lista"></div>
+  <div style="height:40px"></div>
+</section>
+
+<!-- ================= SERVIDORES ================= -->
+<section id="servidores" class="view">
+  <header class="topo">
+    <div class="topo-in">
+      <button class="voltar" data-ir="voltar" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#174A6B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topo-tit"><strong>Quadro de servidores</strong></div>
+    </div>
+  </header>
+  <div class="cab-roteiro">
+    <div class="logo" role="presentation"></div>
+    <h2>Quadro da Mesa de Servidores</h2>
+    <p>Grupo Transcender de Narcóticos Anônimos</p>
+  </div>
+  <div class="passos" id="lista-servidores"></div>
+  <div style="height:40px"></div>
+</section>
+
+<!-- ================= TIMER ================= -->
+<button class="timer-fab" id="timer-fab" aria-label="Cronômetro de partilha" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>
+  <span id="timer-fab-txt">Cronômetro</span>
+</button>
+<div class="sheet-bg" id="sheet-bg"></div>
+<div class="sheet tela" id="sheet" role="dialog" aria-label="Cronômetro">
+  <div class="tela-pill">
+    <div class="visor" id="visor">3:00</div>
+    <div class="tela-linha">
+      <div class="presets" id="presets"></div>
+      <span class="sep"></span>
+      <button class="ic" id="t-go" aria-label="Iniciar">Iniciar</button>
+      <button class="ic" id="t-zera" aria-label="Zerar">↺</button>
+      <button class="ic" id="t-fechar" aria-label="Fechar">✕</button>
+    </div>
+    <div class="status" id="status" hidden></div>
+  </div>
+</div>
+<div class="overlay-tempo" id="overlay">
+  <div>
+    <h2 id="ov-tit">Faltam 2 minutos</h2>
+    <p id="ov-sub"></p>
+    <button class="pill" id="ov-ok">Ok, continuar</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ CONFIGURAÇÃO ============ */
+const CONFIG = {
+  // Cole aqui o link do formulário da ata (Google Forms, por exemplo)
+  ATA_URL: "https://tiny.cc/h921101",
+  // Links das leituras (cole aqui)
+  MEDITACAO_URL: "https://www.na.org.br/meditacao/",
+  IP22_URL: "https://www.na.org.br/downloads-de-literaturas-ips/",
+  PIX: "grupotranscenderna@gmail.com",
+  TESOUREIRO: "Sergio Alexandre Felix de Lima",
+};
+/* ===================================== */
+
+const ORACAO_SERENIDADE = "Deus, conceda-me serenidade para aceitar as coisas que não posso modificar, coragem para modificar aquelas que posso, e sabedoria para reconhecer a diferença.";
+
+const T1  = "“O nosso bem-estar comum deve vir em primeiro lugar; a recuperação individual depende da unidade de NA.”";
+const T3  = "“O único requisito para ser membro de NA é o desejo de parar de usar.”";
+const T7  = "“Todo grupo de NA deverá ser totalmente autossustentado, recusando contribuições de fora.”";
+const T12 = "“O anonimato é o alicerce espiritual de todas as nossas Tradições, lembrando-nos sempre de colocar princípios acima de personalidades.”";
+
+const EVITE = ["1ª dose","Pessoas, lugares e hábitos da ativa","Isolamento","Procrastinação","Justificativas","Ressentimento","Raiva","Medo","Fome","Desonestidade","Autopiedade","Preguiça","Obsessão","Compulsão","Onipotência","Manipulação"];
+const PROCURE = ["Frequência de reuniões","12 Passos","Padrinho / Madrinha","Servir em NA","Poder Superior","Literatura de NA","Mente aberta","Honestidade","Boa vontade","Viver o programa","Humildade","Tolerância","Aceitação","Equilíbrio","Tradições","Partilhar","Escutar","Amor próprio"];
+
+const TRADICOES = [
+ "O nosso bem-estar comum deve vir em primeiro lugar; a recuperação individual depende da unidade de NA.",
+ "Para o nosso propósito comum existe apenas uma autoridade — um Deus amoroso que pode se expressar na nossa consciência de grupo. Nossos líderes são apenas servidores de confiança, eles não governam.",
+ "O único requisito para ser membro é o desejo de parar de usar.",
+ "Cada grupo deve ser autônomo, exceto em assuntos que afetem outros grupos ou NA como um todo.",
+ "Cada grupo tem apenas um propósito primordial — levar a mensagem ao adicto que ainda sofre.",
+ "Um grupo de NA nunca deverá endossar, financiar ou emprestar o nome de NA a nenhuma sociedade relacionada ou empreendimento alheio, para evitar que problemas de dinheiro, propriedade ou prestígio nos desviem do nosso propósito primordial.",
+ "Todo grupo de NA deverá ser totalmente autossustentado, recusando contribuições de fora.",
+ "Narcóticos Anônimos deverá manter-se sempre não profissional, mas nossos centros de serviço podem contratar trabalhadores especializados.",
+ "NA nunca deverá organizar-se como tal; mas podemos criar quadros ou comitês de serviço diretamente responsáveis perante aqueles a quem servem.",
+ "Narcóticos Anônimos não tem opinião sobre questões de fora; portanto o nome de NA nunca deverá aparecer em controvérsias públicas.",
+ "Nossa política de relações públicas baseia-se na atração, não em promoção; na imprensa, rádio e filmes precisamos sempre manter o anonimato pessoal.",
+ "O anonimato é o alicerce espiritual de todas as nossas Tradições, lembrando-nos sempre de colocar princípios acima de personalidades."
+];
+const CONCEITOS = [
+ "Para cumprir o propósito primordial da nossa irmandade, os grupos de NA se uniram para criar uma estrutura que desenvolve, coordena e mantém serviços por NA como um todo.",
+ "A responsabilidade e a autoridade finais sobre os serviços de NA permanecem com os grupos de NA.",
+ "Os grupos de NA delegam à estrutura de serviço a autoridade necessária para cumprir as responsabilidades a ela atribuídas.",
+ "A liderança efetiva é altamente valorizada em Narcóticos Anônimos. As qualidades de liderança devem ser cuidadosamente consideradas ao selecionar servidores de confiança.",
+ "Somente um ponto de decisão e prestação de contas deve ser claramente definido para cada responsabilidade atribuída à estrutura de serviço.",
+ "A consciência de grupo é o meio espiritual pelo qual convidamos um Deus amoroso a influenciar nossas decisões.",
+ "Todos os membros de um corpo de serviço arcam com responsabilidade substancial pelas decisões desse corpo e devem poder participar plenamente dos processos de tomada de decisão.",
+ "A nossa estrutura de serviço depende da integridade e eficiência de nossas comunicações.",
+ "Todos os elementos da nossa estrutura de serviço têm a responsabilidade de considerar cuidadosamente todos os pontos de vista nos seus processos de tomada de decisão.",
+ "Qualquer membro de um corpo de serviço pode requerer deste reparação por injustiça pessoal, sem medo de represália.",
+ "Os recursos de NA devem ser utilizados para levar adiante nosso propósito primordial e devem ser administrados com responsabilidade.",
+ "De acordo com a natureza espiritual de Narcóticos Anônimos, nossa estrutura deve ser sempre de serviço, nunca de governo."
+];
+
+const FICHAS = [
+  {t:"Ingresso", d:"Ficha branca", img:"ficha-branca"},
+  {t:"30 dias", d:"Ficha laranja", img:"ficha-laranja"},
+  {t:"60 dias", d:"Ficha verde", img:"ficha-verde"},
+  {t:"90 dias", d:"Ficha vermelha", img:"ficha-vermelha"},
+  {t:"6 meses", d:"Ficha azul", img:"ficha-azul"},
+  {t:"9 meses", d:"Ficha amarela", img:"ficha-amarela"},
+  {t:"1 ano", d:"Ficha bege", img:"ficha-1ano"},
+  {t:"18 meses", d:"Ficha cinza", img:"ficha-cinza"},
+  {t:"Múltiplos anos", d:"Ficha preta", img:"ficha-preta"},
+];
+
+/* ---------- blocos reutilizáveis ---------- */
+const INFO_HTML = document.getElementById("info-texto").innerHTML;
+const FASE = (nome) => ({fase:nome});
+const nomeSpan = '<span class="linha-nome" aria-label="seu nome"></span>';
+
+const abertura = (tipo) => ({k:"Pessoa em serviço", t:"Abertura da Reunião", html:`<div class="fala">
+    <p>Boa noite a todas as pessoas presentes, e sejam bem-vindas ao Grupo Transcender de Narcóticos Anônimos.</p>
+    <p>Meu nome é ${nomeSpan}, sou uma pessoa adicta em recuperação e hoje estou servindo, com boa vontade e mente aberta, na moderação desta reunião.</p>
+    <p>${tipo}</p>
+    <p>Para começar, vamos fazer um instante de silêncio pelas pessoas adictas que ainda sofrem, seguido da <span class="rosa">Oração da Serenidade</span>.</p></div>`});
+
+const FECHADA = (nome) => `Esta é uma ${nome}: só podem participar pessoas adictas ou que acreditam ter problemas com drogas.`;
+
+const B = {
+  quemSomos: () => ({k:"Quem somos", t:"O que é o Grupo Transcender?", azul:true, html:`<div class="fala">
+        <p>O Grupo Transcender é um grupo de interesse especial de Narcóticos Anônimos voltado ao acolhimento de pessoas trans, travestis, não binárias e dissidentes de gênero.</p>
+        <p>Seguimos os 12 Passos, as 12 Tradições e os 12 Conceitos de NA, oferecendo um espaço de recuperação onde cada pessoa pode viver sua identidade com liberdade, respeito e pertencimento.</p></div>
+        <div class="citacao" style="margin-top:14px">“Somos livres para ser quem somos e viver como escolhemos.”</div>
+        <p class="ref-cit">Viver Limpo: A Jornada Continua — Capítulo 1, “Chaves para a liberdade”, p. 19.</p>
+        <div class="fala" style="margin-top:14px"><p>Nosso propósito primordial é o mesmo de todo grupo de NA: levar a mensagem de recuperação à pessoa adicta que ainda sofre.</p></div>
+        <div class="bv">Todas as pessoas são bem&#8209;vindas.</div>`}),
+  acolhimento: () => ({k:"Acolhimento", t:"Respeito aos pronomes", html:`<div class="fala">
+        <p>Para assegurarmos um espaço mais acolhedor, sugerimos que inclua seu pronome de preferência no seu nome do Zoom, junto com o estado ou país:</p>
+        <p class="citacao" style="font-style:normal">NOME (elu/delu)/RJ</p>
+        <p>Assim, preservamos sua identidade e registramos apenas a localidade em nossa ata. Se precisar de ajuda, é só avisar no chat.</p></div>`}),
+  oracao: () => ({k:"Todas as pessoas", t:"Oração da Serenidade", html:`<div class="oracao">${ORACAO_SERENIDADE}</div>`}),
+  boasVindas: () => ({k:"Acolhimento", t:"Boas-vindas", html:`
+    <div class="perguntas">
+      <div>Gostaríamos de saber se há alguém nos visitando pela primeira vez.<span>Sinta-se à vontade para abrir o áudio e se apresentar.</span></div>
+      <div>Se você ainda não é membro de NA, sugerimos que fique até o final da reunião.<span>Teremos um momento especial para acolher você.</span></div>
+    </div>`}),
+  t1: (depois) => ({k:"Tradição", t:"1ª Tradição", html:`<div class="citacao">${T1}</div>${depois?`<div class="nota">${depois}</div>`:""}`}),
+  t3: () => ({k:"Melhores momentos", t:"3ª Tradição", html:`
+    <div class="citacao">${T3}</div>
+    <div class="fala" style="margin-top:14px">
+      <p>Existe alguém participando que ainda não é membro de NA e acredita ter problemas com drogas?</p>
+      <p>Se for o seu caso, abra o áudio ou escreva no chat. Este é o momento especial de acolhimento que mencionamos no início, e será uma alegria receber você.</p>
+    </div>
+    <div class="nota azul">Se houver ingressos, leremos o IP nº 22, Bem-vindo a Narcóticos Anônimos. O link estará no chat.</div>
+    <div class="acoes-passo"><a class="pill claro js-link" data-link="IP22_URL" href="#" target="_blank" rel="noopener">📄 Literatura de NA (IP nº 22)</a></div>`}),
+  t7: () => ({k:"Tradição", t:"7ª Tradição", azul:true, html:`
+    <div class="citacao">${T7}</div>
+    <div class="pix">
+      <img src="assets/qr-pix.png" alt="QR Code do Pix do grupo">
+      <div class="dados">
+        
+        <div class="pix-lab">Chave Pix ou PayPal</div>
+        <strong>${CONFIG.PIX.replace("@","<wbr>@")}</strong>
+        <div style="font-weight:700">Tesoureiro: ${CONFIG.TESOUREIRO}</div>
+        <button class="copiar" data-copiar="${CONFIG.PIX}">Copiar chave</button>
+      </div>
+    </div>`}),
+  servico: () => ({k:"Serviço", t:"Servir também é 7ª Tradição!", html:`<div class="fala">
+        <p>Fortalecemos nossa recuperação e nossos laços servindo à irmandade de NA. Para fazer parte do corpo de serviço do grupo, sugerimos:</p></div>
+        <ul class="lista" style="margin-top:12px">
+          <li><span class="n">1</span>90 dias limpos para a moderação</li>
+          <li><span class="n">2</span>30 dias limpos para o apoio</li>
+          <li><span class="n">3</span>Frequência nas reuniões, boa vontade, mente aberta e apadrinhamento</li>
+        </ul>
+        <div class="acoes-passo"><button class="pill claro" data-ir="servidores">👥 Quadro de servidores</button></div>
+        <div class="fala" style="margin-top:14px"><p>Alguém gostaria de se indicar para servir?</p></div>
+        <div class="nota azul">Em caso de eletiva, abriremos para perguntas. Em seguida, levaremos a pessoa autoindicada para a sala de espera e iniciaremos a votação. Após a decisão coletiva, receberemos a pessoa autoindicada de volta com respeito e amorosidade.</div>`}),
+  avisos: () => ({t:"Avisos e recados da irmandade", html:`
+    <div class="fala"><p>Agora é o momento dos avisos e recados da irmandade.</p></div>
+    <ul class="lista" style="margin-top:12px">
+      <li><span class="n">📌</span>3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições em <a href="https://www.encontemas-diversida.de/" target="_blank" rel="noopener">encontemas-diversida.de</a></li>
+    </ul>
+    <div class="fala" style="margin-top:12px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
+  leitura: (titulo, frase, link, botao) => ({t:titulo, azul:true, html:`
+    <div class="fala"><p>Vamos fazer agora a leitura ${frase}. O link está no chat para quem quiser acompanhar.</p></div>
+    <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a></div>`}),
+  literatura: () => B.leitura("Leitura da Literatura de NA","da literatura de NA","IP22_URL","Literatura de NA"),
+  meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária"),
+  soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
+  retorno: (volta) => ({t:volta==="leitura"?"Retorno à leitura":"Retorno às partilhas", azul:true, html:`
+    <div class="fala"><p>Vamos deixar no chat as informações do Grupo Transcender para quem quiser continuar em contato.</p></div>
+    <pre class="info-pre">${INFO_HTML}</pre>
+    <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>
+    <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>`}),
+  t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
+  conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
+    <div class="citacao" style="color:var(--rosa-forte);font-weight:700">💙 Momento da troca de fichas 💙</div>
+    <div class="fala" style="text-align:center"><p>Alguém vai trocar de ficha hoje?</p></div>
+    <div class="acoes-passo" style="justify-content:center"><button class="pill rosa" data-ir="fichas">Abrir fichas de tempo limpo</button></div>`}),
+  evite: () => ({k:"Para lembrar", t:"Evite e Procure", html:`
+    <div class="ep">
+      <div class="ep-card ep-evite"><h4>Evite</h4><ul>${EVITE.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      <div class="ep-card ep-procure"><h4>Procure</h4><ul>${PROCURE.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    </div>
+    <div class="alerta">Álcool e maconha são drogas.</div>`}),
+  encerramento: () => ({k:"Fim", t:"Encerramento", html:`
+    <div class="fala">
+      <p>Agora, um breve resumo da ata. Agradecemos a presença de todas as pessoas.</p>
+      <p>Para encerrar, um instante de silêncio pelas pessoas adictas que ainda sofrem, dentro e fora das salas, seguido da <span class="rosa">Oração da Serenidade</span>.</p>
+    </div>`}),
+};
+
+const din = (itens,cls="") => `<div class="dinamica ${cls}">${itens.map(([b,s])=>`<div class="din"><strong class="din-t">${b}</strong>${s?`<span>${s}</span>`:""}</div>`).join("")}</div>`;
+
+/* ---------- roteiros ---------- */
+const ROTEIROS = {
+  estudo: {
+    nome:"Reunião de Estudo", sub:"Meditação Diária, leitura de um trecho e partilhas.", timer:[3,7,10],
+    passos:[
+      abertura(FECHADA("reunião de estudo fechada")),
+      B.oracao(),
+      B.quemSomos(),
+      B.acolhimento(),
+      B.boasVindas(),
+      {t:"Dinâmica da Reunião", azul:true, html: din([["Estudo da<br>literatura",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri") + `<div class="fala" style="margin-top:14px"><p>Usaremos o cronômetro nas partilhas. Respeite o tempo, para que mais pessoas possam partilhar.</p></div>`},
+      B.literatura(),
+      B.t1("Início das partilhas"),
+      FASE("Melhores Momentos"),
+      B.t3(),
+      B.t7(),
+      B.servico(),
+      B.conquistas(),
+      B.avisos(),
+      B.meditacao(),
+      B.retorno("leitura"),
+      FASE("Fim"),
+      B.t12(),
+      B.encerramento(),
+      B.oracao(),
+    ]
+  },
+
+  fechada: {
+    nome:"Reunião Fechada", sub:"Literatura de NA, partilhas e melhores momentos.", timer:[3,7,10],
+    passos:[
+      abertura(FECHADA("reunião fechada")),
+      B.oracao(),
+      B.quemSomos(),
+      B.acolhimento(),
+      B.boasVindas(),
+      B.evite(),
+      {k:"Como funciona", t:"Dinâmica da Reunião", azul:true, html: din([["Literatura<br>de NA",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri") +
+        `<div class="fala" style="margin-top:14px"><p>Usaremos o cronômetro nas partilhas. Respeite o tempo, para que mais pessoas possam partilhar.</p></div>`},
+      B.literatura(),
+      B.t1("Início das partilhas"),
+      FASE("Melhores Momentos"),
+      B.t3(),
+      B.t7(),
+      B.servico(),
+      B.conquistas(),
+      B.avisos(),
+      B.meditacao(),
+      B.retorno("partilhas"),
+      FASE("Fim"),
+      B.t12(),
+      B.encerramento(),
+      B.oracao(),
+    ]
+  },
+
+  tematica: {
+    nome:"Reunião Temática", sub:"Só por Hoje e partilha temática 25+5.", timer:[3,7,10,25],
+    passos:[
+      abertura(FECHADA("reunião temática")),
+      B.oracao(),
+      B.quemSomos(),
+      B.acolhimento(),
+      B.boasVindas(),
+      B.evite(),
+      {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>25+5",""],["Melhores<br>momentos",""]],"tri") + `<div class="fala" style="margin-top:14px"><p>Usaremos o cronômetro nas partilhas. Respeite o tempo, para que mais pessoas possam partilhar.</p></div>`},
+      B.meditacao(),
+      B.t1(),
+      {k:"Temática", t:"Início da Temática", html:`<div class="citacao" style="font-style:normal;font-weight:700">Agora é o momento da partilha temática <span style="color:var(--rosa-forte)">(25+5)</span></div>
+        <div class="nota azul">Use o cronômetro: 25 minutos para a temática e 5, 7 ou 10 minutos para cada partilha. Ele avisa quando faltam 2 minutos e quando o tempo se esgota.</div>
+        <div class="acoes-passo" style="justify-content:center"><button class="pill" data-timer="25">Iniciar 25 min</button><button class="pill claro" data-timer="5">5 min</button></div>`},
+      FASE("Melhores Momentos"),
+      B.t3(),
+      B.conquistas(),
+      B.t7(),
+      B.servico(),
+      B.avisos(),
+      B.retorno("partilhas"),
+      FASE("Fim"),
+      B.t12(),
+      B.encerramento(),
+      B.oracao(),
+    ]
+  },
+
+  administrativa: {
+    nome:"Reunião Administrativa", sub:"Consciência de grupo e serviço.", timer:null,
+    passos:[
+      abertura(`Esta é a reunião administrativa do Grupo Transcender, espaço da nossa consciência de grupo.`),
+      B.oracao(),
+      B.quemSomos(),
+      B.acolhimento(),
+      {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">Deus, conceda-nos a sabedoria para servirmos de acordo com os Seus divinos preceitos. Inspire em nós um sentido do Seu propósito. Faça-nos servidores da Sua vontade e conceda-nos um laço de abnegação, para que esta seja verdadeiramente a Sua obra, não a nossa, para que nenhum adicto, em nenhum lugar, precise morrer dos horrores da adicção.</div>`},
+      {k:"Leitura", t:"As 12 Tradições de NA", html:`<ol class="lista">${TRADICOES.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
+      {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html:`<ol class="lista">${CONCEITOS.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
+      {t:"Consciência de grupo", azul:true, html: din([["Relatórios<br>de serviço",""],["7ª<br>Tradição",""],["Encargos<br>e eletivas",""],["Decisões<br>do grupo",""]],"tri quad")},
+      FASE("Fim"),
+      B.encerramento(),
+      B.oracao(),
+    ]
+  }
+};
+
+/* ---------- render ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+let atual = null, anterior = "home";
+
+const store = {
+  get(k){ try{return localStorage.getItem(k)}catch(e){return null} },
+  set(k,v){ try{localStorage.setItem(k,v)}catch(e){} }
+};
+
+const ILU = {
+  "O que é o Grupo Transcender?": ["ilu-grupo.jpg"],
+};
+const iluHTML = (t) => { const i = ILU[t]; return i ? `<figure class="passo-ilu ${i[1]||""}"><img src="assets/${i[0]}" alt="" loading="lazy"></figure>` : ""; };
+function renderRoteiro(id){
+  const r = ROTEIROS[id]; atual = id;
+  $("#r-titulo").textContent = r.nome;
+  $("#r-sub").innerHTML = '<span class="sub-a">Grupo Transcender</span><span class="sub-b">de Narcóticos Anônimos</span>';
+  let n = 0;
+  $("#r-passos").innerHTML = r.passos.map((p,i)=> p.fase ? `<div class="fase"><span>${p.fase}</span></div>` : `
+    <article class="passo ${p.azul?"azul":""}" data-i="${i}">
+      <div class="passo-head">
+        <div class="num">${++n}</div>
+        <h3>${p.t}</h3>
+      </div>
+      ${iluHTML(p.t)}${p.html}
+    </article>`).join("");
+  aplicarNome(); aplicarAta(); aplicarLinks(); progresso();
+  setupTimer(r.timer);
+}
+
+function aplicarNome(){}
+function aplicarLinks(){
+  $$(".js-link").forEach(a=>{ const u=CONFIG[a.dataset.link]; a.href = u || "#"; });
+}
+function aplicarAta(){
+  $$(".js-ata").forEach(a=>{
+    if(CONFIG.ATA_URL){ a.href = CONFIG.ATA_URL; a.removeAttribute("aria-disabled"); }
+    else { a.href = "#"; a.setAttribute("aria-disabled","true"); }
+  });
+}
+function progresso(){}
+
+function ir(dest){
+  if(dest==="voltar") dest = anterior || "home";
+  const vis = $(".view.ativa")?.id;
+  if((dest==="fichas"||dest==="servidores") && vis!==dest) anterior = vis==="roteiro" ? atual : "home";
+  $$(".view").forEach(v=>v.classList.remove("ativa"));
+  if(ROTEIROS[dest]){ renderRoteiro(dest); $("#roteiro").classList.add("ativa"); }
+  else { $("#"+dest)?.classList.add("ativa"); }
+  if(!ROTEIROS[dest]) $("#timer-fab").hidden = true;
+  if(location.hash.slice(1)!==(dest==="home"?"":dest)) history.pushState(null,"",dest==="home"?location.pathname:"#"+dest);
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+document.addEventListener("click", e=>{
+  const go = e.target.closest("[data-ir]");
+  if(go){ e.preventDefault(); ir(go.dataset.ir); return; }
+  const ck = e.target.closest(".check");
+  if(ck){ ck.closest(".passo").classList.toggle("feito"); progresso(); return; }
+  const cp = e.target.closest("[data-copiar]");
+  if(cp){ copiar(cp.dataset.copiar); return; }
+  const lk = e.target.closest(".js-link");
+  if(lk && !CONFIG[lk.dataset.link]){ e.preventDefault(); toast("Link ainda não configurado"); return; }
+  const ata = e.target.closest(".js-ata");
+  if(ata && !CONFIG.ATA_URL){ e.preventDefault(); toast("Link da ata ainda não configurado"); return; }
+  const tm = e.target.closest("[data-timer]");
+  if(tm){ abrirSheet(); escolher(+tm.dataset.timer); iniciar(); return; }
+});
+
+
+function copiar(txt,msg="Chave copiada"){
+  (navigator.clipboard?.writeText(txt) || Promise.reject()).then(()=>toast(msg))
+    .catch(()=>{ const t=document.createElement("textarea"); t.value=txt; document.body.appendChild(t); t.select(); try{document.execCommand("copy");toast(msg)}catch(e){toast("Não deu para copiar. Abra o texto e copie manualmente.")} t.remove(); });
+}
+document.addEventListener("click",e=>{ if(e.target.closest("[data-copiar-info]")) copiar($("#info-texto").textContent,"Texto copiado"); });
+let toastT;
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),2200); }
+
+/* ---------- timer ---------- */
+let total=180, resta=180, tick=null, avisou=false;
+function fmt(s){ const m=Math.floor(s/60), r=s%60; return m+":"+String(r).padStart(2,"0"); }
+function setupTimer(presets){
+  const fab=$("#timer-fab");
+  if(!presets){ fab.hidden=true; return; }
+  fab.hidden=false;
+  $("#presets").innerHTML = presets.map(m=>`<button data-min="${m}" aria-label="${m} minutos">${m}</button>`).join("");
+  if(!tick) escolher(presets.includes(3)?3:presets[0]);
+}
+function escolher(m){
+  parar(); total=resta=m*60; avisou=false;
+  $$("#presets button").forEach(b=>b.classList.toggle("sel",+b.dataset.min===m));
+  render(); $("#status").textContent="Pronto para iniciar.";
+}
+function render(){
+  $("#visor").textContent=fmt(resta);
+  const fab=$("#timer-fab");
+  $("#timer-fab-txt").textContent = tick ? fmt(resta) : "Cronômetro";
+  fab.classList.toggle("rodando",!!tick);
+  fab.classList.toggle("alerta",!!tick && resta<=120);
+  $("#t-go").textContent = tick ? "❚❚" : "▶";
+  $("#sheet").classList.toggle("rodando",!!tick);
+}
+function iniciar(){
+  if(tick){ parar(); $("#status").textContent="Pausado."; return; }
+  if(resta<=0) resta=total;
+  $("#status").textContent="Partilha em andamento.";
+  tick=setInterval(()=>{
+    resta--;
+    if(!avisou && total>120 && resta===120){ avisou=true; mostrar("Faltam 2 minutos",""); }
+    if(resta<=0){ parar(); resta=0; mostrar("Tempo esgotado!","Por favor, conclua."); }
+    render();
+  },1000);
+  render();
+}
+function parar(){ clearInterval(tick); tick=null; render(); }
+function mostrar(t,s){
+  $("#ov-tit").textContent=t; $("#ov-sub").textContent=s; $("#overlay").classList.add("on");
+  try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
+}
+$("#ov-ok").onclick=()=>$("#overlay").classList.remove("on");
+const FUNDOS=["timer-bg2.jpg","timer-bg3.jpg"]; let fundoI=-1;
+function abrirSheet(){ fundoI=(fundoI+1)%FUNDOS.length; $("#sheet").style.backgroundImage=`url(assets/${FUNDOS[fundoI]})`; $("#sheet").classList.add("on"); $("#sheet-bg").classList.add("on"); }
+/* editar tempo clicando no número */
+$("#visor").title="Toque para digitar outro tempo";
+$("#visor").addEventListener("click",()=>{
+  if($("#visor input")) return;
+  parar();
+  const inp=document.createElement("input");
+  inp.type="text"; inp.inputMode="numeric"; inp.className="visor-in"; inp.value=fmt(resta); inp.setAttribute("aria-label","Digite os minutos, ou minutos:segundos");
+  $("#visor").textContent=""; $("#visor").appendChild(inp); inp.focus(); inp.select();
+  const aplicar=()=>{
+    const v=inp.value.trim().replace(",",":").replace(".",":");
+    let seg=null;
+    if(/^\d{1,3}$/.test(v)) seg=parseInt(v,10)*60;
+    else { const m=v.match(/^(\d{1,3}):(\d{1,2})$/); if(m) seg=parseInt(m[1],10)*60+Math.min(59,parseInt(m[2],10)); }
+    if(seg && seg>0){ total=resta=seg; avisou=false; $$("#presets button").forEach(b=>b.classList.toggle("sel",+b.dataset.min*60===seg)); }
+    render();
+  };
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); inp.blur(); } if(e.key==="Escape"){ inp.value=fmt(resta); inp.blur(); } });
+  inp.addEventListener("blur",aplicar,{once:true});
+});
+function fecharSheet(){ $("#sheet").classList.remove("on"); $("#sheet-bg").classList.remove("on"); }
+$("#timer-fab").onclick=abrirSheet;
+$("#sheet-bg").onclick=fecharSheet;
+$("#t-fechar").onclick=fecharSheet;
+$("#presets").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) escolher(+b.dataset.min); });
+$("#t-go").onclick=iniciar;
+$("#t-zera").onclick=()=>{ parar(); resta=total; avisou=false; render(); $("#status").textContent="Zerado."; };
+
+/* ---------- fichas ---------- */
+$("#lista-fichas").innerHTML = FICHAS.map(f=>`
+  <div class="ficha">
+    <img class="ficha-img" src="assets/${f.img}.png" alt="${f.d}" loading="lazy">
+    ${f.t}<span>${f.d}</span>
+  </div>`).join("");
+
+const MARCOS = [ {d:0,f:0},{m:1,f:1},{m:2,f:2},{m:3,f:3},{m:6,f:4},{m:9,f:5},{m:12,f:6},{m:18,f:7},{m:24,f:8} ];
+function addMeses(dt,m){ const d=new Date(dt); d.setMonth(d.getMonth()+m); return d; }
+$("#data-limpa").addEventListener("change",e=>{
+  const v=e.target.value; const out=$("#calc-res");
+  if(!v){ out.innerHTML=""; return; }
+  const ini=new Date(v+"T00:00:00"), hoje=new Date(); hoje.setHours(0,0,0,0);
+  if(ini>hoje){ out.textContent="A data limpa não pode estar no futuro."; return; }
+  const dias=Math.round((hoje-ini)/864e5);
+  let anos=hoje.getFullYear()-ini.getFullYear(), meses=hoje.getMonth()-ini.getMonth();
+  if(hoje.getDate()<ini.getDate()) meses--;
+  if(meses<0){ anos--; meses+=12; }
+  const totalMeses=anos*12+meses;
+  let atualF=FICHAS[0];
+  if(dias>=30) atualF=FICHAS[1];
+  if(dias>=60) atualF=FICHAS[2];
+  if(dias>=90) atualF=FICHAS[3];
+  if(totalMeses>=6) atualF=FICHAS[4];
+  if(totalMeses>=9) atualF=FICHAS[5];
+  if(totalMeses>=12) atualF=FICHAS[6];
+  if(totalMeses>=18) atualF=FICHAS[7];
+  if(totalMeses>=24) atualF=FICHAS[8];
+  const partes=[]; if(anos) partes.push(anos+(anos>1?" anos":" ano")); if(meses) partes.push(meses+(meses>1?" meses":" mês"));
+  const tempo = partes.length ? partes.join(" e ") : dias+(dias===1?" dia":" dias");
+  let prox="";
+  const etapas=[[30,"30 dias",1,"d"],[60,"60 dias",2,"d"],[90,"90 dias",3,"d"],[6,"6 meses",4,"m"],[9,"9 meses",5,"m"],[12,"1 ano",6,"m"],[18,"18 meses",7,"m"]];
+  for(const [n,label,,tipo] of etapas){
+    const dataMarco = tipo==="d" ? new Date(ini.getTime()+n*864e5) : addMeses(ini,n);
+    if(dataMarco>hoje){ prox=`Próxima conquista: <strong>${label}</strong>, em ${dataMarco.toLocaleDateString("pt-BR")}.`; break; }
+  }
+  if(!prox){ const a=anos+1; prox=`Próxima conquista: <strong>${a} anos</strong>, em ${addMeses(ini,a*12).toLocaleDateString("pt-BR")}.`; }
+  out.innerHTML=`Tempo limpo: <strong>${tempo}</strong> (${dias.toLocaleString("pt-BR")} dias).<br>Ficha do momento: <strong>${atualF.t} · ${atualF.d}</strong>.<br>${prox}`;
+});
+
+/* ---------- diretrizes ---------- */
+const DIRETRIZES = [
+ {t:"Sobre o grupo", ref:"Ata de Fundação · 13/09/2025; Ata 03 · 12/10/2025", html:`
+  <p>O Grupo Transcender de Narcóticos Anônimos é um espaço de recuperação comprometido com o acolhimento, a segurança e a inclusão de pessoas trans, travestis, não binárias e dissidentes de gênero.</p>
+  <p>O grupo busca preservar uma atmosfera de recuperação livre de transfobia, homofobia, assédio e outras formas de discriminação.</p>`},
+ {t:"Funcionamento das reuniões", html:`
+  <h4>Horário e duração</h4>
+  <p>As reuniões regulares acontecem todos os dias, das 19h às 21h, com 2 horas de duração.</p>
+  <h4>Reunião de estudo</h4>
+  <p>A reunião de sexta-feira, às 19h, é dedicada ao estudo da literatura e/ou dos Passos de Narcóticos Anônimos.</p>
+  <p class="ref">Ata 08 · 03/01/2026</p>
+  <h4>Reunião temática</h4>
+  <p>No último sábado de cada mês, às 19h, o grupo realiza uma reunião temática. O corpo de serviço tem autonomia para:</p>
+  <ul><li>escolher temas com base na literatura de NA;</li><li>convidar pessoas para partilhar;</li><li>organizar a temática no grupo de serviço.</li></ul>
+  <p class="ref">Ata 12 · 02/05/2026</p>
+  <h4>Reuniões extraordinárias</h4>
+  <p>Havendo servidores disponíveis, podem ser abertas reuniões extraordinárias de partilhas, com divulgação prévia nos canais do grupo.</p>
+  <p class="ref">Ata 04 · 01/11/2025</p>`},
+ {t:"Condução da reunião", html:`
+  <h4>Moderação</h4>
+  <p>A pessoa que modera é responsável por:</p>
+  <ul><li>conduzir a reunião conforme o roteiro;</li><li>preservar a atmosfera de recuperação;</li><li>organizar a dinâmica da reunião;</li><li>usar as ferramentas de segurança quando necessário;</li><li>fazer os registros previstos pelo grupo.</li></ul>
+  <h4>Apoio</h4>
+  <p>Sempre que houver alguém servindo no apoio, suas principais funções são:</p>
+  <ul><li>ajudar a organizar a lista de partilhas;</li><li>acompanhar o tempo das falas;</li><li>dar suporte técnico à moderação;</li><li>colaborar com a segurança e o fluxo da reunião.</li></ul>
+  <p class="ref">Ata 06 · 23/11/2025</p>
+  <h4>Literatura</h4>
+  <p>A pessoa responsável pela reunião tem autonomia para escolher trechos da literatura oficial de Narcóticos Anônimos. A Meditação Diária faz parte da abertura, e outras leituras podem ser usadas ao longo do encontro.</p>
+  <p class="ref">Ata 08 · 03/01/2026; Ata 11 · 04/04/2026</p>`},
+ {t:"Partilhas", html:`
+  <h4>Organização</h4>
+  <p>As partilhas são organizadas prioritariamente por levantamento de mão. Moderação e apoio podem usar o chat e outros recursos da plataforma para organizar a ordem das falas.</p>
+  <p class="ref">Ata Extraordinária · 14/09/2025</p>
+  <h4>Tempo</h4>
+  <ul><li>Com até 10 participantes, cada partilha pode ter até 10 minutos.</li><li>Com mais de 10 participantes, até 7 minutos.</li></ul>
+  <p>A moderação deve considerar o número de pessoas presentes, o tempo disponível e a participação do maior número possível de membros.</p>
+  <p class="ref">Ata 14 · 04/07/2026</p>
+  <h4>Retorno sobre partilhas</h4>
+  <p>Não é sugerido dar retorno sobre a partilha de outra pessoa. A partilha é um espaço para a experiência individual, sem debates, respostas, julgamentos ou conselhos sobre o que outra pessoa compartilhou.</p>
+  <p class="ref">Ata 11 · 04/04/2026</p>
+  <h4>Retorno espiritual</h4>
+  <p>A moderação pode fazer um retorno espiritual baseado na literatura, inclusive no Só por Hoje, sem direcioná-lo à partilha de um membro.</p>
+  <p class="ref">Ata 12 · 02/05/2026</p>
+  <h4>Uso no mesmo dia</h4>
+  <p>Sugere-se que a pessoa que usou no dia não partilhe. Ela continua acolhida na reunião e é incentivada a continuar voltando.</p>
+  <p class="ref">Ata 15 · 01/08/2026</p>`},
+ {t:"Convivência", ref:"Ata Extraordinária · 14/09/2025; Ata 03 · 12/10/2025", html:`
+  <p>Durante as reuniões:</p>
+  <ul><li>não é permitido fumar com a câmera aberta;</li><li>é permitido se alimentar com a câmera aberta;</li><li>não é permitida nudez, seminudez ou exposição inadequada;</li><li>espera-se respeito aos nomes, pronomes e identidades das pessoas presentes;</li><li>comportamentos discriminatórios, violentos, predatórios ou perturbadores podem levar à intervenção da moderação.</li></ul>`},
+ {t:"Segurança da reunião", html:`
+  <p>A segurança do espaço é responsabilidade coletiva. Cabe à moderação e ao corpo de serviço usar os recursos técnicos necessários para preservar a reunião.</p>
+  <h4>Áudio e vídeo</h4>
+  <p>Diante de comportamento perturbador, violento ou predatório, a pessoa responsável pela reunião tem autonomia para:</p>
+  <ul><li>desligar o áudio;</li><li>impedir que o áudio seja reativado, quando necessário;</li><li>desligar o vídeo;</li><li>restringir outros recursos da plataforma.</li></ul>
+  <p class="ref">Ata 11 · 04/04/2026; Ata 12 · 02/05/2026</p>
+  <h4>Sala de espera</h4>
+  <p>O uso da sala de espera fica a critério da pessoa responsável pela reunião, conforme as necessidades de segurança e funcionamento.</p>
+  <p class="ref">Ata 13 · 06/06/2026</p>
+  <h4>Remoção de perfis</h4>
+  <p>Perfis que ameacem a integridade, a segurança ou o funcionamento da reunião podem ser removidos pelos servidores responsáveis.</p>
+  <p class="ref">Ata Extraordinária · 14/09/2025</p>`},
+ {t:"Privacidade e inteligência artificial", ref:"Ata 12 · 02/05/2026", html:`
+  <p>Para preservar o anonimato e a privacidade dos membros:</p>
+  <ul><li>o AI Companion deve ficar desativado;</li><li>a transcrição automática deve ficar desativada;</li><li>sempre que possível, a plataforma deve ser configurada para impedir que participantes ativem esses recursos.</li></ul>`},
+ {t:"Chat", ref:"Ata Extraordinária · 14/09/2025; Ata 11 · 04/04/2026", html:`
+  <p>O chat é administrado por host e co-host. A comunicação entre membros e host/co-host continua habilitada, conforme a configuração definida pelo grupo.</p>
+  <p>O chat deve ser usado de forma compatível com a atmosfera de recuperação e a segurança da reunião.</p>`},
+ {t:"Transfobia e discriminação", html:`
+  <p>O Grupo Transcender não aceita atitudes transfóbicas em suas reuniões ou espaços de comunicação.</p>
+  <p>Quando houver ocorrência registrada por prints, conversas ou outras provas, pode ser aplicada suspensão de 30 dias dos espaços do Grupo Transcender. Em caso de reincidência, uma nova suspensão pode ser aplicada.</p>
+  <p>Independentemente de sanção posterior, a moderação pode agir imediatamente para preservar a segurança da reunião.</p>
+  <p class="ref">Ata 03 · 12/10/2025</p>
+  <p>Casos de homofobia, assédio, comportamento predatório ou ameaça à segurança também permitem intervenção imediata dos servidores.</p>
+  <p class="ref">Ata Extraordinária · 14/09/2025</p>`},
+ {t:"Boas práticas de serviço", ref:"Ata de Fundação · 13/09/2025; Ata 03 · 12/10/2025; Ata 04 · 01/11/2025", html:`
+  <p>Quem assume um encargo deve buscar:</p>
+  <ul><li>frequência nas reuniões;</li><li>compromisso com o horário e as responsabilidades assumidas;</li><li>pedir ajuda com antecedência quando não puder servir;</li><li>conhecer e respeitar as diretrizes de inclusão do Transcender;</li><li>respeitar linguagem, nomes, pronomes e liberdade de gênero;</li><li>trabalhar em unidade com o restante do corpo de serviço.</li></ul>`},
+ {t:"Faltas e continuidade do serviço", html:`
+  <p>Três faltas consecutivas, sem justificativa e sem pedido de ajuda antecipado, representam quebra do compromisso esperado no serviço.</p>
+  <p>Ao chegar a cinco faltas no mesmo termo, mesmo justificadas, a pessoa é destituída do encargo. Para quem modera, contam tanto as reuniões sob sua responsabilidade quanto as reuniões administrativas.</p>
+  <p class="ref">Ata 04 · 01/11/2025</p>
+  <p>A pessoa que entregar voluntariamente um encargo ou for destituída deve ficar três meses afastada dos encargos de serviço do Grupo Transcender. O afastamento do serviço não significa afastamento das reuniões de recuperação.</p>
+  <p class="ref">Ata 06 · 23/11/2025</p>`},
+ {t:"Comunicação", html:`
+  <p>Mudanças de horário, formato ou informações públicas das reuniões devem ser atualizadas no site do grupo em até 72 horas.</p>
+  <p class="ref">Ata 04 · 01/11/2025</p>
+  <p>O grupo também tem um encargo temporário de divulgação das reuniões, com termo de 15 dias.</p>
+  <p class="ref">Ata 11 · 04/04/2026</p>`},
+ {t:"Reuniões administrativas", ref:"Ata 03 · 12/10/2025; Ata 08 · 03/01/2026", html:`
+  <p>O Grupo Transcender realiza uma reunião administrativa mensal, às 19h, para:</p>
+  <ul><li>prestação de contas dos servidores;</li><li>apresentação de relatórios;</li><li>eletivas;</li><li>discussão de assuntos novos;</li><li>apresentação e votação de moções;</li><li>definição das diretrizes do grupo.</li></ul>`},
+ {t:"Atualização deste guia", ref:"Ata 12 · 02/05/2026", html:`
+  <p>Este guia deve representar o funcionamento atual do Grupo Transcender. Sempre que a consciência de grupo aprovar uma mudança de procedimento, a versão vigente deve ser atualizada.</p>
+  <p>As atas administrativas continuam sendo a fonte das decisões e podem ser consultadas para esclarecer a origem de uma diretriz.</p>
+  <p>A criação e a consolidação deste documento foram aprovadas pela consciência de grupo do Grupo Transcender.</p>`},
+];
+const idDir = (i) => "dir-"+(i+1);
+$("#dir-indice").innerHTML = DIRETRIZES.map((d,i)=>`<a href="#" data-dir="${i}"><span>${i+1}</span>${d.t}</a>`).join("");
+$("#dir-lista").innerHTML = DIRETRIZES.map((d,i)=>`
+  <article class="passo diretriz ${i%2?"azul":""}" id="${idDir(i)}">
+    <div class="passo-head"><div class="num">${i+1}</div><h3>${d.t}</h3></div>
+    <div class="dir-txt">${d.html}${d.ref?`<p class="ref">${d.ref}</p>`:""}</div>
+  </article>`).join("");
+document.addEventListener("click", e=>{
+  const a=e.target.closest("[data-dir]"); if(!a) return;
+  e.preventDefault();
+  const el=document.getElementById(idDir(+a.dataset.dir));
+  const y=el.getBoundingClientRect().top+window.scrollY-80;
+  window.scrollTo({top:y,behavior:"smooth"});
+});
+
+/* ---------- quadro de servidores ---------- */
+// Preencha os nomes aqui. Deixe "" para mostrar como vago.
+const SERVIDORES = {
+  mesa: [
+    ["RSG", "Kai", "05/09/2027"],
+    ["RSG Suplente", "", ""],
+    ["Secretaria", "", ""],
+    ["Tesouraria", "Vovô Serginho", "07/03/2027"],
+  ],
+  dias: [
+    ["Segunda-feira", ["Ribeiro","14/01/2027"], ["Gustavo","13/01/2027"]],
+    ["Terça-feira",   ["Lis","23/11/2026"],     ["",""]],
+    ["Quarta-feira",  ["Lúcia","04/12/2026"],   ["",""]],
+    ["Quinta-feira",  ["Paty","13/12/2026"],    ["",""]],
+    ["Sexta-feira",   ["Paty","15/01/2026"],    ["",""]],
+    ["Sábado",        ["Kai","23/08/2026"],     ["",""]],
+    ["Domingo",       ["Matheus","02/11/2026"], ["Rafael","25/01/2027"]],
+  ]
+};
+const pessoa = (nome,data) => nome ? `<b>${nome}</b>${data?`<small>até ${data}</small>`:""}` : `<b class="vago">Vago</b>`;
+$("#lista-servidores").innerHTML = `
+  <article class="passo">
+    <div class="passo-head"><h3>Mesa de servidores</h3></div>
+    <ul class="quadro">${SERVIDORES.mesa.map(([enc,n,d])=>`<li><span>${enc}</span><div class="q-p">${pessoa(n,d)}</div></li>`).join("")}</ul>
+  </article>
+  <article class="passo azul">
+    <div class="passo-head"><h3>Moderação e apoio</h3></div>
+    <div class="dias">${SERVIDORES.dias.map(([dia,m,a])=>`
+      <div class="dia">
+        <h4>${dia}</h4>
+        <div class="dia-l"><span>Moderação</span><div class="q-p">${pessoa(m[0],m[1])}</div></div>
+        <div class="dia-l"><span>Apoio</span><div class="q-p">${pessoa(a[0],a[1])}</div></div>
+      </div>`).join("")}</div>
+  </article>`;
+
+/* ---------- start ---------- */
+aplicarAta();
+function rotaPeloHash(){
+  const h=location.hash.slice(1);
+  const vis=$(".view.ativa")?.id;
+  const ativo = vis==="roteiro" ? atual : vis;
+  const alvo = (ROTEIROS[h]||["fichas","diretrizes","servidores"].includes(h)) ? h : "home";
+  if(alvo!==ativo) ir(alvo);
+}
+window.addEventListener("hashchange", rotaPeloHash);
+rotaPeloHash();
+</script>
+</body>
+</html>
