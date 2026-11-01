@@ -621,6 +621,50 @@ a{color:inherit}
   .home-left .btn-reuniao .nome{font-size:min(2.3vw,4.2vh)}
   .btn-reuniao .desc{font-size:min(16px,2.6vh)}
 }
+
+/* ===== ajustes mobile (v2) ===== */
+.ficha-img{height:auto!important;width:auto;max-width:100%;max-height:170px;object-fit:contain;mix-blend-mode:multiply;filter:none!important;margin:0 auto 8px}
+.ficha{display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.calc-lab{display:block;margin-top:12px;font-size:15px;font-weight:700;color:var(--indigo)}
+.calc input{display:block;-webkit-appearance:none;appearance:none;min-height:52px;max-width:100%;margin-top:6px}
+.home-grid>*,.home-left,.home-left .menu{min-width:0}
+.home-left .menu{grid-template-columns:minmax(0,1fr)}
+@media (min-width:861px){.home-left .menu{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media (max-width:860px){
+  .home-grid{padding:0 16px!important}
+  .home-top{justify-content:flex-start!important;padding:22px 2px 14px!important;gap:12px!important}
+}
+@media (max-width:520px){
+  .home-top .logo{width:64px!important;flex:none}
+  .home-top h1{min-width:0}
+  .home-top h1 .h1-a{font-size:min(7.1vw,34px)!important}
+  .home-top h1 .h1-b{font-size:min(4.3vw,20px)!important}
+  .home-left .atalhos{display:grid;grid-template-columns:1fr;gap:10px}
+  .home-left .atalhos .pill{justify-content:center;width:100%;font-size:17px;padding:15px 16px}
+  /* cabeçalho das páginas */
+  .cab-roteiro{justify-content:flex-start;padding:18px 18px 4px;column-gap:12px}
+  .cab-roteiro .logo{width:68px!important}
+  #r-sub .sub-a{font-size:min(7.4vw,30px)}
+  #r-sub .sub-b{font-size:min(4.4vw,18px)}
+  .cab-roteiro h2{font-size:min(6.8vw,28px);line-height:1.1}
+  .cab-roteiro p{font-size:14px;font-weight:400}
+  /* cronômetro compacto e espaço para a barra do Safari */
+  .timer-fab{padding:12px 15px;font-size:15px;bottom:calc(84px + env(safe-area-inset-bottom))}
+  .fim{padding-bottom:150px}
+  #fichas,#diretrizes,#servidores{padding-bottom:110px}
+  .fichas{gap:10px}
+  .ficha{padding:12px 8px}
+  .ficha-img{max-height:150px}
+}
+@media (max-width:520px){
+  .timer-fab{width:56px;height:56px;padding:0;justify-content:center;border-radius:50%}
+  .timer-fab #timer-fab-txt{display:none}
+  .timer-fab.rodando{width:auto;padding:0 16px;border-radius:999px}
+  .timer-fab.rodando #timer-fab-txt{display:inline}
+  .timer-fab svg{width:24px;height:24px}
+  .btn-reuniao::after{width:64px;height:64px;right:-22px;top:-22px;opacity:.3}
+}
+.calc p{font-weight:400}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -732,6 +776,7 @@ Senha: 000000
     <div class="card">
       <h3>Qual ficha é a próxima?</h3>
       <p>Informe a data limpa para ver o tempo limpo e a ficha que a pessoa pode receber.</p>
+      <label class="calc-lab" for="data-limpa">Data limpa</label>
       <input type="date" id="data-limpa" aria-label="Data limpa">
       <div class="res" id="calc-res"></div>
     </div>
@@ -1238,7 +1283,7 @@ $("#t-zera").onclick=()=>{ parar(); resta=total; avisou=false; render(); $("#sta
 /* ---------- fichas ---------- */
 $("#lista-fichas").innerHTML = FICHAS.map(f=>`
   <div class="ficha">
-    <img class="ficha-img" src="assets/${f.img}.png" alt="${f.d}" loading="lazy">
+    <img class="ficha-img" src="assets/${f.img}.jpg" alt="${f.d}" loading="lazy">
     ${f.t}<span>${f.d}</span>
   </div>`).join("");
 
