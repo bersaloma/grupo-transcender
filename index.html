@@ -665,6 +665,12 @@ a{color:inherit}
   .btn-reuniao::after{width:64px;height:64px;right:-22px;top:-22px;opacity:.3}
 }
 .calc p{font-weight:400}
+@media (max-width:860px){
+  #home::before{-webkit-mask-image:linear-gradient(transparent,#000 35%,#000 82%,transparent)!important;mask-image:linear-gradient(transparent,#000 35%,#000 82%,transparent)!important}
+}
+@media (min-width:861px){
+  #home::before{-webkit-mask-image:linear-gradient(90deg,transparent,#000 30%),linear-gradient(#000 88%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 30%),linear-gradient(#000 88%,transparent);mask-composite:intersect}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
