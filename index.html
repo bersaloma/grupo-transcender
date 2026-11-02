@@ -742,6 +742,9 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .ficha-modal h3{font-size:clamp(38px,6vw,64px);line-height:1.05;margin-top:2px}
 .ficha-modal .fm-txt{font-size:clamp(18px,2.2vw,24px)!important;line-height:1.5;color:var(--indigo);margin:14px auto 0;max-width:520px}
 .ficha-modal .fm-x{position:fixed;top:18px;right:18px;width:48px;height:48px;border-radius:50%;background:#fff;color:var(--indigo);display:grid;place-items:center;box-shadow:var(--sombra)}
+.ficha-img,.ficha-modal .fm-card img,.fm-card img{mix-blend-mode:normal!important}
+.ficha-modal .fm-card img{filter:drop-shadow(0 22px 30px rgba(23,74,107,.22))!important}
+.ficha-img{filter:drop-shadow(0 8px 10px rgba(23,74,107,.15))!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -942,7 +945,7 @@ Senha: 000000
 <div class="ficha-modal" id="ficha-modal" role="dialog" aria-label="Ficha" hidden>
   <button class="fm-x" data-fm-fechar aria-label="Fechar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <div class="fm-card">
-    <img id="fm-img" src="assets/ficha-branca.jpg" alt="">
+    <img id="fm-img" src="assets/ficha-branca.png" alt="">
     <p class="fm-sub" id="fm-sub"></p>
     <h3 id="fm-tit"></h3>
     <p class="fm-txt" id="fm-txt"></p>
@@ -1371,7 +1374,7 @@ $("#t-zera").onclick=()=>{ parar(); resta=total; avisou=false; render(); $("#sta
 /* ---------- fichas ---------- */
 $("#lista-fichas").innerHTML = FICHAS.map((f,i)=>`
   <div class="ficha" data-ficha="${i}" role="button" tabindex="0" aria-label="Abrir ${f.d}">
-    <img class="ficha-img" src="assets/${f.img}.jpg" alt="${f.d}" loading="lazy">
+    <img class="ficha-img" src="assets/${f.img}.png" alt="${f.d}" loading="lazy">
     ${f.t}<span>${f.d}</span>
   </div>`).join("");
 
@@ -1574,7 +1577,7 @@ window.__topo && window.__topo();
 /* ---------- ficha em tela cheia ---------- */
 function abrirFicha(i){
   const f=FICHAS[i]; const m=$("#ficha-modal");
-  $("#fm-img").src=`assets/${f.img}.jpg`; $("#fm-img").alt=f.d;
+  $("#fm-img").src=`assets/${f.img}.png`; $("#fm-img").alt=f.d;
   $("#fm-sub").textContent=f.t; $("#fm-tit").textContent=f.d; $("#fm-txt").textContent=f.msg;
   m.hidden=false; document.body.style.overflow="hidden";
 }
