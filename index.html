@@ -136,6 +136,12 @@ a{color:inherit}
 .topo-in{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
 .voltar{width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none;box-shadow:var(--sombra)}
 .voltar svg{width:22px;height:22px}
+.seta-voltar{all:unset;box-sizing:border-box;position:fixed;top:14px;left:14px;z-index:24;width:46px;height:46px;border-radius:50%;background:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -6px rgba(23,74,107,.35)}
+.seta-voltar[hidden]{display:none}
+.seta-voltar svg{width:22px;height:22px}
+.seta-voltar:hover{background:#FAD3DE}
+body.topo-on .seta-voltar{display:none}
+@media (max-width:700px){ .view:not(#home) .cab-roteiro{padding-left:62px;padding-right:12px} .seta-voltar{width:42px;height:42px;top:14px;left:10px} }
 .topo-tit{flex:1;min-width:0}
 .topo-tit small{display:block;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--azul-forte)}
 .topo-tit strong{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:24px;line-height:1.05;color:var(--titulo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1045,6 +1051,9 @@ Senha: 000000
     <div class="q-bts"><button type="button" class="pill claro" data-q-cancelar>Cancelar</button><button type="submit" class="pill rosa" id="q-salvar">Salvar</button></div>
   </form>
 </div>
+<button class="voltar seta-voltar" id="seta-voltar" data-ir="home" aria-label="Voltar" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="#174A6B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+</button>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1371,6 +1380,7 @@ function ir(dest){
   if(!ROTEIROS[dest]) $("#timer-fab").hidden = true;
   if(location.hash.slice(1)!==(dest==="home"?"":dest)) history.pushState(null,"",dest==="home"?location.pathname:"#"+dest);
   window.scrollTo({top:0,behavior:"instant"});
+  const sv=$("#seta-voltar"); sv.hidden = dest==="home"; sv.dataset.ir = (dest==="fichas"||dest==="servidores") ? "voltar" : "home";
   if(window.__topo) window.__topo();
   if(dest==="servidores") carregarQuadro();
 }
