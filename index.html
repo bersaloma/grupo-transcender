@@ -881,6 +881,25 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .ele{grid-template-columns:1fr 1fr}
   .ele-rot{grid-column:1/-1}
 }
+/* chamada compacta */
+.chamada{display:flex;flex-direction:column}
+.ch-grupo{font-family:"DM Serif Display",Georgia,serif;font-size:19px;color:var(--titulo);padding:12px 0 4px;border-bottom:1px solid #DCE8F2}
+.pc-l{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:center;gap:8px;min-width:0}
+.pc{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #EEF3F8}
+.pc-rot{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--indigo)}
+.pc-nome{font:inherit;font-size:16px;font-weight:700;color:var(--indigo);border:2px solid transparent;border-radius:10px;padding:6px 8px;background:transparent;outline:none;min-width:0;width:100%;box-sizing:border-box}
+.pc-nome::placeholder{color:var(--rosa-forte);font-weight:400}
+.pc-nome:hover{border-color:#DCE8F2}.pc-nome:focus{border-color:#5BCEFA;background:#fff}
+.pc .pres{flex-wrap:nowrap;gap:3px}
+.pc .pres button{font-size:12.5px;padding:6px 9px}
+.pc .pres-vago{display:none}
+@media (max-width:600px){
+  .pc{gap:6px;padding:4px 0}
+  .pc-l{grid-template-columns:1fr;gap:0}
+  .pc-rot{font-size:10.5px}
+  .pc-nome{padding:2px 6px;margin-left:-8px;font-size:15px}
+  .pc .pres button{font-size:11.5px;padding:6px 7px}
+}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1875,7 +1894,7 @@ function presenca(k){
   return `<div class="pres">${PRES.map(o=>`<button type="button" class="${v===o?"on":""} ${o==="Presente"?"ok":o==="Ausente"?"no":"jus"}" data-pres="${k}" data-v="${o}">${o}</button>`).join("")}</div>`;
 }
 function pessoaAta(k,rot){
-  return `<div class="pessoa"><div class="pessoa-l"><span class="pessoa-rot">${rot}</span><input class="pessoa-nome" data-k="${k}.nome" data-rerender value="${esc(getPath(ATA,k+".nome"))}" placeholder="Vago"></div>${presenca(k)}</div>`;
+  return `<div class="pc"><div class="pc-l"><span class="pc-rot">${rot}</span><input class="pc-nome" data-k="${k}.nome" data-rerender value="${esc(getPath(ATA,k+".nome"))}" placeholder="Vago" aria-label="${rot}"></div>${presenca(k)}</div>`;
 }
 function cardAta(n,t,html,azul){ return `<article class="passo ${azul?"azul":""}"><div class="passo-head"><div class="num">${n}</div><h3>${t}</h3></div>${html}</article>`; }
 
@@ -1906,10 +1925,12 @@ function renderAta(){
     </div>`),
     cardAta(++n,"Abertura",`<p class="af-nota">Vai para a ata automaticamente: Oração da Serenidade, Oração do Serviço, leitura das 12 Tradições e dos 12 Conceitos, e o compromisso do grupo com a inclusão.</p>`,true),
     cardAta(++n,"Lista de chamada",`
-      <h4 class="af-sub">Mesa de servidores</h4>
-      ${A.mesa.map((m,i)=>`<div class="ata-linha">${pessoaAta(`mesa.${i}`,m.enc)}</div>`).join("")}
-      <h4 class="af-sub">Moderação e apoio</h4>
-      ${A.dias.map((d,i)=>`<div class="ata-linha"><div class="ata-dia">${d.dia} 19h</div>${pessoaAta(`dias.${i}.mod`,"Moderação")}${pessoaAta(`dias.${i}.apoio`,"Apoio")}</div>`).join("")}
+      <div class="chamada">
+        <div class="ch-grupo">Mesa de servidores</div>
+        ${A.mesa.map((m,i)=>pessoaAta(`mesa.${i}`,m.enc)).join("")}
+        ${A.dias.map((d,i)=>`<div class="ch-grupo">${d.dia}</div>${pessoaAta(`dias.${i}.mod`,"Moderação")}${pessoaAta(`dias.${i}.apoio`,"Apoio")}`).join("")}
+      </div>
+      <p class="af-nota" style="margin:10px 0 0">Toque no nome para corrigir. Deixe em branco se estiver vago.</p>
     `),
     cardAta(++n,"Relatórios",`
       <h4 class="af-sub">Mesa de servidores</h4>
