@@ -792,15 +792,13 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .tab-semana thead th{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:21px;color:var(--titulo);padding:10px 10px;background:#F4F9FD}
 .tab-semana th.canto{background:transparent}
 .tab-semana tbody th{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);vertical-align:middle;padding:10px 6px;background:transparent}
-.tab-semana .hoje{box-shadow:inset 0 0 0 2px #5BCEFA}
-.tab-semana thead th.hoje{background:#E3F5FD}
 .tab-semana .dia-tag{display:inline-block;margin-left:6px;vertical-align:middle;font-family:"Inter",system-ui,sans-serif}
-.tab-semana .slot{background:transparent;padding:10px;border-radius:14px;height:100%;cursor:pointer;transition:box-shadow .15s}
+.tab-semana .slot{background:transparent;padding:9px 8px;border-radius:14px;height:100%;cursor:pointer;transition:box-shadow .15s}
 .tab-semana .slot+.slot{background:transparent}
 .tab-semana .slot:hover,.tab-semana .slot:focus-visible{box-shadow:inset 0 0 0 2px #5BCEFA}
 .tab-semana .slot:active{transform:scale(.98)}
 .tab-h .canto{width:104px}
-.tab-h .slot-fim{white-space:nowrap}
+.tab-semana .slot-fim{font-size:11px;white-space:nowrap}
 .tab-v{display:none}
 @media (max-width:860px){
   .tab-wrap{margin:14px 0 0;padding:6px}
@@ -810,8 +808,6 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .tab-v thead th{font-family:"Inter",system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);background:transparent;padding:6px 10px 2px}
   .tab-v tbody th{font-family:"DM Serif Display",Georgia,serif;font-size:20px;letter-spacing:0;text-transform:none;color:var(--titulo);font-weight:400;background:#F4F9FD;padding:10px}
   .tab-v tbody th .dia-tag{display:block;width:max-content;margin:4px 0 0}
-  .tab-v tr.hoje>*{box-shadow:inset 0 0 0 2px #5BCEFA}
-  .tab-v tr.hoje>th{background:#E3F5FD}
   .tab-v tr.hoje{box-shadow:none}
 }
 /* modal de edição */
