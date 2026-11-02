@@ -745,6 +745,8 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .ficha-img,.ficha-modal .fm-card img,.fm-card img{mix-blend-mode:normal!important}
 .ficha-modal .fm-card img{filter:drop-shadow(0 22px 30px rgba(23,74,107,.22))!important}
 .ficha-img{filter:drop-shadow(0 8px 10px rgba(23,74,107,.15))!important}
+.quadro-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.quadro-fonte{font-size:14px;color:var(--indigo-2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -958,6 +960,8 @@ Senha: 000000
 const CONFIG = {
   // Cole aqui o link do formulário da ata (Google Forms, por exemplo)
   ATA_URL: "https://tiny.cc/h921101",
+  // Planilha do quadro de servidores (conta do grupo). Troque só o ID se a planilha mudar.
+  QUADRO_SHEET_ID: "1RfrkXoh3PM_imtWL8m2_bPNIA90vhOlbc1wIXEjQcRY",
   // Links das leituras (cole aqui)
   MEDITACAO_URL: "https://www.na.org.br/meditacao/",
   IP22_URL: "https://www.na.org.br/downloads-de-literaturas-ips/",
@@ -1274,6 +1278,7 @@ function ir(dest){
   if(location.hash.slice(1)!==(dest==="home"?"":dest)) history.pushState(null,"",dest==="home"?location.pathname:"#"+dest);
   window.scrollTo({top:0,behavior:"instant"});
   if(window.__topo) window.__topo();
+  if(dest==="servidores") carregarQuadro();
 }
 
 document.addEventListener("click", e=>{
@@ -1542,20 +1547,52 @@ const SERVIDORES = {
   ]
 };
 const pessoa = (nome,data) => nome ? `<b>${nome}</b>${data?`<small>até ${data}</small>`:""}` : `<b class="vago">Vago</b>`;
+function renderQuadro(Q, fonte){
 $("#lista-servidores").innerHTML = `
+  <div class="quadro-acoes">
+    <a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">✏️ Editar quadro</a>
+    <span class="quadro-fonte">${fonte}</span>
+  </div>
   <article class="passo">
     <div class="passo-head"><h3>Mesa de servidores</h3></div>
-    <ul class="quadro">${SERVIDORES.mesa.map(([enc,n,d])=>`<li><span>${enc}</span><div class="q-p">${pessoa(n,d)}</div></li>`).join("")}</ul>
+    <ul class="quadro">${Q.mesa.map(([enc,n,d])=>`<li><span>${enc}</span><div class="q-p">${pessoa(n,d)}</div></li>`).join("")}</ul>
   </article>
   <article class="passo azul">
     <div class="passo-head"><h3>Moderação e apoio</h3></div>
-    <div class="dias">${SERVIDORES.dias.map(([dia,m,a])=>`
+    <div class="dias">${Q.dias.map(([dia,m,a])=>`
       <div class="dia">
         <h4>${dia}</h4>
         <div class="dia-l"><span>Moderação</span><div class="q-p">${pessoa(m[0],m[1])}</div></div>
         <div class="dia-l"><span>Apoio</span><div class="q-p">${pessoa(a[0],a[1])}</div></div>
       </div>`).join("")}</div>
   </article>`;
+}
+function csvLinhas(txt){
+  const out=[]; let row=[], cur="", q=false;
+  for(let i=0;i<txt.length;i++){ const c=txt[i];
+    if(q){ if(c==='"'){ if(txt[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else if(c==='"') q=true; else if(c===','){row.push(cur);cur="";} else if(c==='\n'){row.push(cur);out.push(row);row=[];cur="";} else if(c!=='\r') cur+=c; }
+  if(cur||row.length){row.push(cur);out.push(row);} return out;
+}
+function quadroDaPlanilha(rows){
+  const Q={mesa:[],dias:[]}; const dias={};
+  rows.slice(1).forEach(r=>{ const [g,enc,nome,fim]=r.map(x=>(x||"").trim()); if(!g||!enc) return;
+    const G=g.toLowerCase();
+    if(G==="mesa") Q.mesa.push([enc,nome,fim]);
+    else { if(!dias[enc]){ dias[enc]=[enc,["",""],["",""]]; Q.dias.push(dias[enc]); }
+      if(G.startsWith("modera")) dias[enc][1]=[nome,fim]; else if(G.startsWith("apoio")) dias[enc][2]=[nome,fim]; }
+  });
+  return Q;
+}
+renderQuadro(SERVIDORES, "");
+async function carregarQuadro(){
+  try{
+    const r=await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/gviz/tq?tqx=out:csv&gid=0&t=${Date.now()}`);
+    if(!r.ok) throw 0; const txt=await r.text(); if(txt.trim().startsWith("<")) throw 0;
+    const Q=quadroDaPlanilha(csvLinhas(txt)); if(!Q.mesa.length && !Q.dias.length) throw 0;
+    renderQuadro(Q, "Atualizado pela planilha do grupo");
+  }catch(e){ renderQuadro(SERVIDORES, "Mostrando a última versão salva no site"); }
+}
 
 /* ---------- barra superior: oculta; aparece ao tocar/clicar no topo ---------- */
 (function(){
