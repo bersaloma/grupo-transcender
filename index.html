@@ -854,6 +854,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .af-nota{font-size:15px;color:var(--indigo);line-height:1.5;margin-bottom:10px}
 .ata-linha{background:#F4F9FD;border-radius:16px;padding:12px;margin-top:10px;display:flex;flex-direction:column;gap:10px}
 .ata-dia{font-family:"DM Serif Display",Georgia,serif;font-size:20px;color:var(--titulo)}
+.rel-nome{font-family:"Inter",system-ui,sans-serif;font-size:14px;font-weight:700;color:var(--indigo);margin-left:6px}
 .pessoa{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
 .pessoa-l{display:flex;flex-direction:column;gap:5px}
 .pessoa-rot{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo)}
@@ -1904,13 +1905,19 @@ function renderAta(){
       ${campo("encargoAutor","Encargo de quem redige","Ex.: RSG")}
     </div>`),
     cardAta(++n,"Abertura",`<p class="af-nota">Vai para a ata automaticamente: Oração da Serenidade, Oração do Serviço, leitura das 12 Tradições e dos 12 Conceitos, e o compromisso do grupo com a inclusão.</p>`,true),
-    cardAta(++n,"Lista de chamada e relatórios",`
+    cardAta(++n,"Lista de chamada",`
       <h4 class="af-sub">Mesa de servidores</h4>
-      ${A.mesa.map((m,i)=>`<div class="ata-linha">${pessoaAta(`mesa.${i}`,m.enc)}${texto(`mesa.${i}.relato`,"Relatório","Breve relato (opcional)")}</div>`).join("")}
+      ${A.mesa.map((m,i)=>`<div class="ata-linha">${pessoaAta(`mesa.${i}`,m.enc)}</div>`).join("")}
       <h4 class="af-sub">Moderação e apoio</h4>
-      ${A.dias.map((d,i)=>`<div class="ata-linha"><div class="ata-dia">${d.dia} 19h</div>${pessoaAta(`dias.${i}.mod`,"Moderação")}${pessoaAta(`dias.${i}.apoio`,"Apoio")}${texto(`dias.${i}.relato`,"Breve relato","Como foram as reuniões (opcional)")}</div>`).join("")}
+      ${A.dias.map((d,i)=>`<div class="ata-linha"><div class="ata-dia">${d.dia} 19h</div>${pessoaAta(`dias.${i}.mod`,"Moderação")}${pessoaAta(`dias.${i}.apoio`,"Apoio")}</div>`).join("")}
     `),
-    cardAta(++n,"Assuntos",`${texto("novos","Assuntos novos")}${texto("velhos","Assuntos velhos")}`,true),
+    cardAta(++n,"Relatórios",`
+      <h4 class="af-sub">Mesa de servidores</h4>
+      ${A.mesa.map((m,i)=>`<div class="ata-linha"><div class="ata-dia">${m.enc}${m.nome?` <span class="rel-nome">${esc(m.nome)}</span>`:""}</div>${m.nome?texto(`mesa.${i}.relato`,"Relatório","Breve relato (opcional)"):`<p class="pres-vago">Vago</p>`}</div>`).join("")}
+      <h4 class="af-sub">Reuniões da semana</h4>
+      ${A.dias.map((d,i)=>`<div class="ata-linha"><div class="ata-dia">${d.dia} 19h${(d.mod.nome||d.apoio.nome)?` <span class="rel-nome">${[d.mod.nome,d.apoio.nome].filter(Boolean).map(esc).join(" e ")}</span>`:""}</div>${texto(`dias.${i}.relato`,"Breve relato","Como foram as reuniões (opcional)")}</div>`).join("")}
+    `,true),
+    cardAta(++n,"Assuntos",`${texto("novos","Assuntos novos")}${texto("velhos","Assuntos velhos")}`),
     cardAta(++n,"Moções",`${mocoes||`<p class="af-nota">Nenhuma moção adicionada.</p>`}<button type="button" class="pill claro" data-add-mocao>＋ Adicionar moção</button>`),
     cardAta(++n,"Eletivas",`<p class="af-nota">Já vem com o quadro atual. Altere só o que mudou na reunião.</p>
       <h4 class="af-sub">Mesa de servidores</h4>
