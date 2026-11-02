@@ -842,6 +842,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .ajuda-nums{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .ajuda-nums a{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;font-size:19px;color:var(--indigo);text-decoration:none;box-shadow:0 4px 12px -6px rgba(23,74,107,.3);font-variant-numeric:tabular-nums}
 .ajuda-nums a:hover{box-shadow:inset 0 0 0 2px #5BCEFA}
+.ata-adm{margin-top:14px}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1074,6 +1075,7 @@ Senha: 000000
 const CONFIG = {
   // Cole aqui o link do formulário da ata (Google Forms, por exemplo)
   ATA_URL: "https://tiny.cc/h921101",
+  ATA_ADM_URL: "",   // link da ata administrativa
   // Planilha do quadro de servidores (conta do grupo). Troque só o ID se a planilha mudar.
   QUADRO_SHEET_ID: "11zHuba1DKxKoS-YjsYkF1kL1UAxPRQzRgSHLtPRPjos",
   // URL do Apps Script (termina em /exec). Enquanto vazio, a edição pelo site fica desligada.
@@ -1357,7 +1359,7 @@ const ROTEIROS = {
       B.usou(),
       {k:"Leitura", t:"As 12 Tradições de NA", html:`<ol class="lista">${TRADICOES.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html:`<ol class="lista">${CONCEITOS.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
-      {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri")},
+      {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><a class="pill js-ata-adm" href="${CONFIG.ATA_ADM_URL||"#"}" target="_blank" rel="noopener">📄 Abrir Ata Administrativa</a></div>`},
       FASE("Fim"),
       B.encerramento(),
       B.oracao(),
@@ -1434,6 +1436,7 @@ document.addEventListener("click", e=>{
   const lk = e.target.closest(".js-link");
   if(lk && !CONFIG[lk.dataset.link]){ e.preventDefault(); toast("Link ainda não configurado"); return; }
   const ata = e.target.closest(".js-ata");
+  if(e.target.closest(".js-ata-adm") && !CONFIG.ATA_ADM_URL){ e.preventDefault(); toast("Link da ata administrativa ainda não configurado"); return; }
   if(ata && !CONFIG.ATA_URL){ e.preventDefault(); toast("Link da ata ainda não configurado"); return; }
   const tm = e.target.closest("[data-timer]");
   if(tm){ abrirSheet(); escolher(+tm.dataset.timer); iniciar(); return; }
