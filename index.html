@@ -1634,7 +1634,7 @@ function renderQuadro(Q, fonte){
   <section class="semana ${EDITANDO?"editando":""}" aria-label="Escala da semana">
     ${dias.map(([dia,m,a])=>`
       <div class="dia-col ${dia===hoje?"hoje":""}">
-        <div class="dia-cab"><span class="dia-n">${curto(dia)}</span>${dia===hoje?`<span class="dia-tag">Hoje</span>`:dia==="Sexta-feira"?`<span class="dia-tag est">Estudo</span>`:""}</div>
+        <div class="dia-cab"><span class="dia-n">${curto(dia)}</span>${dia===hoje?`<span class="dia-tag">Hoje</span>`:""}</div>
         ${slot("Moderação",dia,m[0],m[1],"Moderação")}
         ${slot("Apoio",dia,a[0],a[1],"Apoio")}
       </div>`).join("")}
