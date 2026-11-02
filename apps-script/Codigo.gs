@@ -1,6 +1,7 @@
 /**
- * Quadro de Servidores · Grupo Transcender de NA
- * Liga o site à planilha: lê o quadro e salva edições com histórico.
+ * Quadro de Servidores e Diretrizes · Grupo Transcender de NA
+ * Liga o site à planilha (lê o quadro e salva edições com histórico)
+ * e ao Google Docs do manual de procedimentos (só leitura).
  *
  * Instalação (uma vez, logado na conta do grupo):
  * 1. Na planilha: Extensões → Apps Script. Apague o que estiver lá e cole este arquivo.
@@ -10,13 +11,60 @@
  *      Executar como: Eu (grupotranscenderna@gmail.com)
  *      Quem pode acessar: Qualquer pessoa
  * 4. Autorize, copie a URL que termina em /exec e mande para atualizar o site.
+ *
+ * Para atualizar este código depois: cole a versão nova, salve e vá em
+ * Implantar → Gerenciar implantações → lápis → Versão: Nova versão → Implantar.
+ * Assim a URL continua a mesma.
  */
 
 const ABA_QUADRO = 0;            // primeira aba = quadro atual
 const ABA_HISTORICO = 'Histórico';
+const DOC_DIRETRIZES = '1dKjOKiC5X1EVZK23AyOegQxUxxAb_GGPBne9fxK8Uds'; // manual de procedimentos
 
-function doGet() {
+function doGet(e) {
+  if (e && e.parameter && e.parameter.doc === 'diretrizes') {
+    try { return json({ ok: true, blocos: lerDiretrizes() }); }
+    catch (err) { return json({ ok: false, erro: String(err) }); }
+  }
   return json({ ok: true, linhas: lerQuadro() });
+}
+
+/* Lê o Google Docs e devolve os parágrafos em ordem: títulos, texto e itens de lista. */
+function lerDiretrizes() {
+  const corpo = DocumentApp.openById(DOC_DIRETRIZES).getBody();
+  const H = DocumentApp.ParagraphHeading, T = DocumentApp.ElementType;
+  const blocos = [];
+  for (let i = 0; i < corpo.getNumChildren(); i++) {
+    const el = corpo.getChild(i);
+    const tipoEl = el.getType();
+    if (tipoEl !== T.PARAGRAPH && tipoEl !== T.LIST_ITEM) continue;
+    const texto = el.asText().getText().trim();
+    if (!texto || /^[-_—=*]{3,}$/.test(texto)) continue;
+    let tipo = 'p';
+    if (tipoEl === T.LIST_ITEM) tipo = 'li';
+    else {
+      const h = el.asParagraph().getHeading();
+      if (h === H.TITLE || h === H.HEADING1) tipo = 'h1';
+      else if (h === H.SUBTITLE || h === H.HEADING2) tipo = 'h2';
+      else if (h === H.HEADING3 || h === H.HEADING4) tipo = 'h3';
+    }
+    blocos.push({ tipo: tipo, html: htmlDoTexto(el.asText()) });
+  }
+  return blocos;
+}
+
+/* Converte o texto em HTML simples, mantendo só o negrito. */
+function htmlDoTexto(t) {
+  const txt = t.getText();
+  const cortes = (t.getTextAttributeIndices() || [0]).concat([txt.length]);
+  let out = '';
+  for (let k = 0; k < cortes.length - 1; k++) {
+    const a = cortes[k], b = cortes[k + 1];
+    if (b <= a) continue;
+    const pedaco = txt.substring(a, b).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    out += t.isBold(a) && pedaco.trim() ? '<strong>' + pedaco + '</strong>' : pedaco;
+  }
+  return out.trim();
 }
 
 function doPost(e) {

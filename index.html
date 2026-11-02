@@ -367,6 +367,7 @@ body.topo-on .seta-voltar{display:none}
 
 /* ===== DIRETRIZES ===== */
 .dir-intro{max-width:880px;margin:14px auto 0;padding:0 20px}
+.dir-intro p+p{margin-top:10px}
 .dir-intro p{background:#fff;border-radius:var(--raio);padding:18px 20px;box-shadow:var(--sombra);font-weight:500;font-size:17px;line-height:1.6;color:var(--indigo)}
 .dir-indice{max-width:880px;margin:18px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
 .dir-indice a{display:flex;align-items:center;gap:10px;text-decoration:none;background:rgba(255,255,255,.85);border:2px solid #fff;border-radius:14px;padding:10px 12px;font-weight:700;font-size:15px;color:var(--indigo)}
@@ -984,9 +985,7 @@ Senha: 000000
     <h2>Diretrizes de Serviço</h2>
     <p>Grupo Transcender de Narcóticos Anônimos</p>
   </div>
-  <div class="dir-intro">
-    <p>Este é o manual de procedimentos do Grupo Transcender. Ele existe para facilitar o serviço, preservar a unidade do grupo e oferecer uma referência simples para servidores e membros. As diretrizes se baseiam nas decisões da consciência de grupo registradas nas reuniões administrativas e nas práticas em vigor.</p>
-  </div>
+  <div class="dir-intro" id="dir-intro"></div>
   <nav class="dir-indice" id="dir-indice" aria-label="Seções"></nav>
   <div class="passos" id="dir-lista"></div>
   <div style="height:40px"></div>
@@ -1409,6 +1408,7 @@ function ir(dest){
   const sv=$("#seta-voltar"); sv.hidden = dest==="home"; sv.dataset.ir = (dest==="fichas"||dest==="servidores") ? "voltar" : "home";
   if(window.__topo) window.__topo();
   if(dest==="servidores") carregarQuadro();
+  if(dest==="diretrizes") carregarDiretrizes();
 }
 
 document.addEventListener("click", e=>{
@@ -1547,108 +1547,60 @@ $("#data-limpa").addEventListener("change",e=>{
 });
 
 /* ---------- diretrizes ---------- */
-const DIRETRIZES = [
- {t:"Sobre o grupo", ref:"Ata de Fundação · 13/09/2025; Ata 03 · 12/10/2025", html:`
-  <p>O Grupo Transcender de Narcóticos Anônimos é um espaço de recuperação comprometido com o acolhimento, a segurança e a inclusão de pessoas trans, travestis, não binárias e dissidentes de gênero.</p>
-  <p>O grupo busca preservar uma atmosfera de recuperação livre de transfobia, homofobia, assédio e outras formas de discriminação.</p>`},
- {t:"Funcionamento das reuniões", html:`
-  <h4>Horário e duração</h4>
-  <p>As reuniões regulares acontecem todos os dias, das 19h às 21h, com 2 horas de duração.</p>
-  <h4>Reunião de estudo</h4>
-  <p>A reunião de sexta-feira, às 19h, é dedicada ao estudo da literatura e/ou dos Passos de Narcóticos Anônimos.</p>
-  <p class="ref">Ata 08 · 03/01/2026</p>
-  <h4>Reunião temática</h4>
-  <p>No último sábado de cada mês, às 19h, o grupo realiza uma reunião temática. O corpo de serviço tem autonomia para:</p>
-  <ul><li>escolher temas com base na literatura de NA;</li><li>convidar pessoas para partilhar;</li><li>organizar a temática no grupo de serviço.</li></ul>
-  <p class="ref">Ata 12 · 02/05/2026</p>
-  <h4>Reuniões extraordinárias</h4>
-  <p>Havendo servidores disponíveis, podem ser abertas reuniões extraordinárias de partilhas, com divulgação prévia nos canais do grupo.</p>
-  <p class="ref">Ata 04 · 01/11/2025</p>`},
- {t:"Condução da reunião", html:`
-  <h4>Moderação</h4>
-  <p>A pessoa que modera é responsável por:</p>
-  <ul><li>conduzir a reunião conforme o roteiro;</li><li>preservar a atmosfera de recuperação;</li><li>organizar a dinâmica da reunião;</li><li>usar as ferramentas de segurança quando necessário;</li><li>fazer os registros previstos pelo grupo.</li></ul>
-  <h4>Apoio</h4>
-  <p>Sempre que houver alguém servindo no apoio, suas principais funções são:</p>
-  <ul><li>ajudar a organizar a lista de partilhas;</li><li>acompanhar o tempo das falas;</li><li>dar suporte técnico à moderação;</li><li>colaborar com a segurança e o fluxo da reunião.</li></ul>
-  <p class="ref">Ata 06 · 23/11/2025</p>
-  <h4>Literatura</h4>
-  <p>A pessoa responsável pela reunião tem autonomia para escolher trechos da literatura oficial de Narcóticos Anônimos. A Meditação Diária faz parte da abertura, e outras leituras podem ser usadas ao longo do encontro.</p>
-  <p class="ref">Ata 08 · 03/01/2026; Ata 11 · 04/04/2026</p>`},
- {t:"Partilhas", html:`
-  <h4>Organização</h4>
-  <p>As partilhas são organizadas prioritariamente por levantamento de mão. Moderação e apoio podem usar o chat e outros recursos da plataforma para organizar a ordem das falas.</p>
-  <p class="ref">Ata Extraordinária · 14/09/2025</p>
-  <h4>Tempo</h4>
-  <ul><li>Com até 10 participantes, cada partilha pode ter até 10 minutos.</li><li>Com mais de 10 participantes, até 7 minutos.</li></ul>
-  <p>A moderação deve considerar o número de pessoas presentes, o tempo disponível e a participação do maior número possível de membros.</p>
-  <p class="ref">Ata 14 · 04/07/2026</p>
-  <h4>Retorno sobre partilhas</h4>
-  <p>Não é sugerido dar retorno sobre a partilha de outra pessoa. A partilha é um espaço para a experiência individual, sem debates, respostas, julgamentos ou conselhos sobre o que outra pessoa compartilhou.</p>
-  <p class="ref">Ata 11 · 04/04/2026</p>
-  <h4>Retorno espiritual</h4>
-  <p>A moderação pode fazer um retorno espiritual baseado na literatura, inclusive no Só por Hoje, sem direcioná-lo à partilha de um membro.</p>
-  <p class="ref">Ata 12 · 02/05/2026</p>
-  <h4>Uso no mesmo dia</h4>
-  <p>Sugere-se que a pessoa que usou no dia não partilhe. Ela continua acolhida na reunião e é incentivada a continuar voltando.</p>
-  <p class="ref">Ata 15 · 01/08/2026</p>`},
- {t:"Convivência", ref:"Ata Extraordinária · 14/09/2025; Ata 03 · 12/10/2025", html:`
-  <p>Durante as reuniões:</p>
-  <ul><li>não é permitido fumar com a câmera aberta;</li><li>é permitido se alimentar com a câmera aberta;</li><li>não é permitida nudez, seminudez ou exposição inadequada;</li><li>espera-se respeito aos nomes, pronomes e identidades das pessoas presentes;</li><li>comportamentos discriminatórios, violentos, predatórios ou perturbadores podem levar à intervenção da moderação.</li></ul>`},
- {t:"Segurança da reunião", html:`
-  <p>A segurança do espaço é responsabilidade coletiva. Cabe à moderação e ao corpo de serviço usar os recursos técnicos necessários para preservar a reunião.</p>
-  <h4>Áudio e vídeo</h4>
-  <p>Diante de comportamento perturbador, violento ou predatório, a pessoa responsável pela reunião tem autonomia para:</p>
-  <ul><li>desligar o áudio;</li><li>impedir que o áudio seja reativado, quando necessário;</li><li>desligar o vídeo;</li><li>restringir outros recursos da plataforma.</li></ul>
-  <p class="ref">Ata 11 · 04/04/2026; Ata 12 · 02/05/2026</p>
-  <h4>Sala de espera</h4>
-  <p>O uso da sala de espera fica a critério da pessoa responsável pela reunião, conforme as necessidades de segurança e funcionamento.</p>
-  <p class="ref">Ata 13 · 06/06/2026</p>
-  <h4>Remoção de perfis</h4>
-  <p>Perfis que ameacem a integridade, a segurança ou o funcionamento da reunião podem ser removidos pelos servidores responsáveis.</p>
-  <p class="ref">Ata Extraordinária · 14/09/2025</p>`},
- {t:"Privacidade e inteligência artificial", ref:"Ata 12 · 02/05/2026", html:`
-  <p>Para preservar o anonimato e a privacidade dos membros:</p>
-  <ul><li>o AI Companion deve ficar desativado;</li><li>a transcrição automática deve ficar desativada;</li><li>sempre que possível, a plataforma deve ser configurada para impedir que participantes ativem esses recursos.</li></ul>`},
- {t:"Chat", ref:"Ata Extraordinária · 14/09/2025; Ata 11 · 04/04/2026", html:`
-  <p>O chat é administrado por host e co-host. A comunicação entre membros e host/co-host continua habilitada, conforme a configuração definida pelo grupo.</p>
-  <p>O chat deve ser usado de forma compatível com a atmosfera de recuperação e a segurança da reunião.</p>`},
- {t:"Transfobia e discriminação", html:`
-  <p>O Grupo Transcender não aceita atitudes transfóbicas em suas reuniões ou espaços de comunicação.</p>
-  <p>Quando houver ocorrência registrada por prints, conversas ou outras provas, pode ser aplicada suspensão de 30 dias dos espaços do Grupo Transcender. Em caso de reincidência, uma nova suspensão pode ser aplicada.</p>
-  <p>Independentemente de sanção posterior, a moderação pode agir imediatamente para preservar a segurança da reunião.</p>
-  <p class="ref">Ata 03 · 12/10/2025</p>
-  <p>Casos de homofobia, assédio, comportamento predatório ou ameaça à segurança também permitem intervenção imediata dos servidores.</p>
-  <p class="ref">Ata Extraordinária · 14/09/2025</p>`},
- {t:"Boas práticas de serviço", ref:"Ata de Fundação · 13/09/2025; Ata 03 · 12/10/2025; Ata 04 · 01/11/2025", html:`
-  <p>Quem assume um encargo deve buscar:</p>
-  <ul><li>frequência nas reuniões;</li><li>compromisso com o horário e as responsabilidades assumidas;</li><li>pedir ajuda com antecedência quando não puder servir;</li><li>conhecer e respeitar as diretrizes de inclusão do Transcender;</li><li>respeitar linguagem, nomes, pronomes e liberdade de gênero;</li><li>trabalhar em unidade com o restante do corpo de serviço.</li></ul>`},
- {t:"Faltas e continuidade do serviço", html:`
-  <p>Três faltas consecutivas, sem justificativa e sem pedido de ajuda antecipado, representam quebra do compromisso esperado no serviço.</p>
-  <p>Ao chegar a cinco faltas no mesmo termo, mesmo justificadas, a pessoa é destituída do encargo. Para quem modera, contam tanto as reuniões sob sua responsabilidade quanto as reuniões administrativas.</p>
-  <p class="ref">Ata 04 · 01/11/2025</p>
-  <p>A pessoa que entregar voluntariamente um encargo ou for destituída deve ficar três meses afastada dos encargos de serviço do Grupo Transcender. O afastamento do serviço não significa afastamento das reuniões de recuperação.</p>
-  <p class="ref">Ata 06 · 23/11/2025</p>`},
- {t:"Comunicação", html:`
-  <p>Mudanças de horário, formato ou informações públicas das reuniões devem ser atualizadas no site do grupo em até 72 horas.</p>
-  <p class="ref">Ata 04 · 01/11/2025</p>
-  <p>O grupo também tem um encargo temporário de divulgação das reuniões, com termo de 15 dias.</p>
-  <p class="ref">Ata 11 · 04/04/2026</p>`},
- {t:"Reuniões administrativas", ref:"Ata 03 · 12/10/2025; Ata 08 · 03/01/2026", html:`
-  <p>O Grupo Transcender realiza uma reunião administrativa mensal, às 19h, para:</p>
-  <ul><li>prestação de contas dos servidores;</li><li>apresentação de relatórios;</li><li>eletivas;</li><li>discussão de assuntos novos;</li><li>apresentação e votação de moções;</li><li>definição das diretrizes do grupo.</li></ul>`},
- {t:"Atualização deste guia", ref:"Ata 12 · 02/05/2026", html:`
-  <p>Este guia deve representar o funcionamento atual do Grupo Transcender. Sempre que a consciência de grupo aprovar uma mudança de procedimento, a versão vigente deve ser atualizada.</p>
-  <p>As atas administrativas continuam sendo a fonte das decisões e podem ser consultadas para esclarecer a origem de uma diretriz.</p>
-  <p>A criação e a consolidação deste documento foram aprovadas pela consciência de grupo do Grupo Transcender.</p>`},
-];
+/* Diretrizes: o texto vem do Google Docs do manual (via Apps Script).
+   DIRETRIZES_SALVAS é a cópia usada se o Docs não responder. */
+const DIRETRIZES_SALVAS = [{"tipo": "h1", "html": "<strong>GRUPO TRANSCENDER DE NARCÓTICOS ANÔNIMOS</strong>"}, {"tipo": "h2", "html": "<strong>MANUAL DE PROCEDIMENTOS</strong>"}, {"tipo": "p", "html": "Este é o manual de procedimentos do Grupo Transcender de Narcóticos Anônimos. Seu objetivo é facilitar o serviço, preservar a unidade do grupo e oferecer uma referência simples para servidores e membros. As diretrizes aqui reunidas são baseadas nas decisões da consciência de grupo registradas em reuniões administrativas e nas práticas atualmente vigentes."}, {"tipo": "h1", "html": "<strong>1. SOBRE O GRUPO</strong>"}, {"tipo": "p", "html": "O <strong>Grupo Transcender de Narcóticos Anônimos</strong> é um espaço de recuperação comprometido com o acolhimento, a segurança e a inclusão de pessoas trans, travestis, não binárias e dissidentes de gênero."}, {"tipo": "p", "html": "O grupo busca preservar uma atmosfera de recuperação livre de transfobia, homofobia, assédio e outras formas de discriminação."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata de Fundação — 13/09/2025; Ata 03 — 12/10/2025."}, {"tipo": "h1", "html": "<strong>2. FUNCIONAMENTO DAS REUNIÕES</strong>"}, {"tipo": "h2", "html": "<strong>2.1 Horário</strong>"}, {"tipo": "p", "html": "As reuniões regulares acontecem:"}, {"tipo": "p", "html": "<strong>todos os dias, às 19h - 21h.</strong>"}, {"tipo": "h2", "html": "<strong>2.2 Duração</strong>"}, {"tipo": "p", "html": "As reuniões têm atualmente:"}, {"tipo": "p", "html": "<strong>2 horas de duração.</strong>"}, {"tipo": "h2", "html": "<strong>2.3 Reunião de estudo</strong>"}, {"tipo": "p", "html": "A reunião de estudo de <strong>sexta-feira às 19h</strong> foi temporariamente suspensa por falta de servidores, operando como reunião normal de partilha regular da semana."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 08 — 03/01/2026; Ata 16 — 05/09/2026."}, {"tipo": "h2", "html": "<strong>2.4 Reunião temática</strong>"}, {"tipo": "p", "html": "Em <strong>todos os sábados, às 19h</strong>, o grupo realiza uma reunião temática."}, {"tipo": "p", "html": "O corpo de serviço possui autonomia para:"}, {"tipo": "li", "html": "escolher temas com base na literatura de NA;"}, {"tipo": "li", "html": "convidar pessoas para partilhar (requisitos para convidados: mínimo de 1 ano limpo, serviço ativo em NA e ter trabalhado ou estar trabalhando os 12 Passos);"}, {"tipo": "li", "html": "organizar a temática no grupo de serviço."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 12 — 02/05/2026; Ata 16 — 05/09/2026; Ata 17 — 02/10/2026."}, {"tipo": "h2", "html": "<strong>2.5 Reuniões extraordinárias</strong>"}, {"tipo": "p", "html": "Havendo disponibilidade de servidores, poderão ser abertas reuniões extraordinárias de partilhas, com divulgação prévia nos canais do grupo."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 04 — 01/11/2025."}, {"tipo": "h1", "html": "<strong>3. CONDUÇÃO DA REUNIÃO</strong>"}, {"tipo": "h2", "html": "<strong>3.1 Moderação</strong>"}, {"tipo": "p", "html": "A pessoa moderadora é responsável por:"}, {"tipo": "li", "html": "conduzir a reunião conforme o roteiro oficial;"}, {"tipo": "li", "html": "incluir no roteiro o número da Linha de Ajuda (132) e números de NA;"}, {"tipo": "li", "html": "disponibilizar as informações da Sétima Tradição (chave PIX e QR Code) no chat da reunião;"}, {"tipo": "li", "html": "preservar a atmosfera de recuperação;"}, {"tipo": "li", "html": "organizar a dinâmica da reunião;"}, {"tipo": "li", "html": "utilizar as ferramentas de segurança quando necessário;"}, {"tipo": "li", "html": "realizar os registros previstos pelo grupo."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 06 — 23/11/2025; Ata 16 — 05/09/2026; Ata 17 — 02/10/2026."}, {"tipo": "h2", "html": "<strong>3.2 Apoio</strong>"}, {"tipo": "p", "html": "Sempre que houver pessoa servindo no apoio, suas principais funções são:"}, {"tipo": "li", "html": "auxiliar na organização da lista de partilhas;"}, {"tipo": "li", "html": "acompanhar o tempo das falas;"}, {"tipo": "li", "html": "auxiliar tecnicamente a moderação;"}, {"tipo": "li", "html": "colaborar com a segurança e o fluxo da reunião."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 06 — 23/11/2025."}, {"tipo": "h2", "html": "<strong>3.3 Literatura</strong>"}, {"tipo": "p", "html": "A pessoa responsável pela reunião possui autonomia para escolher trechos da <strong>literatura oficial de Narcóticos Anônimos</strong> para leitura."}, {"tipo": "p", "html": "A Meditação Diária integra a abertura da reunião e outras leituras de literatura podem ser utilizadas ao longo do encontro."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 08 — 03/01/2026; Ata 11 — 04/04/2026."}, {"tipo": "h1", "html": "<strong>4. PARTILHAS</strong>"}, {"tipo": "h2", "html": "<strong>4.1 Organização</strong>"}, {"tipo": "p", "html": "As partilhas são organizadas prioritariamente por <strong>levantamento de mão</strong>."}, {"tipo": "p", "html": "A moderação e o apoio podem utilizar o chat e outros recursos da plataforma para organizar a sequência das falas."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata Extraordinária — 14/09/2025."}, {"tipo": "h2", "html": "<strong>4.2 Tempo</strong>"}, {"tipo": "p", "html": "Como referência:"}, {"tipo": "li", "html": "com <strong>até 10 participantes</strong>, as partilhas podem ter até <strong>10 minutos</strong>;"}, {"tipo": "li", "html": "com <strong>mais de 10 participantes</strong>, podem ter até <strong>7 minutos</strong>."}, {"tipo": "p", "html": "A moderação deve considerar o número de pessoas presentes, o tempo disponível e a possibilidade de participação do maior número possível de membros, tendo autonomia para ajustar o tempo conforme necessário."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 14 — 04/07/2026; Ata 16 — 05/09/2026."}, {"tipo": "h2", "html": "<strong>4.3 Retorno sobre partilhas</strong>"}, {"tipo": "p", "html": "<strong>Não é sugerido dar retorno sobre a partilha de outra pessoa.</strong>"}, {"tipo": "p", "html": "O espaço de partilha é destinado à experiência individual, evitando debates, respostas, julgamentos ou aconselhamento direto sobre aquilo que outra pessoa compartilhou."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 11 — 04/04/2026."}, {"tipo": "h2", "html": "<strong>4.4 Retorno espiritual</strong>"}, {"tipo": "p", "html": "Moderador da reunião pode realizar um retorno espiritual baseado na literatura, inclusive no <strong>Só por Hoje</strong>, sem direcioná-lo pessoalmente à partilha de um membro."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 12 — 02/05/2026."}, {"tipo": "h2", "html": "<strong>4.5 Uso no mesmo dia</strong>"}, {"tipo": "p", "html": "É sugerido à pessoa que tenha usado naquele dia que <strong>não realize partilha</strong>, permanecendo acolhida na reunião e sendo incentivada a continuar voltando."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 15 — 01/08/2026."}, {"tipo": "h1", "html": "<strong>5. CONVIVÊNCIA E BOAS PRÁTICAS</strong>"}, {"tipo": "h2", "html": "<strong>5.1 Regras de convivência</strong>"}, {"tipo": "p", "html": "Durante as reuniões:"}, {"tipo": "li", "html": "não é permitido fumar com a câmera aberta;"}, {"tipo": "li", "html": "é permitido alimentar-se com a câmera aberta;"}, {"tipo": "li", "html": "não é permitido nudez, seminudez ou exposição inadequada;"}, {"tipo": "li", "html": "espera-se respeito aos nomes, pronomes e identidades das pessoas presentes;"}, {"tipo": "li", "html": "comportamentos discriminatórios, violentos, predatórios ou perturbadores poderão gerar intervenção da moderação."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata Extraordinária — 14/09/2025; Ata 03 — 12/10/2025."}, {"tipo": "h2", "html": "<strong>5.2 Boas práticas de conduta e serviço</strong>"}, {"tipo": "p", "html": "Quem assume o serviço deve observar:"}, {"tipo": "li", "html": "tolerância zero a comportamento predatório ou assédio;"}, {"tipo": "li", "html": "acolhimento especial a mulheres e recém-chegados, incluindo a pergunta sobre tempo limpo na recepção;"}, {"tipo": "li", "html": "servidores que abrirem a câmera durante o serviço devem utilizar plano de fundo neutro, sem apologia política, religiosa ou de causas alheias a NA, priorizando o uso da logo da irmandade ou do grupo."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata Extraordinária — 14/09/2025; Ata 03 — 12/10/2025; Ata 16 — 05/09/2026."}, {"tipo": "h1", "html": "<strong>6. SEGURANÇA DA REUNIÃO</strong>"}, {"tipo": "p", "html": "A segurança do espaço é responsabilidade coletiva, cabendo à moderação e ao corpo de serviço utilizar os recursos técnicos necessários para preservar a reunião."}, {"tipo": "h2", "html": "<strong>6.1 Áudio e vídeo</strong>"}, {"tipo": "p", "html": "Diante de comportamento perturbador, violento ou predatório, a pessoa responsável pela reunião possui autonomia para:"}, {"tipo": "li", "html": "desligar áudio;"}, {"tipo": "li", "html": "impedir reativação do áudio quando necessário;"}, {"tipo": "li", "html": "desligar vídeo;"}, {"tipo": "li", "html": "restringir outros recursos da plataforma durante o dia da ocorrência."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 11 — 04/04/2026; Ata 12 — 02/05/2026."}, {"tipo": "h2", "html": "<strong>6.2 Sala de espera</strong>"}, {"tipo": "p", "html": "A utilização da sala de espera fica a critério da pessoa responsável pela reunião, conforme as necessidades de segurança e funcionamento."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 13 — 06/06/2026; Ata 16 — 05/09/2026."}, {"tipo": "h2", "html": "<strong>6.3 Remoção de perfis</strong>"}, {"tipo": "p", "html": "Perfis que ameacem a integridade, a segurança ou o funcionamento da reunião (como trolls ou invasões) podem ser removidos imediatamente pelos servidores responsáveis."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata Extraordinária — 14/09/2025."}, {"tipo": "h1", "html": "<strong>7. PRIVACIDADE E RECURSOS DE INTELIGÊNCIA ARTIFICIAL</strong>"}, {"tipo": "p", "html": "Para preservar o anonimato e a privacidade dos membros:"}, {"tipo": "li", "html": "o <strong>AI Companion deve permanecer desativado</strong>;"}, {"tipo": "li", "html": "recursos de <strong>transcrição automática devem permanecer desativados</strong>;"}, {"tipo": "li", "html": "a configuração da plataforma deve impedir obrigatoriamente que participantes iniciem esses recursos."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 12 — 02/05/2026."}, {"tipo": "h1", "html": "<strong>8. CHAT E COMUNICAÇÃO DIGITAL</strong>"}, {"tipo": "h2", "html": "<strong>8.1 Chat na reunião</strong>"}, {"tipo": "p", "html": "O chat na reunião permanece fechado para participantes em geral, ficando habilitado apenas para envio de mensagens entre membros e host/co-host."}, {"tipo": "p", "html": "O chat deve ser utilizado de maneira compatível com a atmosfera de recuperação e a segurança da reunião."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata Extraordinária — 14/09/2025; Ata 11 — 04/04/2026; Ata 16 — 05/09/2026."}, {"tipo": "h2", "html": "<strong>8.2 Grupos digitais e administração</strong>"}, {"tipo": "p", "html": "O privilégio de Administrador nos grupos oficiais de mensagens (WhatsApp) é restrito exclusivamente aos membros da Mesa (RSG, RSG Suplente, Secretário e Tesoureiro)."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 16 — 05/09/2026."}, {"tipo": "h2", "html": "<strong>8.3 Proteção e guarda de dados</strong>"}, {"tipo": "p", "html": "O CSA Virtual guarda em seu Drive um backup de todos os dados do grupo com acesso exclusivo do Grupo Transcender."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 17 — 02/10/2026."}, {"tipo": "h1", "html": "<strong>9. TRANSFOBIA E DISCRIMINAÇÃO</strong>"}, {"tipo": "p", "html": "O Grupo Transcender não aceita atitudes transfóbicas em suas reuniões ou espaços de comunicação."}, {"tipo": "p", "html": "Quando houver ocorrência devidamente registrada, por prints, conversas ou outros elementos comprobatórios, poderá ser aplicada:"}, {"tipo": "p", "html": "<strong>suspensão de 30 dias dos espaços do Grupo Transcender.</strong>"}, {"tipo": "p", "html": "Em caso de reincidência, uma nova suspensão poderá ser aplicada."}, {"tipo": "p", "html": "Independentemente da sanção posterior, a moderação poderá agir imediatamente para preservar a segurança da reunião."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 03 — 12/10/2025."}, {"tipo": "p", "html": "Casos de homofobia, assédio, comportamento predatório ou ameaça à segurança também permitem intervenção imediata dos servidores."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata Extraordinária — 14/09/2025."}, {"tipo": "h1", "html": "<strong>10. BOAS PRÁTICAS DE SERVIÇO E ESTRUTURA DE ENCARGOS</strong>"}, {"tipo": "h2", "html": "<strong>10.1 Boas práticas de serviço</strong>"}, {"tipo": "p", "html": "Quem assume um encargo deve buscar:"}, {"tipo": "li", "html": "frequência nas reuniões;"}, {"tipo": "li", "html": "comprometimento com o horário e as responsabilidades assumidas;"}, {"tipo": "li", "html": "pedir ajuda antecipadamente quando não puder servir;"}, {"tipo": "li", "html": "conhecer e respeitar as diretrizes de inclusão do Transcender;"}, {"tipo": "li", "html": "respeitar linguagem, nomes, pronomes e liberdade de gênero;"}, {"tipo": "li", "html": "trabalhar em unidade com o restante do corpo de serviço."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata de Fundação — 13/09/2025; Ata 03 — 12/10/2025; Ata 04 — 01/11/2025."}, {"tipo": "h2", "html": "<strong>10.2 Encargos e requisitos</strong>"}, {"tipo": "p", "html": "Requisitos e termos de encargo:"}, {"tipo": "li", "html": "<strong>Secretário Geral:</strong> 6 meses limpo / 6 meses de termo."}, {"tipo": "li", "html": "<strong>Tesoureiro:</strong> 1 ano limpo / 1 ano de termo."}, {"tipo": "li", "html": "<strong>RSG e Suplente:</strong> 6 meses limpo / 1 ano de termo."}, {"tipo": "li", "html": "<strong>Moderador:</strong> 90 dias limpo / 3 meses de termo (renovável por mais 3 meses)."}, {"tipo": "p", "html": "<strong>Nota: O encargo de Moderador Volante foi oficialmente extinto por decisão da consciência de grupo.</strong>"}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 15 — 01/08/2026."}, {"tipo": "h1", "html": "<strong>11. FALTAS E CONTINUIDADE DO SERVIÇO</strong>"}, {"tipo": "p", "html": "Três faltas consecutivas sem justificativa e sem pedido de ajuda antecipado representam quebra do compromisso esperado no serviço."}, {"tipo": "p", "html": "Ao atingir <strong>cinco faltas durante o termo</strong>, mesmo justificadas, foi estabelecida a destituição do encargo."}, {"tipo": "p", "html": "Para moderadores, são consideradas tanto as reuniões sob sua responsabilidade quanto as reuniões administrativas."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 04 — 01/11/2025."}, {"tipo": "p", "html": "A pessoa que entregar voluntariamente um encargo ou for destituída deverá permanecer <strong>três meses afastada dos encargos de serviço do Grupo Transcender</strong>."}, {"tipo": "p", "html": "O afastamento do serviço não significa afastamento das reuniões de recuperação."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 06 — 23/11/2025."}, {"tipo": "h1", "html": "<strong>12. COMUNICAÇÃO</strong>"}, {"tipo": "p", "html": "Mudanças que alterem horários, formatos ou informações públicas das reuniões devem ser atualizadas no site do grupo em até <strong>72 horas</strong>."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 04 — 01/11/2025."}, {"tipo": "p", "html": "O grupo também dispõe de um encargo temporário de <strong>divulgação das reuniões</strong>, com termo de 15 dias."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 11 — 04/04/2026."}, {"tipo": "h1", "html": "<strong>13. REUNIÕES ADMINISTRATIVAS</strong>"}, {"tipo": "p", "html": "O Grupo Transcender realiza reunião administrativa <strong>mensal</strong>, destinada à:"}, {"tipo": "li", "html": "prestação de contas dos servidores;"}, {"tipo": "li", "html": "apresentação de relatórios;"}, {"tipo": "li", "html": "eletivas;"}, {"tipo": "li", "html": "discussão de assuntos novos;"}, {"tipo": "li", "html": "apresentação e votação de moções;"}, {"tipo": "li", "html": "definição das diretrizes do grupo."}, {"tipo": "p", "html": "As administrativas são realizadas às <strong>19h</strong>."}, {"tipo": "p", "html": "<strong>Referências:</strong> Ata 03 — 12/10/2025; Ata 08 — 03/01/2026."}, {"tipo": "h1", "html": "<strong>14. ATUALIZAÇÃO DESTE GUIA</strong>"}, {"tipo": "p", "html": "Este Guia deve representar <strong>o funcionamento atual do Grupo Transcender</strong>."}, {"tipo": "p", "html": "Sempre que a consciência de grupo aprovar uma mudança de procedimento, a versão vigente deverá ser atualizada."}, {"tipo": "p", "html": "As atas administrativas permanecem como fonte das decisões e podem ser consultadas quando necessário para esclarecer a origem de uma diretriz."}, {"tipo": "p", "html": "A criação e consolidação deste documento foi aprovada pela consciência do Grupo Transcender."}, {"tipo": "p", "html": "<strong>Referência:</strong> Ata 12 — 02/05/2026."}];
+const semTags = h => h.replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").trim();
+function tituloSecao(t){
+  return t.replace(/^\d+[\.\)]?\s*/,"").split(/\s+/).map((w,i)=>{
+    if(/^(NA|PIX|AI|CSA|RSG|QR)$/.test(w)) return w;
+    const l=w.toLocaleLowerCase("pt-BR"); return i===0 ? l.charAt(0).toLocaleUpperCase("pt-BR")+l.slice(1) : l;
+  }).join(" ");
+}
+function montarDiretrizes(blocos){
+  const intro=[], secoes=[]; let atual=null, lista=[];
+  const fecharLista=()=>{ if(atual && lista.length){ atual.html+=`<ul>${lista.map(x=>`<li>${x}</li>`).join("")}</ul>`; } lista=[]; };
+  blocos.forEach(b=>{
+    const txt=semTags(b.html); if(!txt) return;
+    let tipo=b.tipo;
+    if(/^\d+\.\d+\s/.test(txt) && (tipo==="p"||tipo==="h3")) tipo="h2";
+    else if(/^\d+\.\s+\S/.test(txt) && tipo==="p" && /^<strong>[^]*<\/strong>$/.test(b.html.trim())) tipo="h1";
+    if(tipo==="h1"){
+      if(!/^\d/.test(txt)) return;                 // título do documento
+      fecharLista(); atual={t:tituloSecao(txt), html:""}; secoes.push(atual); return;
+    }
+    if(!atual){ if(tipo==="p") intro.push(b.html); return; }
+    if(tipo==="li"){ lista.push(b.html); return; }
+    fecharLista();
+    if(tipo==="h2"||tipo==="h3"){ atual.html+=`<h4>${semTags(b.html).replace(/^\d+(\.\d+)*\s*/,"")}</h4>`; return; }
+    if(/^Refer[êe]ncias?\s*:/i.test(txt)){ atual.html+=`<p class="ref">${txt.replace(/^Refer[êe]ncias?\s*:\s*/i,"").replace(/\s*[—–]\s*/g," · ")}</p>`; return; }
+    atual.html+=`<p>${b.html}</p>`;
+  });
+  fecharLista();
+  return {intro, secoes};
+}
 const idDir = (i) => "dir-"+(i+1);
-$("#dir-indice").innerHTML = DIRETRIZES.map((d,i)=>`<a href="#" data-dir="${i}"><span>${i+1}</span>${d.t}</a>`).join("");
-$("#dir-lista").innerHTML = DIRETRIZES.map((d,i)=>`
+function renderDiretrizes(blocos){
+  const {intro, secoes} = montarDiretrizes(blocos);
+  if(secoes.length<3) return false;
+  $("#dir-intro").innerHTML = intro.map(p=>`<p>${p}</p>`).join("");
+  $("#dir-indice").innerHTML = secoes.map((d,i)=>`<a href="#" data-dir="${i}"><span>${i+1}</span>${d.t}</a>`).join("");
+  $("#dir-lista").innerHTML = secoes.map((d,i)=>`
   <article class="passo diretriz ${i%2?"azul":""}" id="${idDir(i)}">
     <div class="passo-head"><div class="num">${i+1}</div><h3>${d.t}</h3></div>
-    <div class="dir-txt">${d.html}${d.ref?`<p class="ref">${d.ref}</p>`:""}</div>
+    <div class="dir-txt">${d.html}</div>
   </article>`).join("");
+  return true;
+}
+renderDiretrizes(DIRETRIZES_SALVAS);
+let diretrizesCarregadas=false;
+async function carregarDiretrizes(){
+  if(diretrizesCarregadas || !CONFIG.QUADRO_API_URL) return;
+  try{
+    const r=await fetch(CONFIG.QUADRO_API_URL+"?doc=diretrizes&t="+Date.now()); const j=await r.json();
+    if(j.ok && renderDiretrizes(j.blocos)) diretrizesCarregadas=true;
+  }catch(e){}
+}
 document.addEventListener("click", e=>{
   const a=e.target.closest("[data-dir]"); if(!a) return;
   e.preventDefault();
