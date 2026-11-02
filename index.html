@@ -747,6 +747,50 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .ficha-img{filter:drop-shadow(0 8px 10px rgba(23,74,107,.15))!important}
 .quadro-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .quadro-fonte{font-size:14px;color:var(--indigo-2)}
+/* ===== quadro semanal ===== */
+.semana{max-width:880px;margin:16px auto 0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.dia-col{background:rgba(255,255,255,.9);border:2px solid #fff;border-radius:18px;padding:10px 8px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--sombra)}
+.dia-col.hoje{border-color:#5BCEFA;background:#F2FAFE}
+.dia-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px;min-height:26px}
+.dia-n{font-family:"DM Serif Display",Georgia,serif;font-size:21px;color:var(--titulo);line-height:1}
+.dia-tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:#5BCEFA;color:#fff;border-radius:999px;padding:3px 7px}
+.dia-tag.est{background:#FCE3EE;color:var(--rosa-forte)}
+.slot{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:1px;width:100%;padding:8px 9px;border-radius:12px;background:#FFF5FA;cursor:default}
+.slot+.slot{background:#F1F8FD}
+.slot-rot{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo-2)}
+.slot-nome{font-size:16px;font-weight:700;color:var(--indigo);line-height:1.2;overflow-wrap:anywhere}
+.slot.vago .slot-nome{color:var(--rosa-forte);font-weight:400}
+.slot-fim{font-size:12px;color:var(--indigo-2)}
+.slot.venc .slot-fim{color:var(--rosa-forte);font-weight:700}
+.editando .slot{cursor:pointer;outline:2px dashed rgba(23,74,107,.25);outline-offset:-2px}
+.editando .slot:hover{outline-color:var(--titulo)}
+.mesa-card{max-width:880px;margin:16px auto 0}
+.mesa-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mesa-grid .slot{background:#F1F8FD}
+.quadro-acoes{max-width:880px;margin:6px auto 0}
+#lista-servidores{padding:0 16px}
+@media (max-width:860px){
+  .semana{grid-template-columns:1fr;gap:8px}
+  .dia-col{display:grid;grid-template-columns:92px 1fr 1fr;align-items:stretch;gap:8px;padding:10px}
+  .dia-cab{flex-direction:column;align-items:flex-start;justify-content:center}
+  .mesa-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){ .dia-col{grid-template-columns:74px 1fr 1fr} .dia-n{font-size:19px} .slot-nome{font-size:15px} }
+/* modal de edição */
+.q-modal{position:fixed;inset:0;z-index:66;background:rgba(23,74,107,.45);display:grid;place-items:center;padding:16px}
+.q-modal[hidden]{display:none}
+.q-card{background:#fff;border-radius:22px;padding:22px;width:100%;max-width:400px;display:flex;flex-direction:column;gap:12px;box-shadow:0 30px 70px -20px rgba(23,74,107,.5)}
+.q-card h3{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:28px;color:var(--titulo);line-height:1.1}
+.q-sub{font-size:14px;color:var(--indigo-2);margin-top:-8px}
+.q-sub:empty{display:none}
+.q-card label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:700;color:var(--indigo)}
+.q-card input{font:inherit;font-weight:400;font-size:17px;color:var(--indigo);padding:12px 14px;border-radius:12px;border:2px solid #D6E6F2;background:#FAFCFE;outline:none}
+.q-card input:focus{border-color:#5BCEFA}
+#q-auth{display:flex;flex-direction:column;gap:12px;padding-top:4px;border-top:1px solid #EEF2F6}
+#q-auth[hidden]{display:none}
+.q-erro{color:var(--rosa-forte);font-size:14px;font-weight:700;min-height:0}
+.q-erro:empty{display:none}
+.q-bts{display:flex;gap:10px;justify-content:flex-end}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -953,6 +997,20 @@ Senha: 000000
     <p class="fm-txt" id="fm-txt"></p>
   </div>
 </div>
+<div class="q-modal" id="q-modal" hidden>
+  <form class="q-card" id="q-form">
+    <h3 id="q-tit">Editar</h3>
+    <p class="q-sub" id="q-sub"></p>
+    <label>Nome<input id="q-nome" type="text" autocomplete="off" placeholder="Deixe vazio para marcar como vago"></label>
+    <label>Fim do termo<input id="q-fim" type="text" inputmode="numeric" placeholder="dd/mm/aaaa"></label>
+    <div id="q-auth">
+      <label>Seu nome (fica no histórico)<input id="q-autor" type="text" autocomplete="name"></label>
+      <label>Senha de serviço<input id="q-pin" type="password" autocomplete="off"></label>
+    </div>
+    <p class="q-erro" id="q-erro"></p>
+    <div class="q-bts"><button type="button" class="pill claro" data-q-cancelar>Cancelar</button><button type="submit" class="pill rosa" id="q-salvar">Salvar</button></div>
+  </form>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -962,6 +1020,8 @@ const CONFIG = {
   ATA_URL: "https://tiny.cc/h921101",
   // Planilha do quadro de servidores (conta do grupo). Troque só o ID se a planilha mudar.
   QUADRO_SHEET_ID: "11zHuba1DKxKoS-YjsYkF1kL1UAxPRQzRgSHLtPRPjos",
+  // URL do Apps Script (termina em /exec). Enquanto vazio, a edição pelo site fica desligada.
+  QUADRO_API_URL: "",
   // Links das leituras (cole aqui)
   MEDITACAO_URL: "https://www.na.org.br/meditacao/",
   IP22_URL: "https://www.na.org.br/downloads-de-literaturas-ips/",
@@ -1547,25 +1607,43 @@ const SERVIDORES = {
   ]
 };
 const pessoa = (nome,data) => nome ? `<b>${nome}</b>${data?`<small>até ${data}</small>`:""}` : `<b class="vago">Vago</b>`;
+let QUADRO_ATUAL=null, EDITANDO=false;
+const DIAS_ORDEM=["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
+const curto=d=>d.replace("-feira","");
+function hojeNome(){ return DIAS_ORDEM[(new Date().getDay()+6)%7]; }
+function vencido(fim){ const m=(fim||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if(!m) return false; return new Date(+m[3],+m[2]-1,+m[1]) < new Date(new Date().toDateString()); }
+function slot(grupo,enc,nome,fim,rot){
+  const vazio=!nome;
+  return `<button class="slot ${vazio?"vago":""} ${vencido(fim)?"venc":""}" data-slot data-g="${grupo}" data-e="${enc}" data-n="${nome||""}" data-f="${fim||""}" ${EDITANDO?"":"tabindex=\"-1\""}>
+    <span class="slot-rot">${rot}</span>
+    <span class="slot-nome">${vazio?"Vago":nome}</span>
+    ${fim?`<span class="slot-fim">${vencido(fim)?"termo vencido":"até "+fim}</span>`:""}
+  </button>`;
+}
 function renderQuadro(Q, fonte){
-$("#lista-servidores").innerHTML = `
+  QUADRO_ATUAL=Q;
+  const hoje=hojeNome();
+  const dias=[...Q.dias].sort((a,b)=>DIAS_ORDEM.indexOf(a[0])-DIAS_ORDEM.indexOf(b[0]));
+  const podeEditar=!!CONFIG.QUADRO_API_URL;
+  $("#lista-servidores").innerHTML = `
   <div class="quadro-acoes">
-    <a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">✏️ Editar quadro</a>
-    <span class="quadro-fonte">${fonte}</span>
+    ${podeEditar?`<button class="pill claro" data-q-editar>${EDITANDO?"✓ Concluir edição":"✏️ Editar quadro"}</button>`:
+      `<a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">✏️ Editar na planilha</a>`}
+    <span class="quadro-fonte">${EDITANDO?"Toque em um nome para alterar":fonte}</span>
   </div>
-  <article class="passo">
+  <section class="semana ${EDITANDO?"editando":""}" aria-label="Escala da semana">
+    ${dias.map(([dia,m,a])=>`
+      <div class="dia-col ${dia===hoje?"hoje":""}">
+        <div class="dia-cab"><span class="dia-n">${curto(dia)}</span>${dia===hoje?`<span class="dia-tag">Hoje</span>`:dia==="Sexta-feira"?`<span class="dia-tag est">Estudo</span>`:""}</div>
+        ${slot("Moderação",dia,m[0],m[1],"Moderação")}
+        ${slot("Apoio",dia,a[0],a[1],"Apoio")}
+      </div>`).join("")}
+  </section>
+  <article class="passo mesa-card">
     <div class="passo-head"><h3>Mesa de servidores</h3></div>
-    <ul class="quadro">${Q.mesa.map(([enc,n,d])=>`<li><span>${enc}</span><div class="q-p">${pessoa(n,d)}</div></li>`).join("")}</ul>
-  </article>
-  <article class="passo azul">
-    <div class="passo-head"><h3>Moderação e apoio</h3></div>
-    <div class="dias">${Q.dias.map(([dia,m,a])=>`
-      <div class="dia">
-        <h4>${dia}</h4>
-        <div class="dia-l"><span>Moderação</span><div class="q-p">${pessoa(m[0],m[1])}</div></div>
-        <div class="dia-l"><span>Apoio</span><div class="q-p">${pessoa(a[0],a[1])}</div></div>
-      </div>`).join("")}</div>
+    <div class="mesa-grid ${EDITANDO?"editando":""}">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
   </article>`;
+  const h=document.querySelector(".dia-col.hoje"); if(h && window.innerWidth<861) h.scrollIntoView({block:"nearest",inline:"start"});
 }
 function csvLinhas(txt){
   const out=[]; let row=[], cur="", q=false;
@@ -1582,10 +1660,13 @@ function quadroDaPlanilha(rows){
     else { if(!dias[enc]){ dias[enc]=[enc,["",""],["",""]]; Q.dias.push(dias[enc]); }
       if(G.startsWith("modera")) dias[enc][1]=[nome,fim]; else if(G.startsWith("apoio")) dias[enc][2]=[nome,fim]; }
   });
+  DIAS_ORDEM.forEach(d=>{ if(!Q.dias.some(x=>x[0]===d)) Q.dias.push([d,["",""],["",""]]); });
+  ["RSG","RSG Suplente","Secretaria","Tesouraria"].forEach(e=>{ if(!Q.mesa.some(x=>x[0].toLowerCase()===e.toLowerCase())) Q.mesa.push([e,"",""]); });
   return Q;
 }
 renderQuadro(SERVIDORES, "");
 async function carregarQuadro(){
+  if(CONFIG.QUADRO_API_URL){ try{ const r=await fetch(CONFIG.QUADRO_API_URL+"?t="+Date.now()); const j=await r.json(); if(j.ok){ renderQuadro(quadroDaPlanilha(j.linhas),"Atualizado pela planilha do grupo"); return; } }catch(e){} }
   try{
     const r=await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/gviz/tq?tqx=out:csv&t=${Date.now()}`);
     if(!r.ok) throw 0; const txt=await r.text(); if(txt.trim().startsWith("<")) throw 0;
@@ -1627,6 +1708,38 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape") fecharFicha();
   const c=e.target.closest && e.target.closest("[data-ficha]"); if(c && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); abrirFicha(+c.dataset.ficha); }
+});
+
+/* ---------- edição do quadro ---------- */
+let qAlvo=null;
+const sessao={get(k){try{return sessionStorage.getItem(k)||""}catch(e){return ""}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-q-editar]")){ EDITANDO=!EDITANDO; renderQuadro(QUADRO_ATUAL,"Atualizado pela planilha do grupo"); return; }
+  const sl=e.target.closest("[data-slot]");
+  if(sl && EDITANDO){ qAlvo=sl.dataset;
+    $("#q-tit").textContent=sl.dataset.g==="Mesa"?sl.dataset.e:`${sl.dataset.g} · ${curto(sl.dataset.e)}`;
+    $("#q-sub").textContent=sl.dataset.g==="Mesa"?"Mesa de servidores":"";
+    $("#q-nome").value=sl.dataset.n; $("#q-fim").value=sl.dataset.f;
+    $("#q-autor").value=sessao.get("q-autor"); $("#q-pin").value=sessao.get("q-pin");
+    $("#q-auth").hidden=!!(sessao.get("q-autor")&&sessao.get("q-pin"));
+    $("#q-erro").textContent=""; $("#q-modal").hidden=false; setTimeout(()=>$("#q-nome").focus(),50); return; }
+  if(e.target.closest("[data-q-cancelar]") || e.target.id==="q-modal") $("#q-modal").hidden=true;
+});
+$("#q-fim").addEventListener("input",e=>{ let v=e.target.value.replace(/\D/g,"").slice(0,8); if(v.length>4) v=v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4); else if(v.length>2) v=v.slice(0,2)+"/"+v.slice(2); e.target.value=v; });
+$("#q-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const fim=$("#q-fim").value.trim(), autor=$("#q-autor").value.trim(), pin=$("#q-pin").value.trim();
+  if(fim && !/^\d{2}\/\d{2}\/\d{4}$/.test(fim)){ $("#q-erro").textContent="Use a data no formato dd/mm/aaaa."; return; }
+  if(!autor||!pin){ $("#q-auth").hidden=false; $("#q-erro").textContent="Informe seu nome e a senha de serviço."; return; }
+  $("#q-salvar").disabled=true; $("#q-salvar").textContent="Salvando…";
+  try{
+    const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({pin,autor,grupo:qAlvo.g,encargo:qAlvo.e,nome:$("#q-nome").value.trim(),fim})});
+    const j=await r.json();
+    if(!j.ok){ $("#q-erro").textContent=j.erro||"Não foi possível salvar."; if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); $("#q-auth").hidden=false; } return; }
+    sessao.set("q-autor",autor); sessao.set("q-pin",pin);
+    $("#q-modal").hidden=true; renderQuadro(quadroDaPlanilha(j.linhas),"Atualizado pela planilha do grupo"); toast("Salvo na planilha");
+  }catch(err){ $("#q-erro").textContent="Sem conexão com a planilha. Tente de novo."; }
+  finally{ $("#q-salvar").disabled=false; $("#q-salvar").textContent="Salvar"; }
 });
 
 /* ---------- start ---------- */
