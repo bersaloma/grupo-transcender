@@ -1587,7 +1587,7 @@ function quadroDaPlanilha(rows){
 renderQuadro(SERVIDORES, "");
 async function carregarQuadro(){
   try{
-    const r=await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/gviz/tq?tqx=out:csv&gid=0&t=${Date.now()}`);
+    const r=await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/gviz/tq?tqx=out:csv&t=${Date.now()}`);
     if(!r.ok) throw 0; const txt=await r.text(); if(txt.trim().startsWith("<")) throw 0;
     const Q=quadroDaPlanilha(csvLinhas(txt)); if(!Q.mesa.length && !Q.dias.length) throw 0;
     renderQuadro(Q, "Atualizado pela planilha do grupo");
