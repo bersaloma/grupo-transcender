@@ -143,15 +143,18 @@ function termoTxt(p) { return p && p.nome ? p.nome + (p.fim ? ' (até ' + p.fim 
 /* Acrescenta parágrafo ou item de lista com partes em negrito: partes = [[texto, negrito], ...] */
 function rico(corpo, partes, lista) {
   const txt = partes.map(function (x) { return x[0]; }).join('');
-  const el = lista ? corpo.appendListItem(txt || ' ').setGlyphType(DocumentApp.GlyphType.BULLET) : corpo.appendParagraph(txt || ' ');
-  if (!lista) el.setHeading(DocumentApp.ParagraphHeading.NORMAL);
+  const el = lista ? corpo.appendListItem(txt || ' ') : corpo.appendParagraph(txt || ' ');
+  if (lista) el.setGlyphType(DocumentApp.GlyphType.BULLET);
+  else el.setHeading(DocumentApp.ParagraphHeading.NORMAL);
   const t = el.editAsText(); t.setBold(false);
   let pos = 0;
   partes.forEach(function (x) { if (x[1] && x[0]) t.setBold(pos, pos + x[0].length - 1, true); pos += x[0].length; });
   return el;
 }
 function titulo(corpo, txt, nivel) {
-  return corpo.appendParagraph(txt).setHeading(nivel || DocumentApp.ParagraphHeading.HEADING2);
+  const p = corpo.appendParagraph(txt);
+  p.setHeading(nivel || DocumentApp.ParagraphHeading.HEADING2);
+  return p;
 }
 
 function criarAta(d) {
@@ -162,9 +165,12 @@ function criarAta(d) {
   lock.waitLock(20000);
   try {
     const doc = DocumentApp.create('ATA N.' + n + ' (' + dataBR(a.data) + ') - Reunião Administrativa');
+    try {
     const c = doc.getBody();
     const H1 = DocumentApp.ParagraphHeading.HEADING1;
-    c.getParagraphs()[0].setText('ATA N.' + n + ' · REUNIÃO ADMINISTRATIVA ORDINÁRIA · GRUPO TRANSCENDER DE NARCÓTICOS ANÔNIMOS').setHeading(H1);
+    const primeiro = c.getParagraphs()[0];
+    primeiro.setText('ATA N.' + n + ' · REUNIÃO ADMINISTRATIVA ORDINÁRIA · GRUPO TRANSCENDER DE NARCÓTICOS ANÔNIMOS');
+    primeiro.setHeading(H1);
     rico(c, [['Data: ', true], [dataExtenso(a.data) + '.', false]]);
     rico(c, [['Horário: ', true], [(a.inicio || '19h00') + '.', false]]);
 
@@ -225,6 +231,10 @@ function criarAta(d) {
 
     // pasta do grupo
     DriveApp.getFileById(doc.getId()).moveTo(DriveApp.getFolderById(PASTA_ATAS_ID));
+    } catch (erroDoc) {
+      try { DriveApp.getFileById(doc.getId()).setTrashed(true); } catch (x) {}
+      throw erroDoc;
+    }
 
     // eletivas no quadro
     let alteracoes = 0;
