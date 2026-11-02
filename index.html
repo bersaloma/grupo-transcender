@@ -1991,7 +1991,9 @@ document.addEventListener("click",async e=>{
     try{
       const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({acao:"ata",pin,autor:ATA.autor,ata:ATA})});
       const j=await r.json();
-      if(!j.ok){ toast(j.erro||"Não foi possível enviar."); if(/senha/i.test(j.erro||"")) sessao.set("q-pin",""); return; }
+      if(!j.ok){
+        const msg = /incompletos/i.test(j.erro||"") ? "O Apps Script do grupo ainda está na versão antiga. Atualize o código e implante uma nova versão." : (j.erro||"Não foi possível enviar.");
+        toast(msg); if(/senha/i.test(j.erro||"")) sessao.set("q-pin",""); return; }
       sessao.set("q-pin",pin); sessao.set("q-autor",ATA.autor);
       ATA.gerada={numero:j.numero,url:j.url,alteracoes:j.alteracoes||0}; salvarRascunho();
       if(j.linhas) renderQuadro(quadroDaPlanilha(j.linhas),"");
