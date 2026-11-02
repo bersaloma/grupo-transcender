@@ -762,15 +762,19 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .slot.vago .slot-nome{color:var(--rosa-forte);font-weight:400}
 .slot-fim{font-size:12px;color:var(--indigo-2)}
 .slot.venc .slot-fim{color:var(--rosa-forte);font-weight:700}
-.editando .slot{cursor:pointer;outline:2px dashed rgba(23,74,107,.25);outline-offset:-2px}
-.editando .slot:hover{outline-color:var(--titulo)}
+.editando .slot{cursor:pointer;transition:box-shadow .15s}
+.editando .slot:active{transform:scale(.98)}
+.editando .slot:hover{box-shadow:inset 0 0 0 2px #5BCEFA}
 .mesa-card{max-width:880px;margin:16px auto 0}
 .mesa-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .mesa-grid .slot{background:#F1F8FD}
-.quadro-acoes{max-width:880px;margin:6px auto 0}
+.quadro-acoes{max-width:880px;margin:6px auto 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.quadro-dica{font-size:16px;font-weight:700;color:var(--indigo)}
+.quadro-fonte:empty{display:none}
 #lista-servidores{padding:0 16px}
 @media (max-width:860px){
   .semana{grid-template-columns:1fr;gap:8px}
+  .quadro-acoes{padding:0 24px}
   .dia-col{display:grid;grid-template-columns:92px 1fr 1fr;align-items:stretch;gap:8px;padding:10px}
   .dia-cab{flex-direction:column;align-items:flex-start;justify-content:center}
   .mesa-grid{grid-template-columns:1fr 1fr}
@@ -1607,14 +1611,14 @@ const SERVIDORES = {
   ]
 };
 const pessoa = (nome,data) => nome ? `<b>${nome}</b>${data?`<small>até ${data}</small>`:""}` : `<b class="vago">Vago</b>`;
-let QUADRO_ATUAL=null, EDITANDO=false;
+let QUADRO_ATUAL=null;
 const DIAS_ORDEM=["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
 const curto=d=>d.replace("-feira","");
 function hojeNome(){ return DIAS_ORDEM[(new Date().getDay()+6)%7]; }
 function vencido(fim){ const m=(fim||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if(!m) return false; return new Date(+m[3],+m[2]-1,+m[1]) < new Date(new Date().toDateString()); }
 function slot(grupo,enc,nome,fim,rot){
   const vazio=!nome;
-  return `<button class="slot ${vazio?"vago":""} ${vencido(fim)?"venc":""}" data-slot data-g="${grupo}" data-e="${enc}" data-n="${nome||""}" data-f="${fim||""}" ${EDITANDO?"":"tabindex=\"-1\""}>
+  return `<button class="slot ${vazio?"vago":""} ${vencido(fim)?"venc":""}" data-slot data-g="${grupo}" data-e="${enc}" data-n="${nome||""}" data-f="${fim||""}">
     <span class="slot-rot">${rot}</span>
     <span class="slot-nome">${vazio?"Vago":nome}</span>
     ${fim?`<span class="slot-fim">${vencido(fim)?"termo vencido":"até "+fim}</span>`:""}
@@ -1627,11 +1631,10 @@ function renderQuadro(Q, fonte){
   const podeEditar=!!CONFIG.QUADRO_API_URL;
   $("#lista-servidores").innerHTML = `
   <div class="quadro-acoes">
-    ${podeEditar?`<button class="pill claro" data-q-editar>${EDITANDO?"✓ Concluir edição":"✏️ Editar quadro"}</button>`:
-      `<a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">✏️ Editar na planilha</a>`}
-    <span class="quadro-fonte">${EDITANDO?"Toque em um nome para alterar":fonte}</span>
+    <span class="quadro-dica">✏️ Toque em um nome para editar</span>
+    <span class="quadro-fonte">${fonte}</span>
   </div>
-  <section class="semana ${EDITANDO?"editando":""}" aria-label="Escala da semana">
+  <section class="semana editando" aria-label="Escala da semana">
     ${dias.map(([dia,m,a])=>`
       <div class="dia-col ${dia===hoje?"hoje":""}">
         <div class="dia-cab"><span class="dia-n">${curto(dia)}</span>${dia===hoje?`<span class="dia-tag">Hoje</span>`:""}</div>
@@ -1641,7 +1644,7 @@ function renderQuadro(Q, fonte){
   </section>
   <article class="passo mesa-card">
     <div class="passo-head"><h3>Mesa de servidores</h3></div>
-    <div class="mesa-grid ${EDITANDO?"editando":""}">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
+    <div class="mesa-grid editando">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
   </article>`;
   const h=document.querySelector(".dia-col.hoje"); if(h && window.innerWidth<861) h.scrollIntoView({block:"nearest",inline:"start"});
 }
@@ -1714,9 +1717,9 @@ document.addEventListener("keydown",e=>{
 let qAlvo=null;
 const sessao={get(k){try{return sessionStorage.getItem(k)||""}catch(e){return ""}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
 document.addEventListener("click",e=>{
-  if(e.target.closest("[data-q-editar]")){ EDITANDO=!EDITANDO; renderQuadro(QUADRO_ATUAL,"Atualizado pela planilha do grupo"); return; }
   const sl=e.target.closest("[data-slot]");
-  if(sl && EDITANDO){ qAlvo=sl.dataset;
+  if(sl && !CONFIG.QUADRO_API_URL){ toast("A edição pelo site ainda está sendo ligada. Por enquanto, edite na planilha."); setTimeout(()=>window.open(`https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit`,"_blank"),900); return; }
+  if(sl){ qAlvo=sl.dataset;
     $("#q-tit").textContent=sl.dataset.g==="Mesa"?sl.dataset.e:`${sl.dataset.g} · ${curto(sl.dataset.e)}`;
     $("#q-sub").textContent=sl.dataset.g==="Mesa"?"Mesa de servidores":"";
     $("#q-nome").value=sl.dataset.n; $("#q-fim").value=sl.dataset.f;
