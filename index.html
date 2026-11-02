@@ -792,15 +792,20 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .tab-semana thead th{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;color:var(--titulo);padding:12px 10px;background:#F7FBFE}
 .tab-h thead th.canto{font-family:"Inter",system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);vertical-align:bottom}
 .tab-semana tbody th{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);background:#F7FBFE;vertical-align:middle;padding:10px 12px}
-.tab-semana .hoje{background:#E6F7FE}
-.tab-semana thead th.hoje{box-shadow:inset 0 3px 0 #5BCEFA}
+.tab-h td.hoje,.tab-h th.hoje{box-shadow:inset 3px 0 0 #5BCEFA,inset -3px 0 0 #5BCEFA}
+.tab-h thead th.hoje{box-shadow:inset 3px 0 0 #5BCEFA,inset -3px 0 0 #5BCEFA,inset 0 3px 0 #5BCEFA}
+.tab-h tbody tr:last-child td.hoje{box-shadow:inset 3px 0 0 #5BCEFA,inset -3px 0 0 #5BCEFA,inset 0 -3px 0 #5BCEFA}
 .tab-semana .dia-tag{display:inline-block;margin-left:6px;vertical-align:middle;font-family:"Inter",system-ui,sans-serif}
 .tab-semana td{height:1px;padding:4px}
 .tab-semana .slot{background:transparent;padding:8px 8px;border-radius:10px;height:100%;cursor:pointer;transition:box-shadow .15s}
 .tab-semana .slot:hover,.tab-semana .slot:focus-visible{box-shadow:inset 0 0 0 2px #5BCEFA}
 .tab-semana .slot:active{transform:scale(.98)}
-.tab-semana td:has(.slot.vago){background:#FCE1EC}
-.tab-semana td.hoje:has(.slot.vago),.tab-v tr.hoje>td:has(.slot.vago){background:#F9DDE9}
+/* xadrez rosa e azul */
+.tab-h thead th:nth-child(even),.tab-h tbody tr:nth-child(2) td:nth-child(even),.tab-h tbody tr:nth-child(1) td:nth-child(odd){background:#EAF5FD}
+.tab-h thead th:nth-child(odd):not(.canto),.tab-h tbody tr:nth-child(1) td:nth-child(even),.tab-h tbody tr:nth-child(2) td:nth-child(odd){background:#FDEDF3}
+.tab-v tbody tr:nth-child(odd) td:nth-child(2),.tab-v tbody tr:nth-child(even) td:nth-child(3),.tab-v tbody tr:nth-child(even) th{background:#EAF5FD}
+.tab-v tbody tr:nth-child(even) td:nth-child(2),.tab-v tbody tr:nth-child(odd) td:nth-child(3),.tab-v tbody tr:nth-child(odd) th{background:#FDEDF3}
+.tab-semana td:has(.slot.vago){background:#FAD3E3 !important}
 .tab-semana .slot+.slot{background:transparent}
 .tab-h .canto{width:112px}
 .tab-h .slot-fim{white-space:nowrap}
@@ -813,8 +818,9 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .tab-v thead th{font-family:"Inter",system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo)}
   .tab-v tbody th{font-family:"DM Serif Display",Georgia,serif;font-size:20px;letter-spacing:0;text-transform:none;color:var(--titulo);font-weight:400}
   .tab-v tbody th .dia-tag{display:block;width:max-content;margin:4px 0 0}
-  .tab-v tr.hoje>*{background:#E6F7FE}
-  .tab-v tr.hoje>td:has(.slot.vago){background:#F9DDE9}
+  .tab-v tr.hoje>*{box-shadow:inset 0 3px 0 #5BCEFA,inset 0 -3px 0 #5BCEFA}
+  .tab-v tr.hoje>th{box-shadow:inset 3px 3px 0 #5BCEFA,inset 0 -3px 0 #5BCEFA}
+  .tab-v tr.hoje>td:last-child{box-shadow:inset -3px 3px 0 #5BCEFA,inset 0 -3px 0 #5BCEFA}
 }
 /* modal de edição */
 .q-modal{position:fixed;inset:0;z-index:66;background:rgba(23,74,107,.45);display:grid;place-items:center;padding:16px}
@@ -1673,7 +1679,7 @@ function renderQuadro(Q, fonte){
   <h3 class="quadro-tit">Servidores das Reuniões</h3>
   <div class="tab-wrap">
   <table class="tab-semana tab-h">
-    <thead><tr><th class="canto">Encargos</th>${dias.map(([d])=>`<th class="${d===hoje?"hoje":""}">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th>`).join("")}</tr></thead>
+    <thead><tr><th class="canto"></th>${dias.map(([d])=>`<th class="${d===hoje?"hoje":""}">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th>`).join("")}</tr></thead>
     <tbody>
       <tr><th scope="row">Moderação</th>${dias.map(([d,m])=>`<td class="${d===hoje?"hoje":""}">${slot("Moderação",d,m[0],m[1],"")}</td>`).join("")}</tr>
       <tr><th scope="row">Apoio</th>${dias.map(([d,,a])=>`<td class="${d===hoje?"hoje":""}">${slot("Apoio",d,a[0],a[1],"")}</td>`).join("")}</tr>
