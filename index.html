@@ -732,6 +732,16 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .tela-pill{right:16px!important}
   .sheet.tela .visor{font-size:11vw!important}
 }
+/* ficha em tela cheia */
+.ficha[data-ficha]{cursor:pointer;transition:transform .2s,box-shadow .2s}
+.ficha[data-ficha]:hover{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(120,40,110,.45)}
+.ficha-modal{background:radial-gradient(70% 60% at 50% 35%,#fff 0%,#FFE6F1 55%,#DCEFFB 100%)!important;padding:24px!important}
+.ficha-modal .fm-card{background:transparent;box-shadow:none;max-width:560px;padding:0}
+.ficha-modal .fm-card img{height:min(52vh,460px);filter:none!important;mix-blend-mode:multiply}
+.ficha-modal .fm-sub{font-size:clamp(18px,2.4vw,24px);color:var(--rosa-forte);font-weight:700;margin-top:6px}
+.ficha-modal h3{font-size:clamp(38px,6vw,64px);line-height:1.05;margin-top:2px}
+.ficha-modal .fm-txt{font-size:clamp(18px,2.2vw,24px)!important;line-height:1.5;color:var(--indigo);margin:14px auto 0;max-width:520px}
+.ficha-modal .fm-x{position:fixed;top:18px;right:18px;width:48px;height:48px;border-radius:50%;background:#fff;color:var(--indigo);display:grid;place-items:center;box-shadow:var(--sombra)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -929,13 +939,13 @@ Senha: 000000
     <button class="pill" id="ov-ok">Ok, continuar</button>
   </div>
 </div>
-<div class="ficha-modal" id="ficha-modal" role="dialog" aria-label="Ficha branca" hidden>
+<div class="ficha-modal" id="ficha-modal" role="dialog" aria-label="Ficha" hidden>
+  <button class="fm-x" data-fm-fechar aria-label="Fechar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <div class="fm-card">
-    <button class="fm-x" data-fm-fechar aria-label="Fechar">✕</button>
-    <img src="assets/ficha-branca.jpg" alt="Ficha branca de boas-vindas">
-    <h3>Ficha branca</h3>
-    <p class="fm-sub">Boas-vindas · Ingresso</p>
-    <p>Esta ficha é para quem está chegando. Ela representa o desejo de parar de usar. Que bom ter você aqui em Narcóticos Anônimos!</p>
+    <img id="fm-img" src="assets/ficha-branca.jpg" alt="">
+    <p class="fm-sub" id="fm-sub"></p>
+    <h3 id="fm-tit"></h3>
+    <p class="fm-txt" id="fm-txt"></p>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -993,15 +1003,15 @@ const CONCEITOS = [
 ];
 
 const FICHAS = [
-  {t:"Ingresso", d:"Ficha branca", img:"ficha-branca"},
-  {t:"30 dias", d:"Ficha laranja", img:"ficha-laranja"},
-  {t:"60 dias", d:"Ficha verde", img:"ficha-verde"},
-  {t:"90 dias", d:"Ficha vermelha", img:"ficha-vermelha"},
-  {t:"6 meses", d:"Ficha azul", img:"ficha-azul"},
-  {t:"9 meses", d:"Ficha amarela", img:"ficha-amarela"},
-  {t:"1 ano", d:"Ficha bege", img:"ficha-1ano"},
-  {t:"18 meses", d:"Ficha cinza", img:"ficha-cinza"},
-  {t:"Múltiplos anos", d:"Ficha preta", img:"ficha-preta"},
+  {t:"Ingresso", d:"Ficha branca", img:"ficha-branca", msg:"Que bom ter você aqui! Esta ficha representa o desejo de parar de usar, e esse desejo já é o primeiro passo. Continue voltando."},
+  {t:"30 dias", d:"Ficha laranja", img:"ficha-laranja", msg:"Parabéns pelos seus primeiros 30 dias limpos! Um mês de coragem, vivido um dia de cada vez. Continue voltando."},
+  {t:"60 dias", d:"Ficha verde", img:"ficha-verde", msg:"Parabéns pelos 60 dias limpos! Dois meses de recuperação construída com o programa e com o grupo."},
+  {t:"90 dias", d:"Ficha vermelha", img:"ficha-vermelha", msg:"Parabéns pelos 90 dias limpos! Três meses de compromisso com a sua recuperação. Só por hoje, mais uma vez."},
+  {t:"6 meses", d:"Ficha azul", img:"ficha-azul", msg:"Parabéns pelos seis meses limpos! Meio ano vivendo a liberdade de ser quem você é."},
+  {t:"9 meses", d:"Ficha amarela", img:"ficha-amarela", msg:"Parabéns pelos nove meses limpos! Um tempo de crescimento que merece ser celebrado por todo o grupo."},
+  {t:"1 ano", d:"Ficha bege", img:"ficha-1ano", msg:"Parabéns pelo seu primeiro ano limpo! Um ano inteiro de recuperação, um dia de cada vez. Sua caminhada é esperança para quem está chegando."},
+  {t:"18 meses", d:"Ficha cinza", img:"ficha-cinza", msg:"Parabéns pelos 18 meses limpos! Um ano e meio de recuperação, de serviço e de cuidado com a sua vida."},
+  {t:"Múltiplos anos", d:"Ficha preta", img:"ficha-preta", msg:"Parabéns pelos seus anos de tempo limpo! Sua experiência é esperança viva para quem ainda sofre."},
 ];
 
 /* ---------- blocos reutilizáveis ---------- */
@@ -1359,8 +1369,8 @@ $("#t-go").onclick=iniciar;
 $("#t-zera").onclick=()=>{ parar(); resta=total; avisou=false; render(); $("#status").textContent="Zerado."; };
 
 /* ---------- fichas ---------- */
-$("#lista-fichas").innerHTML = FICHAS.map(f=>`
-  <div class="ficha">
+$("#lista-fichas").innerHTML = FICHAS.map((f,i)=>`
+  <div class="ficha" data-ficha="${i}" role="button" tabindex="0" aria-label="Abrir ${f.d}">
     <img class="ficha-img" src="assets/${f.img}.jpg" alt="${f.d}" loading="lazy">
     ${f.t}<span>${f.d}</span>
   </div>`).join("");
@@ -1561,12 +1571,23 @@ $("#lista-servidores").innerHTML = `
 })();
 window.__topo && window.__topo();
 
-/* ---------- ficha branca ---------- */
+/* ---------- ficha em tela cheia ---------- */
+function abrirFicha(i){
+  const f=FICHAS[i]; const m=$("#ficha-modal");
+  $("#fm-img").src=`assets/${f.img}.jpg`; $("#fm-img").alt=f.d;
+  $("#fm-sub").textContent=f.t; $("#fm-tit").textContent=f.d; $("#fm-txt").textContent=f.msg;
+  m.hidden=false; document.body.style.overflow="hidden";
+}
+function fecharFicha(){ $("#ficha-modal").hidden=true; document.body.style.overflow=""; }
 document.addEventListener("click",e=>{
-  if(e.target.closest("[data-ficha-branca]")){ $("#ficha-modal").hidden=false; return; }
-  if(e.target.closest("[data-fm-fechar]") || e.target.id==="ficha-modal"){ $("#ficha-modal").hidden=true; }
+  if(e.target.closest("[data-ficha-branca]")){ abrirFicha(0); return; }
+  const c=e.target.closest("[data-ficha]"); if(c){ abrirFicha(+c.dataset.ficha); return; }
+  if(e.target.closest("[data-fm-fechar]") || e.target.id==="ficha-modal") fecharFicha();
 });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") $("#ficha-modal").hidden=true; });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") fecharFicha();
+  const c=e.target.closest && e.target.closest("[data-ficha]"); if(c && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); abrirFicha(+c.dataset.ficha); }
+});
 
 /* ---------- start ---------- */
 aplicarAta();
