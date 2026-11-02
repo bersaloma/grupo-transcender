@@ -1954,11 +1954,17 @@ function renderAta(){
 }
 async function abrirAtaAdm(){
   ATA = lerRascunho();
-  if(!ATA){
+  if(ATA) renderAta();
+  else {
     if(CONFIG.QUADRO_API_URL){ try{ await carregarQuadro(); }catch(e){} }
     ATA = novaAta(); renderAta();
-    if(CONFIG.QUADRO_API_URL){ try{ const r=await fetch(CONFIG.QUADRO_API_URL+"?ata=proxima&t="+Date.now()); const j=await r.json(); if(j.ok && !ATA.numero){ ataNumSugerido=String(j.numero); ATA.numero=ataNumSugerido; const el=document.querySelector('#ata-form [data-k="numero"]'); if(el) el.value=ATA.numero; } }catch(e){} }
-  } else renderAta();
+  }
+  if(!ATA.numero && !ATA.gerada && CONFIG.QUADRO_API_URL){
+    try{
+      const r=await fetch(CONFIG.QUADRO_API_URL+"?ata=proxima&t="+Date.now()); const j=await r.json();
+      if(j.ok && j.numero && !ATA.numero){ ataNumSugerido=String(j.numero); ATA.numero=ataNumSugerido; salvarRascunho(); const el=document.querySelector('#ata-form [data-k="numero"]'); if(el) el.value=ATA.numero; }
+    }catch(e){}
+  }
 }
 document.addEventListener("input",e=>{
   const el=e.target.closest("#ata-form [data-k]"); if(!el||!ATA) return;
@@ -1997,7 +2003,7 @@ document.addEventListener("click",async e=>{
       sessao.set("q-pin",pin); sessao.set("q-autor",ATA.autor);
       ATA.gerada={numero:j.numero,url:j.url,alteracoes:j.alteracoes||0}; salvarRascunho();
       if(j.linhas) renderQuadro(quadroDaPlanilha(j.linhas),"");
-      renderAta(); window.scrollTo({top:0,behavior:"smooth"}); toast("Ata enviada ao Drive");
+      renderAta(); window.scrollTo({top:0,behavior:"smooth"}); toast(j.aviso || "Ata enviada ao Drive");
     }catch(x){ toast("Sem conexão com o Drive. O rascunho continua salvo."); }
     finally{ env.disabled=false; env.textContent="📤 Enviar ata ao Drive"; }
   }

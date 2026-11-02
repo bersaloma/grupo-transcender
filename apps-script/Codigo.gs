@@ -144,8 +144,8 @@ function termoTxt(p) { return p && p.nome ? p.nome + (p.fim ? ' (até ' + p.fim 
 function rico(corpo, partes, lista) {
   const txt = partes.map(function (x) { return x[0]; }).join('');
   const el = lista ? corpo.appendListItem(txt || ' ') : corpo.appendParagraph(txt || ' ');
+  el.setHeading(DocumentApp.ParagraphHeading.NORMAL);
   if (lista) el.setGlyphType(DocumentApp.GlyphType.BULLET);
-  else el.setHeading(DocumentApp.ParagraphHeading.NORMAL);
   const t = el.editAsText(); t.setBold(false);
   let pos = 0;
   partes.forEach(function (x) { if (x[1] && x[0]) t.setBold(pos, pos + x[0].length - 1, true); pos += x[0].length; });
@@ -160,13 +160,22 @@ function titulo(corpo, txt, nivel) {
 function criarAta(d) {
   const a = d.ata || {};
   const n = Number(a.numero) || proximaAta();
+  if (!a.data) return { ok: false, erro: 'Informe a data da reunião.' };
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
+    // não deixa registrar o mesmo número duas vezes
+    let reg = ss.getSheetByName(ABA_ATAS);
+    if (reg) {
+      const ja = reg.getDataRange().getDisplayValues().slice(1).some(function (r) { return String(r[0]).trim() === String(n); });
+      if (ja) return { ok: false, erro: 'A Ata N.º ' + n + ' já foi registrada. Confira o número da ata.' };
+    }
+
     const doc = DocumentApp.create('ATA N.' + n + ' (' + dataBR(a.data) + ') - Reunião Administrativa');
+    const docId = doc.getId(), docUrl = doc.getUrl();   // guardar antes de fechar o documento
     let pronto = false;
-    const mocoes = (a.mocoes || []).filter(function (m) { return (m.titulo || m.descricao || '').trim(); });
+    const mocoes = (a.mocoes || []).filter(function (m) { return String(m.titulo || m.descricao || '').trim(); });
     try {
     const c = doc.getBody();
     const H1 = DocumentApp.ParagraphHeading.HEADING1;
@@ -231,37 +240,42 @@ function criarAta(d) {
     doc.saveAndClose();
 
     // pasta do grupo
-    DriveApp.getFileById(doc.getId()).moveTo(DriveApp.getFolderById(PASTA_ATAS_ID));
+    DriveApp.getFileById(docId).moveTo(DriveApp.getFolderById(PASTA_ATAS_ID));
     pronto = true;
     } finally {
-      if (!pronto) { try { DriveApp.getFileById(doc.getId()).setTrashed(true); } catch (x) {} }
+      if (!pronto) { try { DriveApp.getFileById(docId).setTrashed(true); } catch (x) {} }
     }
 
-    // eletivas no quadro
-    let alteracoes = 0;
-    if (a.atualizarQuadro) {
-      const autor = 'Ata N.' + n + ' (' + (a.autor || d.autor || '') + ')';
-      (a.eleMesa || []).forEach(function (m) { if (salvarEncargo(ss, 'Mesa', m.enc, m.nome, m.fim, autor, false)) alteracoes++; });
-      (a.eleDias || []).forEach(function (x) {
-        if (salvarEncargo(ss, 'Moderação', x.dia, x.mod.nome, x.mod.fim, autor, false)) alteracoes++;
-        if (salvarEncargo(ss, 'Apoio', x.dia, x.apoio.nome, x.apoio.fim, autor, false)) alteracoes++;
-      });
-    }
-
-    // registro na aba Atas
-    let reg = ss.getSheetByName(ABA_ATAS);
+    // registro na aba Atas e numeração (logo depois do documento, para nunca ficar ata sem registro)
     if (!reg) {
       reg = ss.insertSheet(ABA_ATAS);
       reg.appendRow(['Nº', 'Data da reunião', 'Redigida por', 'Moções', 'Encargos atualizados no quadro', 'Documento', 'Registrada em']);
       reg.setFrozenRows(1);
     }
     const resumo = mocoes.map(function (m) { return (m.titulo || 'Moção') + ' (' + ([m.resultado, m.votos].filter(Boolean).join(' ') || 'sem resultado') + ')'; }).join('; ');
-    reg.appendRow([n, dataBR(a.data), (a.autor || d.autor || '') + (a.encargoAutor ? ', ' + a.encargoAutor : ''), resumo || 'Sem moções', alteracoes, doc.getUrl(), new Date()]);
-
+    reg.appendRow([n, dataBR(a.data), (a.autor || d.autor || '') + (a.encargoAutor ? ', ' + a.encargoAutor : ''), resumo || 'Sem moções', '', docUrl, new Date()]);
+    const linhaReg = reg.getLastRow();
     const p = PropertiesService.getScriptProperties();
     if (n > Number(p.getProperty('ULTIMA_ATA') || ULTIMA_ATA_PADRAO)) p.setProperty('ULTIMA_ATA', String(n));
 
-    return { ok: true, numero: n, url: doc.getUrl(), alteracoes: alteracoes, linhas: lerQuadro() };
+    // eletivas no quadro (se falhar, a ata continua salva e o site avisa)
+    let alteracoes = 0, aviso = '';
+    if (a.atualizarQuadro) {
+      try {
+        const autor = 'Ata N.' + n + ' (' + (a.autor || d.autor || '') + ')';
+        (a.eleMesa || []).forEach(function (m) { if (salvarEncargo(ss, 'Mesa', m.enc, m.nome, m.fim, autor, false)) alteracoes++; });
+        (a.eleDias || []).forEach(function (x) {
+          const mod = x.mod || {}, apoio = x.apoio || {};
+          if (salvarEncargo(ss, 'Moderação', x.dia, mod.nome, mod.fim, autor, false)) alteracoes++;
+          if (salvarEncargo(ss, 'Apoio', x.dia, apoio.nome, apoio.fim, autor, false)) alteracoes++;
+        });
+      } catch (errQ) { aviso = 'A ata foi salva, mas o quadro não foi atualizado: ' + errQ; }
+      reg.getRange(linhaReg, 5).setValue(aviso ? 'erro' : alteracoes);
+    } else {
+      reg.getRange(linhaReg, 5).setValue('não aplicado');
+    }
+
+    return { ok: true, numero: n, url: docUrl, alteracoes: alteracoes, aviso: aviso, linhas: lerQuadro() };
   } finally {
     lock.releaseLock();
   }
