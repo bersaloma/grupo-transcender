@@ -837,6 +837,11 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .combinados{list-style:none;display:flex;flex-direction:column;gap:8px}
 .combinados li{position:relative;padding-left:22px}
 .combinados li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--rosa-forte)}
+.ajuda{margin-top:14px;background:#EEF6FD;border-radius:16px;padding:14px 16px}
+.ajuda-tit{font-family:"DM Serif Display",Georgia,serif;font-size:22px;color:var(--titulo);line-height:1.1}
+.ajuda-nums{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ajuda-nums a{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;font-size:19px;color:var(--indigo);text-decoration:none;box-shadow:0 4px 12px -6px rgba(23,74,107,.3);font-variant-numeric:tabular-nums}
+.ajuda-nums a:hover{box-shadow:inset 0 0 0 2px #5BCEFA}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1165,7 +1170,15 @@ const B = {
           <li>comportamentos discriminatórios, violentos, predatórios ou perturbadores poderão gerar intervenção da moderação.</li>
         </ul></div>`}),
   usou: () => ({k:"Acolhimento", t:"Se você usou hoje", html:`<div class="fala">
-        <p>É sugerido à pessoa que tenha usado hoje que não faça partilha, permanecendo acolhida na reunião e sendo incentivada a continuar voltando.</p></div>`}),
+        <p>É sugerido à pessoa que tenha usado hoje que não faça partilha, permanecendo acolhida na reunião e sendo incentivada a continuar voltando.</p></div>
+        <div class="ajuda">
+          <div class="ajuda-tit">Linha de Ajuda Nacional</div>
+          <div class="ajuda-nums">
+            <a href="tel:132">📞 132</a>
+            <a href="tel:30035222">📞 3003-5222</a>
+            <a href="tel:08002210221">📞 0800 221 0221</a>
+          </div>
+        </div>`}),
   oracao: () => ({k:"Todas as pessoas", t:"Oração da Serenidade", html:`<div class="oracao">${ORACAO_SERENIDADE}</div>`}),
   boasVindas: () => ({k:"Acolhimento", t:"Boas-vindas", html:`
     <div class="perguntas">
