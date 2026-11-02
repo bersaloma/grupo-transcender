@@ -165,6 +165,8 @@ function criarAta(d) {
   lock.waitLock(20000);
   try {
     const doc = DocumentApp.create('ATA N.' + n + ' (' + dataBR(a.data) + ') - Reunião Administrativa');
+    let pronto = false;
+    const mocoes = (a.mocoes || []).filter(function (m) { return (m.titulo || m.descricao || '').trim(); });
     try {
     const c = doc.getBody();
     const H1 = DocumentApp.ParagraphHeading.HEADING1;
@@ -204,14 +206,13 @@ function criarAta(d) {
     if (String(a.velhos || '').trim()) { titulo(c, (sec++) + '. Assuntos velhos'); rico(c, [[a.velhos.trim(), false]]); }
 
     titulo(c, (sec++) + '. Moções');
-    const mocoes = (a.mocoes || []).filter(function (m) { return (m.titulo || m.descricao || '').trim(); });
     if (!mocoes.length) rico(c, [['Não houve moções nesta reunião.', false]]);
     mocoes.forEach(function (m, i) {
       rico(c, [['Moção ' + (i + 1) + ': ', true], [m.titulo || '', false]]);
       if (m.endosso) rico(c, [['Endosso: ', true], [m.endosso, false]], true);
       if (m.descricao) rico(c, [['Descrição: ', true], [m.descricao, false]], true);
       if (m.emenda) rico(c, [['Emenda: ', true], [m.emenda, false]], true);
-      const res = [m.resultado, m.votos].filter(Boolean).join(': ');
+      const res = m.resultado && m.votos ? m.resultado + ' (' + m.votos + ')' : (m.resultado || m.votos || '');
       rico(c, [['Resultado: ', true], [res || 'não informado', false]], true);
     });
 
@@ -231,9 +232,9 @@ function criarAta(d) {
 
     // pasta do grupo
     DriveApp.getFileById(doc.getId()).moveTo(DriveApp.getFolderById(PASTA_ATAS_ID));
-    } catch (erroDoc) {
-      try { DriveApp.getFileById(doc.getId()).setTrashed(true); } catch (x) {}
-      throw erroDoc;
+    pronto = true;
+    } finally {
+      if (!pronto) { try { DriveApp.getFileById(doc.getId()).setTrashed(true); } catch (x) {} }
     }
 
     // eletivas no quadro
