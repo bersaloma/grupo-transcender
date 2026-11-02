@@ -1913,7 +1913,7 @@ function renderAta(){
     </div>`).join("");
   $("#ata-form").innerHTML = [
     A.gerada ? `<article class="passo ata-ok"><div class="passo-head"><h3>Ata N.º ${esc(A.gerada.numero)} enviada ao Drive</h3></div>
-      <p class="ata-ok-txt">O documento foi criado na pasta <strong>Atas Administrativas</strong> do grupo${A.gerada.alteracoes?` e ${A.gerada.alteracoes} encargo(s) foram atualizados no Quadro de Servidores`:""}.</p>
+      <p class="ata-ok-txt">O documento foi criado na pasta <strong>Administrativas</strong> do Drive do grupo${A.gerada.alteracoes?` e ${A.gerada.alteracoes} encargo(s) foram atualizados no Quadro de Servidores`:""}.</p>
       <div class="ata-acoes"><a class="pill" href="${A.gerada.url}" target="_blank" rel="noopener">📄 Abrir no Google Docs</a><button type="button" class="pill claro" data-ata-nova>Começar nova ata</button></div></article>` : "",
     cardAta(++n,"Dados da reunião",`<div class="af-grade">
       ${campo("numero","Número da ata","Ex.: 18","text",'inputmode="numeric"')}
@@ -1948,7 +1948,7 @@ function renderAta(){
         <div class="ele"><span class="ele-rot">Moderação</span><input data-k="eleDias.${i}.mod.nome" value="${esc(d.mod.nome)}" placeholder="Vago"><input data-k="eleDias.${i}.mod.fim" value="${esc(d.mod.fim)}" placeholder="até dd/mm/aaaa" inputmode="numeric" data-data></div>
         <div class="ele"><span class="ele-rot">Apoio</span><input data-k="eleDias.${i}.apoio.nome" value="${esc(d.apoio.nome)}" placeholder="Vago"><input data-k="eleDias.${i}.apoio.fim" value="${esc(d.apoio.fim)}" placeholder="até dd/mm/aaaa" inputmode="numeric" data-data></div></div>`).join("")}
       <label class="af-check"><input type="checkbox" data-k="atualizarQuadro" ${A.atualizarQuadro?"checked":""}> Atualizar o Quadro de Servidores com estas eletivas</label>`,true),
-    cardAta(++n,"Enviar ao Drive",`<p class="af-nota">O rascunho fica salvo neste aparelho enquanto você preenche. Ao enviar, a ata vira um Google Docs na pasta Atas Administrativas do grupo e fica registrada na planilha.</p>
+    cardAta(++n,"Enviar ao Drive",`<p class="af-nota">O rascunho fica salvo neste aparelho enquanto você preenche. Ao enviar, a ata vira um Google Docs na pasta Administrativas do Drive do grupo e fica registrada na planilha.</p>
       <div class="ata-acoes"><button type="button" class="pill" data-ata-enviar>📤 Enviar ata ao Drive</button><button type="button" class="pill claro" data-ata-limpar>Apagar rascunho</button></div>`)
   ].join("");
 }

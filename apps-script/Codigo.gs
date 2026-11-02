@@ -2,7 +2,7 @@
  * Quadro de Servidores, Diretrizes e Atas · Grupo Transcender de NA
  * Liga o site à planilha (lê o quadro e salva edições com histórico),
  * ao Google Docs do manual de procedimentos (só leitura)
- * e gera as atas administrativas em Google Docs, na pasta "Atas Administrativas".
+ * e gera as atas administrativas em Google Docs, na pasta "Administrativas" do Drive do grupo.
  *
  * Instalação (uma vez, logado na conta do grupo):
  * 1. Na planilha: Extensões → Apps Script. Apague o que estiver lá e cole este arquivo.
@@ -21,13 +21,13 @@
 const ABA_QUADRO = 0;            // primeira aba = quadro atual
 const ABA_HISTORICO = 'Histórico';
 const DOC_DIRETRIZES = '1dKjOKiC5X1EVZK23AyOegQxUxxAb_GGPBne9fxK8Uds'; // manual de procedimentos
-const PASTA_ATAS = 'Atas Administrativas';
+const PASTA_ATAS_ID = '1LULlyLiGUQzCCLoxgQIsFxgNWa7ylxLh'; // pasta Administrativas do Drive do grupo
 const ABA_ATAS = 'Atas';
 const ULTIMA_ATA_PADRAO = 17;    // última ata feita fora do site
 
 /* Rode esta função uma vez pelo editor (Executar) para autorizar o acesso ao Drive. */
 function autorizar() {
-  DriveApp.getRootFolder().getName();
+  DriveApp.getFolderById(PASTA_ATAS_ID).getName();
   DocumentApp.openById(DOC_DIRETRIZES).getName();
   Logger.log('Autorizado. Próxima ata: ' + proximaAta());
 }
@@ -224,9 +224,7 @@ function criarAta(d) {
     doc.saveAndClose();
 
     // pasta do grupo
-    const pastas = DriveApp.getFoldersByName(PASTA_ATAS);
-    const pasta = pastas.hasNext() ? pastas.next() : DriveApp.createFolder(PASTA_ATAS);
-    DriveApp.getFileById(doc.getId()).moveTo(pasta);
+    DriveApp.getFileById(doc.getId()).moveTo(DriveApp.getFolderById(PASTA_ATAS_ID));
 
     // eletivas no quadro
     let alteracoes = 0;
