@@ -765,12 +765,14 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .editando .slot{cursor:pointer;transition:box-shadow .15s}
 .editando .slot:active{transform:scale(.98)}
 .editando .slot:hover{box-shadow:inset 0 0 0 2px #5BCEFA}
-.mesa-card{max-width:880px;margin:16px auto 0}
+.mesa-card{max-width:1060px;margin:16px auto 0}
+.mesa-grid .slot.vago{background:#FCE1EC}
 .mesa-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
 .mesa-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .mesa-grid .slot{background:#F1F8FD}
 .quadro-acoes{max-width:880px;margin:6px auto 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
 .quadro-dica{max-width:880px;margin:14px auto 0;text-align:center;font-size:16px;font-weight:700;color:var(--indigo)}
+.quadro-tit{max-width:1060px;margin:26px auto 0;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(26px,3vw,34px);color:var(--titulo);line-height:1.1;padding:0 4px}
 .quadro-planilha{max-width:880px;margin:18px auto 8px;text-align:center}
 .quadro-fonte:empty{display:none}
 #lista-servidores{padding:0 16px}
@@ -788,6 +790,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .tab-semana tr:first-child th{border-top:0}.tab-semana tr:last-child>*{border-bottom:0}
 .tab-semana tr>*:first-child{border-left:0}.tab-semana tr>*:last-child{border-right:0}
 .tab-semana thead th{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;color:var(--titulo);padding:12px 10px;background:#F7FBFE}
+.tab-h thead th.canto{font-family:"Inter",system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);vertical-align:bottom}
 .tab-semana tbody th{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);background:#F7FBFE;vertical-align:middle;padding:10px 12px}
 .tab-semana .hoje{background:#E6F7FE}
 .tab-semana thead th.hoje{box-shadow:inset 0 3px 0 #5BCEFA}
@@ -992,7 +995,7 @@ Senha: 000000
   </header>
   <div class="cab-roteiro">
     <div class="logo" role="presentation"></div>
-    <h2>Quadro da Mesa de Servidores</h2>
+    <h2>Quadro de Servidores</h2>
     <p>Grupo Transcender de Narcóticos Anônimos</p>
   </div>
   <div class="passos" id="lista-servidores"></div>
@@ -1663,9 +1666,14 @@ function renderQuadro(Q, fonte){
   const dias=[...Q.dias].sort((a,b)=>DIAS_ORDEM.indexOf(a[0])-DIAS_ORDEM.indexOf(b[0]));
   const podeEditar=!!CONFIG.QUADRO_API_URL;
   $("#lista-servidores").innerHTML = `
+  <article class="passo mesa-card">
+    <div class="passo-head"><h3>Servidores da Mesa</h3></div>
+    <div class="mesa-grid editando">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
+  </article>
+  <h3 class="quadro-tit">Servidores das Reuniões</h3>
   <div class="tab-wrap">
   <table class="tab-semana tab-h">
-    <thead><tr><th class="canto"></th>${dias.map(([d])=>`<th class="${d===hoje?"hoje":""}">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th>`).join("")}</tr></thead>
+    <thead><tr><th class="canto">Encargos</th>${dias.map(([d])=>`<th class="${d===hoje?"hoje":""}">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th>`).join("")}</tr></thead>
     <tbody>
       <tr><th scope="row">Moderação</th>${dias.map(([d,m])=>`<td class="${d===hoje?"hoje":""}">${slot("Moderação",d,m[0],m[1],"")}</td>`).join("")}</tr>
       <tr><th scope="row">Apoio</th>${dias.map(([d,,a])=>`<td class="${d===hoje?"hoje":""}">${slot("Apoio",d,a[0],a[1],"")}</td>`).join("")}</tr>
@@ -1676,11 +1684,6 @@ function renderQuadro(Q, fonte){
     <tbody>${dias.map(([d,m,a])=>`<tr class="${d===hoje?"hoje":""}"><th scope="row">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th><td>${slot("Moderação",d,m[0],m[1],"")}</td><td>${slot("Apoio",d,a[0],a[1],"")}</td></tr>`).join("")}</tbody>
   </table>
   </div>
-  <p class="quadro-dica">✏️ Toque em um nome para editar</p>
-  <article class="passo mesa-card">
-    <div class="passo-head"><h3>Mesa de servidores</h3></div>
-    <div class="mesa-grid editando">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
-  </article>
   <div class="quadro-planilha"><a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">Abrir planilha</a></div>`;
 }
 function csvLinhas(txt){
