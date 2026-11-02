@@ -843,6 +843,43 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .ajuda-nums a{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;font-size:19px;color:var(--indigo);text-decoration:none;box-shadow:0 4px 12px -6px rgba(23,74,107,.3);font-variant-numeric:tabular-nums}
 .ajuda-nums a:hover{box-shadow:inset 0 0 0 2px #5BCEFA}
 .ata-adm{margin-top:14px}
+/* ===== ata administrativa ===== */
+#ata-form .passo h4.af-sub{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;color:var(--titulo);margin:16px 0 8px}
+.af{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:700;letter-spacing:.03em;color:var(--indigo)}
+.af input,.af textarea,.af select,.ele input,.pessoa-nome{font:inherit;font-weight:400;letter-spacing:0;font-size:16px;color:var(--indigo);padding:10px 12px;border-radius:12px;border:2px solid #D6E6F2;background:#fff;outline:none;width:100%;box-sizing:border-box}
+.af textarea{resize:vertical;min-height:52px;line-height:1.45}
+.af input:focus,.af textarea:focus,.af select:focus,.ele input:focus,.pessoa-nome:focus{border-color:#5BCEFA}
+.af-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.af-linha{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.af-nota{font-size:15px;color:var(--indigo);line-height:1.5;margin-bottom:10px}
+.ata-linha{background:#F4F9FD;border-radius:16px;padding:12px;margin-top:10px;display:flex;flex-direction:column;gap:10px}
+.ata-dia{font-family:"DM Serif Display",Georgia,serif;font-size:20px;color:var(--titulo)}
+.pessoa{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
+.pessoa-l{display:flex;flex-direction:column;gap:5px}
+.pessoa-rot{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo)}
+.pres{display:flex;gap:4px;flex-wrap:wrap}
+.pres button{all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:9px 11px;border-radius:999px;background:#fff;color:var(--indigo);box-shadow:inset 0 0 0 2px #D6E6F2}
+.pres button.on.ok{background:#5BCEFA;color:#fff;box-shadow:none}
+.pres button.on.no{background:#D14F8A;color:#fff;box-shadow:none}
+.pres button.on.jus{background:#F5A9B8;color:#174A6B;box-shadow:none}
+.pres-vago{font-size:14px;font-weight:700;color:var(--rosa-forte);padding:9px 4px}
+.mocao{background:#FFF4F8;border-radius:16px;padding:12px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.mocao-top{display:flex;justify-content:space-between;align-items:center;color:var(--indigo);font-size:17px}
+.link-rm{all:unset;cursor:pointer;font-size:14px;font-weight:700;color:var(--rosa-forte)}
+.ele{display:grid;grid-template-columns:110px minmax(0,1fr) 150px;gap:8px;align-items:center;margin-top:8px}
+.ele-rot{font-size:13px;font-weight:700;color:var(--indigo)}
+.ele-dia{background:#F4F9FD;border-radius:16px;padding:10px 12px 12px;margin-top:10px}
+.af-check{display:flex;gap:10px;align-items:center;margin-top:16px;font-size:16px;font-weight:700;color:var(--indigo)}
+.af-check input{width:22px;height:22px;accent-color:#5BCEFA}
+.ata-acoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.ata-ok{box-shadow:inset 0 0 0 3px #5BCEFA,var(--sombra)}
+.ata-ok-txt{font-size:16px;color:var(--indigo);line-height:1.5;margin-bottom:10px}
+@media (max-width:600px){
+  .af-grade{grid-template-columns:1fr 1fr}
+  .pessoa{grid-template-columns:1fr}
+  .ele{grid-template-columns:1fr 1fr}
+  .ele-rot{grid-column:1/-1}
+}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -998,6 +1035,16 @@ Senha: 000000
 </section>
 
 <!-- ================= SERVIDORES ================= -->
+<section id="ata-adm" class="view">
+  <div class="cab-roteiro">
+    <div class="logo" role="presentation"></div>
+    <h2>Ata Administrativa</h2>
+    <p>Grupo Transcender de Narcóticos Anônimos</p>
+  </div>
+  <div class="passos" id="ata-form"></div>
+  <div style="height:60px"></div>
+</section>
+
 <section id="servidores" class="view">
   <header class="topo">
     <div class="topo-in">
@@ -1359,7 +1406,7 @@ const ROTEIROS = {
       B.usou(),
       {k:"Leitura", t:"As 12 Tradições de NA", html:`<ol class="lista">${TRADICOES.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html:`<ol class="lista">${CONCEITOS.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
-      {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><a class="pill js-ata-adm" href="${CONFIG.ATA_ADM_URL||"#"}" target="_blank" rel="noopener">📄 Abrir Ata Administrativa</a></div>`},
+      {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><button class="pill" data-ir="ata-adm">📄 Abrir Ata Administrativa</button></div>`},
       FASE("Fim"),
       B.encerramento(),
       B.oracao(),
@@ -1413,17 +1460,18 @@ function progresso(){}
 function ir(dest){
   if(dest==="voltar") dest = anterior || "home";
   const vis = $(".view.ativa")?.id;
-  if((dest==="fichas"||dest==="servidores") && vis!==dest) anterior = vis==="roteiro" ? atual : "home";
+  if((dest==="fichas"||dest==="servidores"||dest==="ata-adm") && vis!==dest) anterior = vis==="roteiro" ? atual : "home";
   $$(".view").forEach(v=>v.classList.remove("ativa"));
   if(ROTEIROS[dest]){ renderRoteiro(dest); $("#roteiro").classList.add("ativa"); }
   else { $("#"+dest)?.classList.add("ativa"); }
   if(!ROTEIROS[dest]) $("#timer-fab").hidden = true;
   if(location.hash.slice(1)!==(dest==="home"?"":dest)) history.pushState(null,"",dest==="home"?location.pathname:"#"+dest);
   window.scrollTo({top:0,behavior:"instant"});
-  const sv=$("#seta-voltar"); sv.hidden = dest==="home"; sv.dataset.ir = (dest==="fichas"||dest==="servidores") ? "voltar" : "home";
+  const sv=$("#seta-voltar"); sv.hidden = dest==="home"; sv.dataset.ir = (dest==="fichas"||dest==="servidores"||dest==="ata-adm") ? "voltar" : "home";
   if(window.__topo) window.__topo();
   if(dest==="servidores") carregarQuadro();
   if(dest==="diretrizes") carregarDiretrizes();
+  if(dest==="ata-adm") abrirAtaAdm();
 }
 
 document.addEventListener("click", e=>{
@@ -1793,13 +1841,146 @@ window.addEventListener("resize",ajustarNomes);
 if(document.fonts) document.fonts.ready.then(ajustarNomes);
 setTimeout(ajustarNomes,300);
 
+
+/* ---------- ata administrativa ---------- */
+const ATA_KEY="ata-adm-rascunho";
+const PRES=["Presente","Ausente","Justificou"];
+let ATA=null, ataNumSugerido=null;
+const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+function hojeISO(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function novaAta(){
+  const Q=QUADRO_ATUAL||SERVIDORES;
+  const dias=DIAS_ORDEM.map(d=>{ const x=Q.dias.find(y=>y[0]===d)||[d,["",""],["",""]]; return x; });
+  return {
+    numero: ataNumSugerido||"", data: hojeISO(), inicio:"19h00", autor:sessao.get("q-autor")||"", encargoAutor:"",
+    mesa: Q.mesa.map(([enc,nome])=>({enc, nome, pres: nome?"Presente":"", relato:""})),
+    dias: dias.map(([dia,m,a])=>({dia, mod:{nome:m[0],pres:m[0]?"Presente":""}, apoio:{nome:a[0],pres:a[0]?"Presente":""}, relato:""})),
+    novos:"", velhos:"", mocoes:[],
+    eleMesa: Q.mesa.map(([enc,nome,fim])=>({enc,nome,fim})),
+    eleDias: dias.map(([dia,m,a])=>({dia, mod:{nome:m[0],fim:m[1]}, apoio:{nome:a[0],fim:a[1]}})),
+    atualizarQuadro:true, termino:"", gerada:null
+  };
+}
+function salvarRascunho(){ try{ localStorage.setItem(ATA_KEY, JSON.stringify(ATA)); }catch(e){} }
+function lerRascunho(){ try{ return JSON.parse(localStorage.getItem(ATA_KEY)||"null"); }catch(e){ return null; } }
+function setPath(o,path,v){ const k=path.split("."); let t=o; for(let i=0;i<k.length-1;i++) t=t[k[i]]; t[k[k.length-1]]=v; }
+function getPath(o,path){ return path.split(".").reduce((t,k)=>t==null?t:t[k],o); }
+
+const campo=(k,rot,ph="",tipo="text",extra="")=>`<label class="af"><span>${rot}</span><input type="${tipo}" data-k="${k}" value="${esc(getPath(ATA,k))}" placeholder="${ph}" ${extra}></label>`;
+const texto=(k,rot,ph="")=>`<label class="af"><span>${rot}</span><textarea data-k="${k}" rows="2" placeholder="${ph}">${esc(getPath(ATA,k))}</textarea></label>`;
+function presenca(k){
+  const v=getPath(ATA,k+".pres"), nome=getPath(ATA,k+".nome");
+  if(!nome) return `<div class="pres"><span class="pres-vago">Vago</span></div>`;
+  return `<div class="pres">${PRES.map(o=>`<button type="button" class="${v===o?"on":""} ${o==="Presente"?"ok":o==="Ausente"?"no":"jus"}" data-pres="${k}" data-v="${o}">${o}</button>`).join("")}</div>`;
+}
+function pessoaAta(k,rot){
+  return `<div class="pessoa"><div class="pessoa-l"><span class="pessoa-rot">${rot}</span><input class="pessoa-nome" data-k="${k}.nome" data-rerender value="${esc(getPath(ATA,k+".nome"))}" placeholder="Vago"></div>${presenca(k)}</div>`;
+}
+function cardAta(n,t,html,azul){ return `<article class="passo ${azul?"azul":""}"><div class="passo-head"><div class="num">${n}</div><h3>${t}</h3></div>${html}</article>`; }
+
+function renderAta(){
+  const A=ATA; let n=0;
+  const mocoes = A.mocoes.map((m,i)=>`<div class="mocao">
+      <div class="mocao-top"><strong>Moção ${i+1}</strong><button type="button" class="link-rm" data-rm-mocao="${i}">Remover</button></div>
+      ${campo(`mocoes.${i}.titulo`,"Título","Ex.: Proteção de dados")}
+      ${campo(`mocoes.${i}.endosso`,"Endosso (quem propôs)","Nome")}
+      ${texto(`mocoes.${i}.descricao`,"Descrição")}
+      ${texto(`mocoes.${i}.emenda`,"Emenda (se houver)","Quem propôs e o que mudou")}
+      <div class="af-linha">
+        <label class="af"><span>Resultado</span><select data-k="mocoes.${i}.resultado">${["","Aprovada","Rejeitada","Aprovada por consciência","Adiada","Retirada"].map(o=>`<option ${m.resultado===o?"selected":""} value="${o}">${o||"Escolha"}</option>`).join("")}</select></label>
+        ${campo(`mocoes.${i}.votos`,"Votação","Ex.: 4x1")}
+      </div>
+    </div>`).join("");
+  $("#ata-form").innerHTML = [
+    A.gerada ? `<article class="passo ata-ok"><div class="passo-head"><h3>Ata N.º ${esc(A.gerada.numero)} enviada ao Drive</h3></div>
+      <p class="ata-ok-txt">O documento foi criado na pasta <strong>Atas Administrativas</strong> do grupo${A.gerada.alteracoes?` e ${A.gerada.alteracoes} encargo(s) foram atualizados no Quadro de Servidores`:""}.</p>
+      <div class="ata-acoes"><a class="pill" href="${A.gerada.url}" target="_blank" rel="noopener">📄 Abrir no Google Docs</a><button type="button" class="pill claro" data-ata-nova>Começar nova ata</button></div></article>` : "",
+    cardAta(++n,"Dados da reunião",`<div class="af-grade">
+      ${campo("numero","Número da ata","Ex.: 18","text",'inputmode="numeric"')}
+      ${campo("data","Data","","date")}
+      ${campo("inicio","Início","19h00")}
+      ${campo("termino","Término","Ex.: 20h40")}
+      ${campo("autor","Ata redigida por","Nome")}
+      ${campo("encargoAutor","Encargo de quem redige","Ex.: RSG")}
+    </div>`),
+    cardAta(++n,"Abertura",`<p class="af-nota">Vai para a ata automaticamente: Oração da Serenidade, Oração do Serviço, leitura das 12 Tradições e dos 12 Conceitos, e o compromisso do grupo com a inclusão.</p>`,true),
+    cardAta(++n,"Lista de chamada e relatórios",`
+      <h4 class="af-sub">Mesa de servidores</h4>
+      ${A.mesa.map((m,i)=>`<div class="ata-linha">${pessoaAta(`mesa.${i}`,m.enc)}${texto(`mesa.${i}.relato`,"Relatório","Breve relato (opcional)")}</div>`).join("")}
+      <h4 class="af-sub">Moderação e apoio</h4>
+      ${A.dias.map((d,i)=>`<div class="ata-linha"><div class="ata-dia">${d.dia} 19h</div>${pessoaAta(`dias.${i}.mod`,"Moderação")}${pessoaAta(`dias.${i}.apoio`,"Apoio")}${texto(`dias.${i}.relato`,"Breve relato","Como foram as reuniões (opcional)")}</div>`).join("")}
+    `),
+    cardAta(++n,"Assuntos",`${texto("novos","Assuntos novos")}${texto("velhos","Assuntos velhos")}`,true),
+    cardAta(++n,"Moções",`${mocoes||`<p class="af-nota">Nenhuma moção adicionada.</p>`}<button type="button" class="pill claro" data-add-mocao>＋ Adicionar moção</button>`),
+    cardAta(++n,"Eletivas",`<p class="af-nota">Já vem com o quadro atual. Altere só o que mudou na reunião.</p>
+      <h4 class="af-sub">Mesa de servidores</h4>
+      ${A.eleMesa.map((m,i)=>`<div class="ele"><span class="ele-rot">${m.enc}</span><input data-k="eleMesa.${i}.nome" value="${esc(m.nome)}" placeholder="Vago"><input data-k="eleMesa.${i}.fim" value="${esc(m.fim)}" placeholder="até dd/mm/aaaa" inputmode="numeric" data-data></div>`).join("")}
+      <h4 class="af-sub">Moderação e apoio</h4>
+      ${A.eleDias.map((d,i)=>`<div class="ele-dia"><div class="ata-dia">${d.dia}</div>
+        <div class="ele"><span class="ele-rot">Moderação</span><input data-k="eleDias.${i}.mod.nome" value="${esc(d.mod.nome)}" placeholder="Vago"><input data-k="eleDias.${i}.mod.fim" value="${esc(d.mod.fim)}" placeholder="até dd/mm/aaaa" inputmode="numeric" data-data></div>
+        <div class="ele"><span class="ele-rot">Apoio</span><input data-k="eleDias.${i}.apoio.nome" value="${esc(d.apoio.nome)}" placeholder="Vago"><input data-k="eleDias.${i}.apoio.fim" value="${esc(d.apoio.fim)}" placeholder="até dd/mm/aaaa" inputmode="numeric" data-data></div></div>`).join("")}
+      <label class="af-check"><input type="checkbox" data-k="atualizarQuadro" ${A.atualizarQuadro?"checked":""}> Atualizar o Quadro de Servidores com estas eletivas</label>`,true),
+    cardAta(++n,"Enviar ao Drive",`<p class="af-nota">O rascunho fica salvo neste aparelho enquanto você preenche. Ao enviar, a ata vira um Google Docs na pasta Atas Administrativas do grupo e fica registrada na planilha.</p>
+      <div class="ata-acoes"><button type="button" class="pill" data-ata-enviar>📤 Enviar ata ao Drive</button><button type="button" class="pill claro" data-ata-limpar>Apagar rascunho</button></div>`)
+  ].join("");
+}
+async function abrirAtaAdm(){
+  ATA = lerRascunho();
+  if(!ATA){
+    if(CONFIG.QUADRO_API_URL){ try{ await carregarQuadro(); }catch(e){} }
+    ATA = novaAta(); renderAta();
+    if(CONFIG.QUADRO_API_URL){ try{ const r=await fetch(CONFIG.QUADRO_API_URL+"?ata=proxima&t="+Date.now()); const j=await r.json(); if(j.ok && !ATA.numero){ ataNumSugerido=String(j.numero); ATA.numero=ataNumSugerido; const el=document.querySelector('#ata-form [data-k="numero"]'); if(el) el.value=ATA.numero; } }catch(e){} }
+  } else renderAta();
+}
+document.addEventListener("input",e=>{
+  const el=e.target.closest("#ata-form [data-k]"); if(!el||!ATA) return;
+  if(el.hasAttribute("data-data")){ let v=el.value.replace(/\D/g,"").slice(0,8); if(v.length>4) v=v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4); else if(v.length>2) v=v.slice(0,2)+"/"+v.slice(2); el.value=v; }
+  setPath(ATA, el.dataset.k, el.type==="checkbox" ? el.checked : el.value);
+  salvarRascunho();
+});
+document.addEventListener("change",e=>{
+  const el=e.target.closest("#ata-form [data-k]"); if(!el||!ATA) return;
+  setPath(ATA, el.dataset.k, el.type==="checkbox" ? el.checked : el.value);
+  if(el.hasAttribute("data-rerender")){ const base=el.dataset.k.replace(/\.nome$/,""); const p=getPath(ATA,base); p.pres = p.nome ? (p.pres||"Presente") : ""; renderAta(); }
+  salvarRascunho();
+});
+document.addEventListener("click",async e=>{
+  if(!e.target.closest("#ata-form")) return;
+  const pr=e.target.closest("[data-pres]");
+  if(pr){ setPath(ATA, pr.dataset.pres+".pres", pr.dataset.v); salvarRascunho(); pr.parentElement.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===pr)); return; }
+  if(e.target.closest("[data-add-mocao]")){ ATA.mocoes.push({titulo:"",endosso:"",descricao:"",emenda:"",resultado:"",votos:""}); salvarRascunho(); renderAta(); return; }
+  const rm=e.target.closest("[data-rm-mocao]");
+  if(rm){ if(confirmarAcao("Remover esta moção?")){ ATA.mocoes.splice(+rm.dataset.rmMocao,1); salvarRascunho(); renderAta(); } return; }
+  if(e.target.closest("[data-ata-limpar]")){ if(confirmarAcao("Apagar todo o rascunho da ata?")){ try{localStorage.removeItem(ATA_KEY)}catch(x){} ATA=null; abrirAtaAdm(); } return; }
+  if(e.target.closest("[data-ata-nova]")){ try{localStorage.removeItem(ATA_KEY)}catch(x){} ATA=null; ataNumSugerido=null; abrirAtaAdm(); window.scrollTo({top:0}); return; }
+  const env=e.target.closest("[data-ata-enviar]");
+  if(env){
+    if(!CONFIG.QUADRO_API_URL){ toast("A ligação com o Drive ainda não está configurada."); return; }
+    if(!ATA.numero || !ATA.data || !ATA.autor){ toast("Preencha número, data e quem redige."); window.scrollTo({top:0,behavior:"smooth"}); return; }
+    let pin=sessao.get("q-pin");
+    if(!pin){ pin=prompt("Senha de serviço:"); if(!pin) return; }
+    env.disabled=true; env.textContent="Enviando…";
+    try{
+      const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({acao:"ata",pin,autor:ATA.autor,ata:ATA})});
+      const j=await r.json();
+      if(!j.ok){ toast(j.erro||"Não foi possível enviar."); if(/senha/i.test(j.erro||"")) sessao.set("q-pin",""); return; }
+      sessao.set("q-pin",pin); sessao.set("q-autor",ATA.autor);
+      ATA.gerada={numero:j.numero,url:j.url,alteracoes:j.alteracoes||0}; salvarRascunho();
+      if(j.linhas) renderQuadro(quadroDaPlanilha(j.linhas),"");
+      renderAta(); window.scrollTo({top:0,behavior:"smooth"}); toast("Ata enviada ao Drive");
+    }catch(x){ toast("Sem conexão com o Drive. O rascunho continua salvo."); }
+    finally{ env.disabled=false; env.textContent="📤 Enviar ata ao Drive"; }
+  }
+});
+function confirmarAcao(msg){ try{ return window.confirm(msg); }catch(e){ return true; } }
+
 /* ---------- start ---------- */
 aplicarAta();
 function rotaPeloHash(){
   const h=location.hash.slice(1);
   const vis=$(".view.ativa")?.id;
   const ativo = vis==="roteiro" ? atual : vis;
-  const alvo = (ROTEIROS[h]||["fichas","diretrizes","servidores"].includes(h)) ? h : "home";
+  const alvo = (ROTEIROS[h]||["fichas","diretrizes","servidores","ata-adm"].includes(h)) ? h : "home";
   if(alvo!==ativo) ir(alvo);
 }
 window.addEventListener("hashchange", rotaPeloHash);
