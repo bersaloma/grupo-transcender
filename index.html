@@ -833,6 +833,9 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .q-bts{display:flex;gap:10px;justify-content:flex-end}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+.combinados{list-style:none;display:flex;flex-direction:column;gap:8px}
+.combinados li{position:relative;padding-left:22px}
+.combinados li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--rosa-forte)}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1155,6 +1158,15 @@ const B = {
         <p>Para assegurarmos um espaço mais acolhedor, sugerimos que inclua seu pronome de preferência no seu nome do Zoom, junto com o estado ou país:</p>
         <p class="citacao" style="font-style:normal">NOME (elu/delu)/RJ</p>
         <p>Assim, preservamos sua identidade e registramos apenas a localidade em nossa ata. Se precisar de ajuda, é só avisar no chat.</p></div>`}),
+  convivencia: () => ({k:"Combinados", t:"Durante as reuniões", azul:true, html:`<div class="fala">
+        <ul class="combinados">
+          <li>não é permitido fumar com a câmera aberta;</li>
+          <li>não é permitida nudez, seminudez ou exposição inadequada;</li>
+          <li>espera-se respeito aos nomes, pronomes e identidades das pessoas presentes;</li>
+          <li>comportamentos discriminatórios, violentos, predatórios ou perturbadores poderão gerar intervenção da moderação.</li>
+        </ul></div>`}),
+  usou: () => ({k:"Acolhimento", t:"Se você usou hoje", html:`<div class="fala">
+        <p>É sugerido à pessoa que tenha usado hoje que não faça partilha, permanecendo acolhida na reunião e sendo incentivada a continuar voltando.</p></div>`}),
   oracao: () => ({k:"Todas as pessoas", t:"Oração da Serenidade", html:`<div class="oracao">${ORACAO_SERENIDADE}</div>`}),
   boasVindas: () => ({k:"Acolhimento", t:"Boas-vindas", html:`
     <div class="perguntas">
@@ -1240,9 +1252,11 @@ const ROTEIROS = {
       B.oracao(),
       B.quemSomos(),
       B.acolhimento(),
+      B.convivencia(),
       B.boasVindas(),
       {t:"Dinâmica da Reunião", azul:true, html: din([["Estudo da<br>literatura",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri")},
       B.literatura(),
+      B.usou(),
       B.t1("Início das partilhas"),
       FASE("Melhores Momentos"),
       B.t3(),
@@ -1266,10 +1280,12 @@ const ROTEIROS = {
       B.oracao(),
       B.quemSomos(),
       B.acolhimento(),
+      B.convivencia(),
       B.boasVindas(),
       B.evite(),
       {k:"Como funciona", t:"Dinâmica da Reunião", azul:true, html: din([["Literatura<br>de NA",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri")},
       B.literatura(),
+      B.usou(),
       B.t1("Início das partilhas"),
       FASE("Melhores Momentos"),
       B.t3(),
@@ -1293,10 +1309,12 @@ const ROTEIROS = {
       B.oracao(),
       B.quemSomos(),
       B.acolhimento(),
+      B.convivencia(),
       B.boasVindas(),
       B.evite(),
       {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>25+5",""],["Melhores<br>momentos",""]],"tri")},
       B.meditacao(),
+      B.usou(),
       B.t1(),
       {k:"Temática", t:"Início da Temática", html:`<div class="citacao" style="font-style:normal;font-weight:700">Agora é o momento da partilha temática <span style="color:var(--rosa-forte)">(25+5)</span></div>
         <div class="nota azul">O cronômetro começa em 10 minutos. Toque no número para mudar o tempo, por exemplo 25 para a temática. Ele avisa quando faltam 2 minutos e quando o tempo se esgota.</div>
@@ -1323,6 +1341,8 @@ const ROTEIROS = {
       {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">Deus, conceda-nos a sabedoria para servirmos de acordo com os Seus divinos preceitos. Inspire em nós um sentido do Seu propósito. Faça-nos servidores da Sua vontade e conceda-nos um laço de abnegação, para que esta seja verdadeiramente a Sua obra, não a nossa, para que nenhum adicto, em nenhum lugar, precise morrer dos horrores da adicção.</div>`},
       B.quemSomos(),
       B.acolhimento(),
+      B.convivencia(),
+      B.usou(),
       {k:"Leitura", t:"As 12 Tradições de NA", html:`<ol class="lista">${TRADICOES.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html:`<ol class="lista">${CONCEITOS.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios<br>de serviço",""],["7ª<br>Tradição",""],["Encargos<br>e eletivas",""],["Decisões<br>do grupo",""]],"tri quad")},
