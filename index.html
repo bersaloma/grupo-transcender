@@ -781,6 +781,32 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .mesa-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:420px){ .dia-col{grid-template-columns:74px 1fr 1fr} .dia-n{font-size:19px} .slot-nome{font-size:15px} }
+/* tabela semanal */
+.tab-wrap{max-width:1060px;margin:16px auto 0;background:#fff;border-radius:20px;box-shadow:var(--sombra);overflow:hidden}
+.tab-semana{width:100%;border-collapse:collapse;table-layout:fixed}
+.tab-semana th,.tab-semana td{border:1px solid #DCE8F2;padding:6px;vertical-align:top;text-align:left}
+.tab-semana tr:first-child th{border-top:0}.tab-semana tr:last-child>*{border-bottom:0}
+.tab-semana tr>*:first-child{border-left:0}.tab-semana tr>*:last-child{border-right:0}
+.tab-semana thead th{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;color:var(--titulo);padding:12px 10px;background:#F7FBFE}
+.tab-semana tbody th{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo);background:#F7FBFE;vertical-align:middle;padding:10px 12px}
+.tab-semana .hoje{background:#E6F7FE}
+.tab-semana thead th.hoje{box-shadow:inset 0 3px 0 #5BCEFA}
+.tab-semana .dia-tag{display:inline-block;margin-left:6px;vertical-align:middle;font-family:"Atkinson Hyperlegible",system-ui,sans-serif}
+.tab-semana .slot{background:transparent;padding:6px 6px;border-radius:10px}
+.tab-semana .slot+.slot{background:transparent}
+.tab-h .canto{width:112px}
+.tab-h .slot-fim{white-space:nowrap}
+.tab-h thead th{font-size:21px}
+.tab-v{display:none}
+@media (max-width:860px){
+  .tab-wrap{margin:14px 0 0}
+  .tab-h{display:none}.tab-v{display:table}
+  .tab-v .canto{width:96px}
+  .tab-v thead th{font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--indigo)}
+  .tab-v tbody th{font-family:"DM Serif Display",Georgia,serif;font-size:20px;letter-spacing:0;text-transform:none;color:var(--titulo);font-weight:400}
+  .tab-v tbody th .dia-tag{display:block;width:max-content;margin:4px 0 0}
+  .tab-v tr.hoje>*{background:#E6F7FE}
+}
 /* modal de edição */
 .q-modal{position:fixed;inset:0;z-index:66;background:rgba(23,74,107,.45);display:grid;place-items:center;padding:16px}
 .q-modal[hidden]{display:none}
@@ -1620,7 +1646,7 @@ function vencido(fim){ const m=(fim||"").match(/^(\d{2})\/(\d{2})\/(\d{4})$/); i
 function slot(grupo,enc,nome,fim,rot){
   const vazio=!nome;
   return `<button class="slot ${vazio?"vago":""} ${vencido(fim)?"venc":""}" data-slot data-g="${grupo}" data-e="${enc}" data-n="${nome||""}" data-f="${fim||""}">
-    <span class="slot-rot">${rot}</span>
+    ${rot?`<span class="slot-rot">${rot}</span>`:""}
     <span class="slot-nome">${vazio?"Vago":nome}</span>
     ${fim?`<span class="slot-fim">${vencido(fim)?"termo vencido":"até "+fim}</span>`:""}
   </button>`;
@@ -1631,21 +1657,25 @@ function renderQuadro(Q, fonte){
   const dias=[...Q.dias].sort((a,b)=>DIAS_ORDEM.indexOf(a[0])-DIAS_ORDEM.indexOf(b[0]));
   const podeEditar=!!CONFIG.QUADRO_API_URL;
   $("#lista-servidores").innerHTML = `
-  <section class="semana editando" aria-label="Escala da semana">
-    ${dias.map(([dia,m,a])=>`
-      <div class="dia-col ${dia===hoje?"hoje":""}">
-        <div class="dia-cab"><span class="dia-n">${curto(dia)}</span>${dia===hoje?`<span class="dia-tag">Hoje</span>`:""}</div>
-        ${slot("Moderação",dia,m[0],m[1],"Moderação")}
-        ${slot("Apoio",dia,a[0],a[1],"Apoio")}
-      </div>`).join("")}
-  </section>
+  <div class="tab-wrap">
+  <table class="tab-semana tab-h">
+    <thead><tr><th class="canto"></th>${dias.map(([d])=>`<th class="${d===hoje?"hoje":""}">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th>`).join("")}</tr></thead>
+    <tbody>
+      <tr><th scope="row">Moderação</th>${dias.map(([d,m])=>`<td class="${d===hoje?"hoje":""}">${slot("Moderação",d,m[0],m[1],"")}</td>`).join("")}</tr>
+      <tr><th scope="row">Apoio</th>${dias.map(([d,,a])=>`<td class="${d===hoje?"hoje":""}">${slot("Apoio",d,a[0],a[1],"")}</td>`).join("")}</tr>
+    </tbody>
+  </table>
+  <table class="tab-semana tab-v">
+    <thead><tr><th class="canto">Dia</th><th>Moderação</th><th>Apoio</th></tr></thead>
+    <tbody>${dias.map(([d,m,a])=>`<tr class="${d===hoje?"hoje":""}"><th scope="row">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th><td>${slot("Moderação",d,m[0],m[1],"")}</td><td>${slot("Apoio",d,a[0],a[1],"")}</td></tr>`).join("")}</tbody>
+  </table>
+  </div>
   <p class="quadro-dica">✏️ Toque em um nome para editar</p>
   <article class="passo mesa-card">
     <div class="passo-head"><h3>Mesa de servidores</h3></div>
     <div class="mesa-grid editando">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
   </article>
   <div class="quadro-planilha"><a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">Abrir planilha</a></div>`;
-  const h=document.querySelector(".dia-col.hoje"); if(h && window.innerWidth<861) h.scrollIntoView({block:"nearest",inline:"start"});
 }
 function csvLinhas(txt){
   const out=[]; let row=[], cur="", q=false;
