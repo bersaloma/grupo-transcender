@@ -770,12 +770,12 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .mesa-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .mesa-grid .slot{background:#F1F8FD}
 .quadro-acoes{max-width:880px;margin:6px auto 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
-.quadro-dica{font-size:16px;font-weight:700;color:var(--indigo)}
+.quadro-dica{max-width:880px;margin:14px auto 0;text-align:center;font-size:16px;font-weight:700;color:var(--indigo)}
+.quadro-planilha{max-width:880px;margin:18px auto 8px;text-align:center}
 .quadro-fonte:empty{display:none}
 #lista-servidores{padding:0 16px}
 @media (max-width:860px){
   .semana{grid-template-columns:1fr;gap:8px}
-  .quadro-acoes{padding:0 24px}
   .dia-col{display:grid;grid-template-columns:92px 1fr 1fr;align-items:stretch;gap:8px;padding:10px}
   .dia-cab{flex-direction:column;align-items:flex-start;justify-content:center}
   .mesa-grid{grid-template-columns:1fr 1fr}
@@ -1631,10 +1631,6 @@ function renderQuadro(Q, fonte){
   const dias=[...Q.dias].sort((a,b)=>DIAS_ORDEM.indexOf(a[0])-DIAS_ORDEM.indexOf(b[0]));
   const podeEditar=!!CONFIG.QUADRO_API_URL;
   $("#lista-servidores").innerHTML = `
-  <div class="quadro-acoes">
-    <span class="quadro-dica">✏️ Toque em um nome para editar</span>
-    <span class="quadro-fonte">${fonte}</span>
-  </div>
   <section class="semana editando" aria-label="Escala da semana">
     ${dias.map(([dia,m,a])=>`
       <div class="dia-col ${dia===hoje?"hoje":""}">
@@ -1643,10 +1639,12 @@ function renderQuadro(Q, fonte){
         ${slot("Apoio",dia,a[0],a[1],"Apoio")}
       </div>`).join("")}
   </section>
+  <p class="quadro-dica">✏️ Toque em um nome para editar</p>
   <article class="passo mesa-card">
-    <div class="passo-head mesa-head"><h3>Mesa de servidores</h3><a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">Abrir planilha</a></div>
+    <div class="passo-head"><h3>Mesa de servidores</h3></div>
     <div class="mesa-grid editando">${Q.mesa.map(([enc,n,d])=>slot("Mesa",enc,n,d,enc)).join("")}</div>
-  </article>`;
+  </article>
+  <div class="quadro-planilha"><a class="pill claro" href="https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/edit" target="_blank" rel="noopener">Abrir planilha</a></div>`;
   const h=document.querySelector(".dia-col.hoje"); if(h && window.innerWidth<861) h.scrollIntoView({block:"nearest",inline:"start"});
 }
 function csvLinhas(txt){
