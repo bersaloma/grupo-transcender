@@ -116,7 +116,8 @@ function salvarEncargo(ss, grupo, encargo, nome, fim, autor, sempre) {
   if (!sempre && norm(antesNome) === norm(nome) && norm(antesFim) === norm(fim)) return false;
   if (linha === -1) aba.appendRow([grupo, encargo, nome, fim]);
   else aba.getRange(linha + 1, 3, 1, 2).setValues([[nome, fim]]);
-  aba.getRange(1, 3, aba.getMaxRows(), 2).setNumberFormat('@'); // mantém datas como texto dd/mm/aaaa
+  // mantém datas como texto dd/mm/aaaa (em tabela com colunas tipadas o Google não permite; aí a própria coluna já é texto)
+  try { aba.getRange(1, 3, aba.getMaxRows(), 2).setNumberFormat('@'); } catch (x) {}
 
   let hist = ss.getSheetByName(ABA_HISTORICO);
   if (!hist) {
