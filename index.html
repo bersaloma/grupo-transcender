@@ -839,6 +839,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .combinados li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--rosa-forte)}
 .ajuda{margin-top:14px;background:#EEF6FD;border-radius:16px;padding:14px 16px}
 .ajuda-tit{font-family:"DM Serif Display",Georgia,serif;font-size:22px;color:var(--titulo);line-height:1.1}
+.ajuda-copiar{margin-top:10px}
 .ajuda-nums{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .ajuda-nums a{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;font-size:19px;color:var(--indigo);text-decoration:none;box-shadow:0 4px 12px -6px rgba(23,74,107,.3);font-variant-numeric:tabular-nums}
 .ajuda-nums a:hover{box-shadow:inset 0 0 0 2px #5BCEFA}
@@ -1247,6 +1248,7 @@ const B = {
             <a href="tel:30035222">📞 3003-5222</a>
             <a href="tel:08002210221">📞 0800 221 0221</a>
           </div>
+          <button class="pill claro ajuda-copiar" data-copiar="Linha de Ajuda Nacional de NA: 132 | 3003-5222 | 0800 221 0221" data-msg="Números copiados">📋 Copiar números</button>
         </div>`}),
   oracao: () => ({k:"Todas as pessoas", t:"Oração da Serenidade", html:`<div class="oracao">${ORACAO_SERENIDADE}</div>`}),
   boasVindas: () => ({k:"Acolhimento", t:"Boas-vindas", html:`
@@ -1290,10 +1292,11 @@ const B = {
     <ul class="lista" style="margin-top:12px">
       <li><span class="n">📌</span>3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições em <a href="https://www.encontemas-diversida.de/" target="_blank" rel="noopener">encontemas-diversida.de</a></li>
     </ul>
+    <div class="acoes-passo"><button class="pill claro" data-copiar="3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições: https://www.encontemas-diversida.de/" data-msg="Aviso copiado">📋 Copiar aviso com link</button></div>
     <div class="fala" style="margin-top:12px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
   leitura: (titulo, frase, link, botao) => ({t:titulo, azul:true, html:`
     <div class="fala"><p>Vamos fazer agora a leitura ${frase}. O link está no chat para quem quiser acompanhar.</p></div>
-    <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a></div>`}),
+    <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a><button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button></div>`}),
   literatura: () => B.leitura("Leitura da Literatura de NA","da literatura de NA","IP22_URL","Literatura de NA"),
   meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária"),
   soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
@@ -1500,7 +1503,7 @@ document.addEventListener("click", e=>{
   const ck = e.target.closest(".check");
   if(ck){ ck.closest(".passo").classList.toggle("feito"); progresso(); return; }
   const cp = e.target.closest("[data-copiar]");
-  if(cp){ copiar(cp.dataset.copiar); return; }
+  if(cp){ copiar(cp.dataset.copiar, cp.dataset.msg || "Chave copiada"); return; }
   const lk = e.target.closest(".js-link");
   if(lk && !CONFIG[lk.dataset.link]){ e.preventDefault(); toast("Link ainda não configurado"); return; }
   const ata = e.target.closest(".js-ata");
