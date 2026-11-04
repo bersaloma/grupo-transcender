@@ -901,6 +901,11 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .pc-nome{padding:2px 6px;margin-left:-8px;font-size:15px}
   .pc .pres button{font-size:11.5px;padding:6px 7px}
 }
+.zoom-mao{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.zoom-mao>div{background:#EEF6FD;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;color:var(--indigo);font-size:16px;line-height:1.45}
+.zoom-mao strong{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:20px;color:var(--titulo)}
+.zoom-mao b{font-weight:700}
+@media (max-width:600px){.zoom-mao{grid-template-columns:1fr}}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1257,6 +1262,17 @@ const B = {
       <div>Se você ainda não é membro de NA, sugerimos que fique até o final da reunião.<span>Teremos um momento especial para acolher você.</span></div>
     </div>`}),
   t1: (depois) => ({k:"Tradição", t:"1ª Tradição", html:`<div class="citacao">${T1}</div>${depois?`<div class="nota">${depois}</div>`:""}`}),
+  partilhas: () => ({k:"Partilhas", t:"Início das partilhas", html:`
+    <div class="fala">
+      <p>Agora vamos dar início às partilhas. A ordem segue as mãos levantadas no Zoom.</p>
+      <p>Cada partilha começa com até 10 minutos. Se muitas pessoas levantarem a mão, o tempo pode diminuir para que todo mundo consiga partilhar.</p>
+      <p>Quem quiser partilhar, é só levantar a mão:</p>
+    </div>
+    <div class="zoom-mao">
+      <div><strong>No computador</strong><span>Clique em <b>Reações</b> na barra de baixo do Zoom e depois em <b>Levantar a mão</b> ✋</span></div>
+      <div><strong>No celular</strong><span>Toque em <b>Mais (•••)</b> no canto de baixo e depois em <b>Levantar a mão</b> ✋</span></div>
+    </div>
+    <div class="nota azul">Pela diretriz do grupo: até 10 pessoas, partilhas de até 10 minutos; mais de 10 pessoas, até 7 minutos. Ajuste o cronômetro tocando no número.</div>`}),
   t3: () => ({k:"Melhores momentos", t:"3ª Tradição", html:`
     <div class="citacao">${T3}</div>
     <div class="fala" style="margin-top:14px">
@@ -1341,7 +1357,8 @@ const ROTEIROS = {
       {t:"Dinâmica da Reunião", azul:true, html: din([["Estudo da<br>literatura",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri")},
       B.literatura(),
       B.usou(),
-      B.t1("Início das partilhas"),
+      B.t1(),
+      B.partilhas(),
       FASE("Melhores Momentos"),
       B.t3(),
       B.t7(),
@@ -1370,7 +1387,8 @@ const ROTEIROS = {
       {k:"Como funciona", t:"Dinâmica da Reunião", azul:true, html: din([["Literatura<br>de NA",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri")},
       B.literatura(),
       B.usou(),
-      B.t1("Início das partilhas"),
+      B.t1(),
+      B.partilhas(),
       FASE("Melhores Momentos"),
       B.t3(),
       B.t7(),
@@ -1403,6 +1421,7 @@ const ROTEIROS = {
       {k:"Temática", t:"Início da Temática", html:`<div class="citacao" style="font-style:normal;font-weight:700">Agora é o momento da partilha temática <span style="color:var(--rosa-forte)">(25+5)</span></div>
         <div class="nota azul">O cronômetro começa em 10 minutos. Toque no número para mudar o tempo, por exemplo 25 para a temática. Ele avisa quando faltam 2 minutos e quando o tempo se esgota.</div>
         `},
+      B.partilhas(),
       FASE("Melhores Momentos"),
       B.t3(),
       B.conquistas(),
