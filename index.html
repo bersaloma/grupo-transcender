@@ -1352,7 +1352,7 @@ const B = {
     <div class="acoes-passo"><button class="pill claro" data-copiar="3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições: https://www.encontemas-diversida.de/" data-msg="Aviso copiado">📋 Copiar aviso com link</button></div>
     <div class="fala" style="margin-top:12px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
   leitura: (titulo, frase, link, botao) => ({t:titulo, azul:true, html:`
-    <div class="fala"><p>Vamos fazer agora a leitura ${frase}. O link está no chat para quem quiser acompanhar.</p></div>
+    <div class="fala"><p>Vamos fazer agora a leitura ${frase}.</p></div>
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a><button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button></div>`}),
   literatura: () => B.leitura("Leitura da Literatura de NA","da literatura de NA","IP22_URL","Literatura de NA"),
   meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária"),
