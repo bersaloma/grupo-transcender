@@ -906,6 +906,12 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .zoom-mao strong{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:20px;color:var(--titulo)}
 .zoom-mao b{font-weight:700}
 @media (max-width:600px){.zoom-mao{grid-template-columns:1fr}}
+/* campos nunca passam da borda (inclui o campo de data do iPhone) */
+input,select,textarea{max-width:100%;min-width:0;box-sizing:border-box}
+.af,.af-grade>*,.af-linha>*,.ele>*,.pc-l>*{min-width:0}
+input[type="date"]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-height:48px;text-align:left;background:#fff}
+input[type="date"]::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
