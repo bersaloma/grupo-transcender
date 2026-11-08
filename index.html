@@ -829,7 +829,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .q-card input{font:inherit;font-weight:400;font-size:17px;color:var(--indigo);padding:12px 14px;border-radius:12px;border:2px solid #D6E6F2;background:#FAFCFE;outline:none}
 .q-card input:focus{border-color:#5BCEFA}
 #q-auth{display:flex;flex-direction:column;gap:12px;padding-top:4px;border-top:1px solid #EEF2F6}
-#q-auth[hidden]{display:none}
+#q-auth[hidden],#q-pin-wrap[hidden]{display:none}
 .q-erro{color:var(--rosa-forte);font-size:14px;font-weight:700;min-height:0}
 .q-erro:empty{display:none}
 .q-bts{display:flex;gap:10px;justify-content:flex-end}
@@ -1139,7 +1139,7 @@ Senha: 000000
     <label>Fim do termo<input id="q-fim" type="text" inputmode="numeric" placeholder="dd/mm/aaaa"></label>
     <div id="q-auth">
       <label>Seu nome (fica no histórico)<input id="q-autor" type="text" autocomplete="name"></label>
-      <label>Senha de serviço<input id="q-pin" type="password" autocomplete="off"></label>
+      <label id="q-pin-wrap" hidden>Senha de serviço<input id="q-pin" type="password" autocomplete="off"></label>
     </div>
     <p class="q-erro" id="q-erro"></p>
     <div class="q-bts"><button type="button" class="pill claro" data-q-cancelar>Cancelar</button><button type="submit" class="pill rosa" id="q-salvar">Salvar</button></div>
@@ -1859,7 +1859,9 @@ document.addEventListener("click",e=>{
     $("#q-sub").textContent=sl.dataset.g==="Mesa"?"Mesa de servidores":"";
     $("#q-nome").value=sl.dataset.n; $("#q-fim").value=sl.dataset.f;
     $("#q-autor").value=sessao.get("q-autor"); $("#q-pin").value=sessao.get("q-pin");
-    $("#q-auth").hidden=!!(sessao.get("q-autor")&&sessao.get("q-pin"));
+    const precisaPin=sessao.get("q-pin-precisa")==="1";
+    $("#q-pin-wrap").hidden=!precisaPin;
+    $("#q-auth").hidden=!!(sessao.get("q-autor") && (!precisaPin || sessao.get("q-pin")));
     $("#q-erro").textContent=""; $("#q-modal").hidden=false; setTimeout(()=>$("#q-nome").focus(),50); return; }
   if(e.target.closest("[data-q-cancelar]") || e.target.id==="q-modal") $("#q-modal").hidden=true;
 });
@@ -1868,13 +1870,13 @@ $("#q-form").addEventListener("submit",async e=>{
   e.preventDefault();
   const fim=$("#q-fim").value.trim(), autor=$("#q-autor").value.trim(), pin=$("#q-pin").value.trim();
   if(fim && !/^\d{2}\/\d{2}\/\d{4}$/.test(fim)){ $("#q-erro").textContent="Use a data no formato dd/mm/aaaa."; return; }
-  if(!autor||!pin){ $("#q-auth").hidden=false; $("#q-erro").textContent="Informe seu nome e a senha de serviço."; return; }
+  if(!autor){ $("#q-auth").hidden=false; $("#q-erro").textContent="Informe seu nome. Ele fica registrado no histórico."; return; }
   $("#q-salvar").disabled=true; $("#q-salvar").textContent="Salvando…";
   try{
     const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({pin,autor,grupo:qAlvo.g,encargo:qAlvo.e,nome:$("#q-nome").value.trim(),fim})});
     const j=await r.json();
-    if(!j.ok){ $("#q-erro").textContent=j.erro||"Não foi possível salvar."; if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); $("#q-auth").hidden=false; } return; }
-    sessao.set("q-autor",autor); sessao.set("q-pin",pin);
+    if(!j.ok){ $("#q-erro").textContent=j.erro||"Não foi possível salvar."; if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); sessao.set("q-pin-precisa","1"); $("#q-auth").hidden=false; $("#q-pin-wrap").hidden=false; } return; }
+    sessao.set("q-autor",autor); if(pin) sessao.set("q-pin",pin);
     $("#q-modal").hidden=true; renderQuadro(quadroDaPlanilha(j.linhas),"Atualizado pela planilha do grupo"); toast("Salvo na planilha");
   }catch(err){ $("#q-erro").textContent="Sem conexão com a planilha. Tente de novo."; }
   finally{ $("#q-salvar").disabled=false; $("#q-salvar").textContent="Salvar"; }
@@ -2023,15 +2025,16 @@ document.addEventListener("click",async e=>{
     if(!CONFIG.QUADRO_API_URL){ toast("A ligação com o Drive ainda não está configurada."); return; }
     if(!ATA.numero || !ATA.data || !ATA.autor){ toast("Preencha número, data e quem redige."); window.scrollTo({top:0,behavior:"smooth"}); return; }
     let pin=sessao.get("q-pin");
-    if(!pin){ pin=prompt("Senha de serviço:"); if(!pin) return; }
+    if(!pin && sessao.get("q-pin-precisa")==="1"){ pin=prompt("Senha de serviço:"); if(!pin) return; }
     env.disabled=true; env.textContent="Enviando…";
     try{
       const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({acao:"ata",pin,autor:ATA.autor,ata:ATA})});
       const j=await r.json();
       if(!j.ok){
         const msg = /incompletos/i.test(j.erro||"") ? "O Apps Script do grupo ainda está na versão antiga. Atualize o código e implante uma nova versão." : (j.erro||"Não foi possível enviar.");
-        toast(msg); if(/senha/i.test(j.erro||"")) sessao.set("q-pin",""); return; }
-      sessao.set("q-pin",pin); sessao.set("q-autor",ATA.autor);
+        if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); sessao.set("q-pin-precisa","1"); toast("Este grupo usa senha de serviço. Toque em Enviar de novo para digitá-la."); return; }
+        toast(msg); return; }
+      if(pin) sessao.set("q-pin",pin); sessao.set("q-autor",ATA.autor);
       ATA.gerada={numero:j.numero,url:j.url,alteracoes:j.alteracoes||0}; salvarRascunho();
       if(j.linhas) renderQuadro(quadroDaPlanilha(j.linhas),"");
       renderAta(); window.scrollTo({top:0,behavior:"smooth"}); toast(j.aviso || "Ata enviada ao Drive");

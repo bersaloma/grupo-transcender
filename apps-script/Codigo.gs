@@ -6,8 +6,8 @@
  *
  * Instalação (uma vez, logado na conta do grupo):
  * 1. Na planilha: Extensões → Apps Script. Apague o que estiver lá e cole este arquivo.
- * 2. Engrenagem "Configurações do projeto" → Propriedades do script → Adicionar:
- *      PIN = (a senha de serviço combinada com a mesa)
+ * 2. (Opcional) Para exigir senha: Configurações do projeto → Propriedades do script → Adicionar:
+ *      PIN = (a senha de serviço). Sem essa propriedade, o site salva sem pedir senha.
  * 3. Implantar → Nova implantação → tipo "App da Web"
  *      Executar como: Eu (grupotranscenderna@gmail.com)
  *      Quem pode acessar: Qualquer pessoa
@@ -85,7 +85,8 @@ function doPost(e) {
   try {
     const d = JSON.parse(e.postData.contents || '{}');
     const pin = PropertiesService.getScriptProperties().getProperty('PIN');
-    if (!pin || String(d.pin || '') !== String(pin)) return json({ ok: false, erro: 'Senha de serviço incorreta.' });
+    // senha opcional: só é exigida se existir a propriedade PIN nas Propriedades do script
+    if (pin && String(d.pin || '') !== String(pin)) return json({ ok: false, erro: 'Senha de serviço incorreta.' });
     if (d.acao === 'ata') return json(criarAta(d));
     if (!d.autor || !d.grupo || !d.encargo) return json({ ok: false, erro: 'Dados incompletos.' });
 
