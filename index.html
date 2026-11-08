@@ -1361,7 +1361,8 @@ const B = {
     <div class="fala"><p>Vamos deixar no chat as informações do Grupo Transcender para quem quiser continuar em contato.</p></div>
     <pre class="info-pre">${INFO_HTML}</pre>
     <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>
-    <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>`}),
+    <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>
+    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button></div>`}`}),
   t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
   conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
     <div class="fala">
