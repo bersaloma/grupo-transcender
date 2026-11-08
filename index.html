@@ -1170,7 +1170,6 @@ Senha: 000000
   <button class="placa-x" data-placa-fechar aria-label="Fechar">✕</button>
   <div class="placa-in">
     <div class="logo placa-logo" role="presentation"></div>
-    <div class="placa-ico" id="placa-ico">⏳</div>
     <h2 id="placa-tit">Faltam 2 minutos</h2>
     <p id="placa-sub"></p>
   </div>
@@ -1310,7 +1309,7 @@ const B = {
       <div><strong>No celular</strong><span>Toque em <b>Mais (•••)</b> no canto de baixo e depois em <b>Levantar a mão</b> ✋</span></div>
     </div>
     <div class="nota azul">Pela diretriz do grupo: até 10 pessoas, partilhas de até 10 minutos; mais de 10 pessoas, até 7 minutos. Ajuste o cronômetro tocando no número.</div>
-    <div class="acoes-passo"><button class="pill" data-placa="2min">⏳ Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">⌛ Seu tempo acabou</button></div>`}),
+    <div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button></div>`}),
   principios: () => ({k:"Partilhas", t:"Princípios Espirituais", azul:true, html:`
     <div class="principio" aria-live="polite">
       <span class="principio-n" data-princ-n>Mensagens da literatura de NA</span>
@@ -2093,7 +2092,7 @@ const PLACAS={
 };
 function abrirPlaca(k){
   const d=PLACAS[k], el=$("#placa"); if(!d) return;
-  $("#placa-ico").textContent=d.ico; $("#placa-tit").textContent=d.t; $("#placa-sub").textContent=d.s;
+  $("#placa-tit").textContent=d.t; $("#placa-sub").textContent=d.s;
   el.classList.toggle("fim",d.fim); el.hidden=false;
   try{ if(el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(()=>{}); }catch(e){}
   try{ navigator.vibrate && navigator.vibrate(200); }catch(e){}
