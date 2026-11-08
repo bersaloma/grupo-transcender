@@ -1760,6 +1760,7 @@ const SERVIDORES = {
 };
 const pessoa = (nome,data) => nome ? `<b>${nome}</b>${data?`<small>até ${data}</small>`:""}` : `<b class="vago">Vago</b>`;
 let QUADRO_ATUAL=null;
+let PIN_PRECISA=false;   // só vira true se o Apps Script pedir senha nesta visita
 const DIAS_ORDEM=["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
 const curto=d=>d.replace("-feira","");
 function hojeNome(){ return DIAS_ORDEM[(new Date().getDay()+6)%7]; }
@@ -1874,7 +1875,7 @@ document.addEventListener("click",e=>{
     $("#q-sub").textContent=sl.dataset.g==="Mesa"?"Mesa de servidores":"";
     $("#q-nome").value=sl.dataset.n; $("#q-fim").value=sl.dataset.f;
     $("#q-autor").value=sessao.get("q-autor"); $("#q-pin").value=sessao.get("q-pin");
-    const precisaPin=sessao.get("q-pin-precisa")==="1";
+    const precisaPin=PIN_PRECISA;
     $("#q-pin-wrap").hidden=!precisaPin;
     $("#q-auth").hidden=!!(sessao.get("q-autor") && (!precisaPin || sessao.get("q-pin")));
     $("#q-erro").textContent=""; $("#q-modal").hidden=false; setTimeout(()=>$("#q-nome").focus(),50); return; }
@@ -1890,7 +1891,7 @@ $("#q-form").addEventListener("submit",async e=>{
   try{
     const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({pin,autor,grupo:qAlvo.g,encargo:qAlvo.e,nome:$("#q-nome").value.trim(),fim})});
     const j=await r.json();
-    if(!j.ok){ $("#q-erro").textContent=j.erro||"Não foi possível salvar."; if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); sessao.set("q-pin-precisa","1"); $("#q-auth").hidden=false; $("#q-pin-wrap").hidden=false; } return; }
+    if(!j.ok){ $("#q-erro").textContent=j.erro||"Não foi possível salvar."; if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); PIN_PRECISA=true; $("#q-auth").hidden=false; $("#q-pin-wrap").hidden=false; } return; }
     sessao.set("q-autor",autor); if(pin) sessao.set("q-pin",pin);
     $("#q-modal").hidden=true; renderQuadro(quadroDaPlanilha(j.linhas),"Atualizado pela planilha do grupo"); toast("Salvo na planilha");
   }catch(err){ $("#q-erro").textContent="Sem conexão com a planilha. Tente de novo."; }
@@ -2040,14 +2041,14 @@ document.addEventListener("click",async e=>{
     if(!CONFIG.QUADRO_API_URL){ toast("A ligação com o Drive ainda não está configurada."); return; }
     if(!ATA.numero || !ATA.data || !ATA.autor){ toast("Preencha número, data e quem redige."); window.scrollTo({top:0,behavior:"smooth"}); return; }
     let pin=sessao.get("q-pin");
-    if(!pin && sessao.get("q-pin-precisa")==="1"){ pin=prompt("Senha de serviço:"); if(!pin) return; }
+    if(!pin && PIN_PRECISA){ pin=prompt("Senha de serviço:"); if(!pin) return; }
     env.disabled=true; env.textContent="Enviando…";
     try{
       const r=await fetch(CONFIG.QUADRO_API_URL,{method:"POST",body:JSON.stringify({acao:"ata",pin,autor:ATA.autor,ata:ATA})});
       const j=await r.json();
       if(!j.ok){
         const msg = /incompletos/i.test(j.erro||"") ? "O Apps Script do grupo ainda está na versão antiga. Atualize o código e implante uma nova versão." : (j.erro||"Não foi possível enviar.");
-        if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); sessao.set("q-pin-precisa","1"); toast("Este grupo usa senha de serviço. Toque em Enviar de novo para digitá-la."); return; }
+        if(/senha/i.test(j.erro||"")){ sessao.set("q-pin",""); PIN_PRECISA=true; toast("Este grupo usa senha de serviço. Toque em Enviar de novo para digitá-la."); return; }
         toast(msg); return; }
       if(pin) sessao.set("q-pin",pin); sessao.set("q-autor",ATA.autor);
       ATA.gerada={numero:j.numero,url:j.url,alteracoes:j.alteracoes||0}; salvarRascunho();
