@@ -282,15 +282,16 @@ body.topo-on .seta-voltar{display:none}
 .ctrl .go{background:var(--rosa);color:#fff}
 .ctrl .zera{background:#fff;color:var(--indigo);border:2px solid var(--indigo)}
 
-.overlay-tempo{
-  position:fixed;inset:0;z-index:60;display:none;place-items:center;text-align:center;padding:24px;
-  background:var(--rosa-bg);
-  background-image:radial-gradient(60% 50% at 30% 30%,#fff,transparent 70%),radial-gradient(60% 50% at 70% 80%,#D6EBF5,transparent 70%);
-}
+.overlay-tempo{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:20px;background:rgba(23,74,107,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .overlay-tempo.on{display:grid}
-.overlay-tempo h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;color:var(--azul);font-size:clamp(64px,16vw,170px);line-height:.9;text-transform:uppercase}
-.overlay-tempo p{font-weight:700;font-size:22px;color:var(--indigo);margin-top:16px}
-.overlay-tempo button{margin-top:26px}
+.ov-card{background:#fff;border-radius:24px;padding:22px 22px 20px;width:100%;max-width:420px;box-shadow:0 30px 70px -20px rgba(23,74,107,.55);animation:ovIn .22s ease-out}
+.ov-card.esgotado{background:#FFF4F8}
+.ov-head{display:flex;align-items:center;gap:12px}
+.ov-ico{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#5BCEFA,#F5A9B8)}
+.ov-card h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:30px;line-height:1.1;color:var(--titulo)}
+.ov-card p{font-size:18px;line-height:1.5;color:var(--indigo);margin-top:12px}
+.ov-card .pill{margin-top:18px}
+@keyframes ovIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
 
 /* ============ FICHAS ============ */
 .fichas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;max-width:880px;margin:20px auto 0;padding:0 16px}
@@ -1114,9 +1115,9 @@ Senha: 000000
     <div class="status" id="status" hidden></div>
   </div>
 </div>
-<div class="overlay-tempo" id="overlay">
-  <div>
-    <h2 id="ov-tit">Faltam 2 minutos</h2>
+<div class="overlay-tempo" id="overlay" role="alertdialog" aria-labelledby="ov-tit">
+  <div class="ov-card" id="ov-card">
+    <div class="ov-head"><div class="ov-ico" id="ov-ico">⏳</div><h2 id="ov-tit">Faltam 2 minutos</h2></div>
     <p id="ov-sub"></p>
     <button class="pill" id="ov-ok">Ok, continuar</button>
   </div>
@@ -1578,15 +1579,17 @@ function iniciar(){
   $("#status").textContent="Partilha em andamento.";
   tick=setInterval(()=>{
     resta--;
-    if(!avisou && total>120 && resta===120){ avisou=true; mostrar("Faltam 2 minutos",""); }
-    if(resta<=0){ parar(); resta=0; mostrar("Tempo esgotado!","Por favor, conclua."); }
+    if(!avisou && total>120 && resta===120){ avisou=true; mostrar("Faltam 2 minutos","Você ainda tem 2 minutos de partilha. Vá caminhando para o encerramento.","⏳",false); }
+    if(resta<=0){ parar(); resta=0; mostrar("Tempo esgotado","Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.","⌛",true); }
     render();
   },1000);
   render();
 }
 function parar(){ clearInterval(tick); tick=null; render(); }
-function mostrar(t,s){
-  $("#ov-tit").textContent=t; $("#ov-sub").textContent=s; $("#overlay").classList.add("on");
+function mostrar(t,s,ico,fim){
+  $("#ov-tit").textContent=t; $("#ov-sub").textContent=s; $("#ov-ico").textContent=ico||"⏳";
+  $("#ov-card").classList.toggle("esgotado",!!fim); $("#ov-ok").textContent = fim ? "Ok" : "Ok, continuar";
+  $("#overlay").classList.add("on");
   try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
 }
 $("#ov-ok").onclick=()=>$("#overlay").classList.remove("on");
