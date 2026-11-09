@@ -946,12 +946,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .sl-acoes{display:flex;gap:8px}
 .sl-bt{all:unset;box-sizing:border-box;width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--indigo);font-size:18px;cursor:pointer;box-shadow:0 4px 12px -6px rgba(23,74,107,.35)}
 .sl-bt svg{width:20px;height:20px}
-.sl-palco{flex:1;min-height:0;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:8px 70px 14px}
-.sl-card{transform-origin:top center;flex:none}
-.sl-card .passo{margin:0!important;width:100%;max-width:none!important;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}
-.sl-card .fase{display:grid!important;place-items:center}
-.sl-card .fase{margin:0!important}
-.sl-card .fase span{transform:scale(1.8)}
+.sl-palco{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:8px 76px 16px}
+.sl-card{flex:none}
+.sl-card .passo{margin:0!important;width:100%;height:100%;max-width:none!important;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;overflow:hidden;padding:clamp(18px,3.5vh,44px) clamp(20px,4vw,56px)!important}
+.sl-conteudo{width:100%}
+.sl-fase .sl-conteudo{text-align:center}
+.sl-fase-tit{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:64px;line-height:1.05;color:var(--titulo)}
 .sl-nav{all:unset;position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center;
   font-size:34px;line-height:1;color:var(--titulo);cursor:pointer;box-shadow:0 8px 20px -8px rgba(23,74,107,.4)}
 .sl-nav:hover{background:#FAD3DE}
@@ -959,7 +959,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .sl-prev{left:10px}.sl-next{right:10px}
 .sl-girar{display:none}
 @media (orientation:portrait) and (max-width:700px){
-  .sl-palco{padding:8px 12px 80px;align-items:flex-start}
+  .sl-palco{padding:8px 12px 80px}
   .sl-nav{top:auto;bottom:16px;transform:none}
   .sl-girar{display:block;position:absolute;left:0;right:0;bottom:30px;text-align:center;font-size:13px;font-weight:700;color:var(--indigo);pointer-events:none}
 }
@@ -1610,6 +1610,8 @@ function ir(dest){
   if(dest==="servidores") carregarQuadro();
   if(dest==="diretrizes") carregarDiretrizes();
   if(dest==="ata-adm") abrirAtaAdm();
+  if(slRetomar && ROTEIROS[dest] && dest===slRetomar.roteiro){ const r=slRetomar; slRetomar=null; setTimeout(()=>slAbrir(r.i),80); }
+  else if(slRetomar && ROTEIROS[dest]) slRetomar=null;
 }
 
 document.addEventListener("click", e=>{
@@ -2136,41 +2138,43 @@ document.addEventListener("click",async e=>{
 function confirmarAcao(msg){ try{ return window.confirm(msg); }catch(e){ return true; } }
 
 /* ---------- modo apresentação ---------- */
-let SL=[], slI=0;
+let SL=[], slI=0, slRetomar=null;
 function slMontar(){ SL=[...$("#r-passos").children].filter(el=>el.matches(".passo,.fase")); }
 function slMostrar(i){
   slI=Math.max(0,Math.min(SL.length-1,i));
-  const card=$("#sl-card"), palco=$("#sl-palco");
-  card.innerHTML=""; card.style.transform=""; card.style.width="";
-  const clone=SL[slI].cloneNode(true); clone.removeAttribute("id"); card.appendChild(clone);
+  const card=$("#sl-card");
+  card.innerHTML="";
+  let clone=SL[slI].cloneNode(true); clone.removeAttribute("id");
+  if(clone.classList.contains("fase")){                                   // divisória vira slide inteiro
+    const art=document.createElement("article"); art.className="passo azul sl-fase";
+    art.innerHTML=`<h2 class="sl-fase-tit">${clone.textContent.trim()}</h2>`; clone=art;
+  }
+  clone.querySelectorAll(".passo-ilu").forEach(f=>f.remove());          // sem imagem nos slides
+  const cont=document.createElement("div"); cont.className="sl-conteudo";
+  while(clone.firstChild) cont.appendChild(clone.firstChild);
+  clone.appendChild(cont); card.appendChild(clone);
   $("#sl-cont").textContent=(slI+1)+" / "+SL.length;
   document.querySelector('[data-sl="-1"]').disabled = slI===0;
   document.querySelector('[data-sl="1"]').disabled = slI===SL.length-1;
-  palco.scrollTop=0;
   slAjustar();
 }
+/* Todos os slides têm o mesmo tamanho (a tela toda). O texto usa um tamanho padrão;
+   só diminui quando o card tem conteúdo demais para caber. */
 function slAjustar(){
-  const card=$("#sl-card"), palco=$("#sl-palco"); if(!card.firstChild) return;
+  const card=$("#sl-card"), palco=$("#sl-palco"), passo=card.firstElementChild; if(!passo) return;
   const cs=getComputedStyle(palco);
   const W=palco.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
   const H=palco.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-  const retrato = innerHeight>innerWidth && innerWidth<=700;
-  const base = retrato ? W : Math.min(900, Math.max(560, W));
-  card.style.transform=""; card.style.width=base+"px"; card.style.marginBottom="";
-  const h=card.scrollHeight;
-  // cabe inteiro na tela; se for muito longo, não fica menor que 60% e a tela rola
-  let esc = retrato ? 1 : Math.max(Math.min(W/base, H/h, 1.7), Math.min(0.6, W/base));
-  // o card ocupa a tela inteira (altura toda), com o conteúdo centralizado
-  const filho=card.firstElementChild;
-  if(filho) filho.style.minHeight = Math.max(h, H/esc)+"px";
-  const hFinal=card.scrollHeight;
-  card.style.transform="scale("+esc+")";
-  card.style.marginBottom=(hFinal*esc-hFinal)+"px";   // ajusta o espaço ocupado depois da escala
+  card.style.width=W+"px"; card.style.height=H+"px";
+  const cont=passo.querySelector(".sl-conteudo"); if(!cont) return;
+  const padrao=Math.max(0.8, Math.min(1.9, H/430, W/720));             // mesmo tamanho de texto em todos os slides
+  let z=padrao; cont.style.zoom=z;
+  for(let k=0;k<40 && passo.scrollHeight>passo.clientHeight+1 && z>0.45;k++){ z=+(z-0.04).toFixed(2); cont.style.zoom=z; }
 }
-function slAbrir(){
+function slAbrir(inicio){
   slMontar(); if(!SL.length) return;
-  // começa no card que está visível na tela
-  let i=SL.findIndex(el=>el.getBoundingClientRect().bottom>innerHeight*0.35); if(i<0) i=0;
+  // começa no card que está visível na tela (ou onde parou antes de abrir as fichas)
+  let i = inicio!=null ? inicio : SL.findIndex(el=>el.getBoundingClientRect().bottom>innerHeight*0.35); if(i<0) i=0;
   $("#slides").hidden=false; document.body.style.overflow="hidden";
   try{ const el=document.documentElement; if(el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(()=>{}); }catch(e){}
   slMostrar(i);
@@ -2184,8 +2188,10 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#slides-fab")){ slAbrir(); return; }
   if(e.target.closest("[data-sl-fechar]")){ slFechar(); return; }
   if(e.target.closest("[data-sl-timer]")){ $("#timer-fab").click(); return; }
-  const n=e.target.closest("[data-sl]"); if(n){ slMostrar(slI+(+n.dataset.sl)); }
-});
+  const n=e.target.closest("[data-sl]"); if(n){ slMostrar(slI+(+n.dataset.sl)); return; }
+  const irDentro=e.target.closest("#slides [data-ir]");
+  if(irDentro){ slRetomar={roteiro:atual, i:slI}; $("#slides").hidden=true; document.body.style.overflow=""; }
+}, true);
 document.addEventListener("keydown",e=>{
   if($("#slides").hidden || !$("#placa").hidden) return;
   if(/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||"")) return;
