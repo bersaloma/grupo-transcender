@@ -980,6 +980,27 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .f11-x{all:unset;flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--indigo);font-size:16px}
 .f11-x:hover{background:#FAD3DE}
 @keyframes f11In{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
+/* barra lateral de páginas (estilo leitor de PDF) */
+.lat-gatilho{position:fixed;left:0;top:76px;bottom:0;width:14px;z-index:39;display:none}
+.lat-gatilho::after{content:"";position:absolute;left:3px;top:50%;width:5px;height:64px;margin-top:-32px;border-radius:999px;background:rgba(23,74,107,.25);transition:background .2s}
+.lat-gatilho:hover::after{background:#5BCEFA}
+body.com-lateral .lat-gatilho{display:block}
+.lateral{position:fixed;left:0;top:0;bottom:0;z-index:40;width:280px;max-width:82vw;display:flex;flex-direction:column;
+  background:rgba(255,255,255,.97);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:12px 0 40px -18px rgba(23,74,107,.5);
+  transform:translateX(-105%);transition:transform .22s ease;border-radius:0 22px 22px 0}
+.lateral[hidden]{display:none}
+.lateral.aberta{transform:none}
+.lat-cab{flex:none;padding:18px 18px 10px;display:flex;flex-direction:column;gap:2px;border-bottom:1px solid #EEF3F8}
+.lat-cab strong{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:22px;color:var(--titulo);line-height:1.1}
+.lat-cab span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--rosa-forte)}
+.lat-lista{list-style:none;margin:0;padding:10px 10px 18px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:6px}
+.lat-lista button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;
+  background:#F4F9FD;border:2px solid transparent;font-size:14px;font-weight:700;color:var(--indigo);line-height:1.25}
+.lat-lista button:hover{border-color:#5BCEFA}
+.lat-lista button.atual{background:#FAD3DE;border-color:#F5A9B8}
+.lat-lista .lat-n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;color:#fff;background:linear-gradient(135deg,#5BCEFA,#F5A9B8)}
+.lat-lista .lat-fase{font-family:"DM Serif Display",Georgia,serif;font-size:17px;color:var(--titulo);padding:10px 6px 2px}
+@media (pointer:coarse){ .lat-gatilho{width:18px} }
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1244,6 +1265,11 @@ Senha: 000000
   <button class="pill" data-f11-agora>Ativar agora</button>
   <button class="f11-x" data-f11-fechar aria-label="Fechar aviso">✕</button>
 </div>
+<div class="lat-gatilho" id="lat-gatilho" aria-hidden="true"></div>
+<nav class="lateral" id="lateral" aria-label="Páginas do roteiro" hidden>
+  <div class="lat-cab"><strong id="lat-tit">Roteiro</strong><span>Páginas</span></div>
+  <ol class="lat-lista" id="lat-lista"></ol>
+</nav>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1629,6 +1655,8 @@ function ir(dest){
   if(dest==="diretrizes") carregarDiretrizes();
   if(dest==="ata-adm") abrirAtaAdm();
   avisoF11(!!ROTEIROS[dest]);
+  document.body.classList.toggle("com-lateral", !!ROTEIROS[dest]);
+  if(ROTEIROS[dest]) latMontar(); else { $("#lateral").classList.remove("aberta"); }
   if(slRetomar && ROTEIROS[dest] && dest===slRetomar.roteiro){ const r=slRetomar; slRetomar=null; setTimeout(()=>slAbrir(r.i),80); }
   else if(slRetomar && ROTEIROS[dest]) slRetomar=null;
 }
@@ -2171,6 +2199,40 @@ document.addEventListener("click",e=>{
 });
 addEventListener("resize",()=>{ if(telaCheia()) $("#aviso-f11").hidden=true; });
 document.addEventListener("fullscreenchange",()=>{ if(document.fullscreenElement) $("#aviso-f11").hidden=true; });
+
+/* ---------- barra lateral de páginas ---------- */
+function latMontar(){
+  const itens=[...$("#r-passos").children].filter(el=>el.matches(".passo,.fase"));
+  $("#lat-tit").textContent=$("#r-titulo").textContent;
+  let n=0;
+  $("#lat-lista").innerHTML=itens.map((el,i)=> el.classList.contains("fase")
+    ? `<li class="lat-fase">${el.textContent.trim()}</li>`
+    : `<li><button data-lat="${i}"><span class="lat-n">${++n}</span><span>${(el.querySelector("h3")||el).textContent.trim()}</span></button></li>`).join("");
+}
+let latTimer=null;
+function latAbrir(){ clearTimeout(latTimer); const l=$("#lateral"); l.hidden=false; requestAnimationFrame(()=>l.classList.add("aberta")); latMarcar(); }
+function latFechar(){ clearTimeout(latTimer); latTimer=setTimeout(()=>$("#lateral").classList.remove("aberta"),180); }
+function latMarcar(){
+  const itens=[...$("#r-passos").children].filter(el=>el.matches(".passo,.fase"));
+  let atualI = !$("#slides").hidden ? slI : itens.findIndex(el=>el.getBoundingClientRect().bottom>innerHeight*0.3);
+  $$("#lat-lista [data-lat]").forEach(b=>b.classList.toggle("atual", +b.dataset.lat===atualI));
+  const a=$("#lat-lista .atual"); if(a) a.scrollIntoView({block:"nearest"});
+}
+$("#lat-gatilho").addEventListener("mouseenter",latAbrir);
+$("#lat-gatilho").addEventListener("click",latAbrir);
+$("#lateral").addEventListener("mouseenter",()=>clearTimeout(latTimer));
+$("#lateral").addEventListener("mouseleave",latFechar);
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-lat]");
+  if(b){
+    const i=+b.dataset.lat;
+    if(!$("#slides").hidden){ slMostrar(i); }
+    else { const el=[...$("#r-passos").children].filter(x=>x.matches(".passo,.fase"))[i]; if(el){ const y=el.getBoundingClientRect().top+scrollY-20; scrollTo({top:y,behavior:"smooth"}); } }
+    latMarcar(); if(matchMedia("(pointer:coarse)").matches) latFechar();
+    return;
+  }
+  if($("#lateral").classList.contains("aberta") && !e.target.closest("#lateral,#lat-gatilho")) latFechar();
+});
 
 /* ---------- modo apresentação ---------- */
 let SL=[], slI=0, slRetomar=null;
