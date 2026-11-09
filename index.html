@@ -968,6 +968,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
   .sl-palco{padding:52px 64px 8px}
   .sl-nav{width:44px;height:44px;font-size:28px}
 }
+/* aviso de tela cheia (F11) */
+.aviso-f11{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:35;display:flex;align-items:center;gap:12px;
+  background:#fff;border-radius:18px;padding:10px 10px 10px 16px;max-width:min(720px,calc(100vw - 140px));
+  box-shadow:0 18px 40px -16px rgba(23,74,107,.5);border:2px solid #5BCEFA;animation:f11In .35s ease-out}
+.aviso-f11[hidden]{display:none}
+.aviso-f11 p{font-size:16px;line-height:1.4;color:var(--indigo);font-weight:700}
+.aviso-f11 kbd{font-family:inherit;font-size:14px;font-weight:800;background:#EEF6FD;border:2px solid #CFE3F2;border-bottom-width:3px;border-radius:8px;padding:1px 7px;white-space:nowrap}
+.f11-ico{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:18px;color:#fff;background:linear-gradient(135deg,#5BCEFA,#F5A9B8)}
+.aviso-f11 .pill{flex:none;padding:9px 14px;font-size:14px}
+.f11-x{all:unset;flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--indigo);font-size:16px}
+.f11-x:hover{background:#FAD3DE}
+@keyframes f11In{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1225,6 +1237,12 @@ Senha: 000000
     <p id="placa-sub"></p>
   </div>
   <span class="placa-dica">Toque em qualquer lugar para fechar</span>
+</div>
+<div class="aviso-f11" id="aviso-f11" role="status" hidden>
+  <span class="f11-ico" aria-hidden="true">⛶</span>
+  <p>Antes de iniciar a reunião, aperte <kbd id="f11-tecla">F11</kbd> para usar a tela cheia.</p>
+  <button class="pill" data-f11-agora>Ativar agora</button>
+  <button class="f11-x" data-f11-fechar aria-label="Fechar aviso">✕</button>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -1610,6 +1628,7 @@ function ir(dest){
   if(dest==="servidores") carregarQuadro();
   if(dest==="diretrizes") carregarDiretrizes();
   if(dest==="ata-adm") abrirAtaAdm();
+  avisoF11(!!ROTEIROS[dest]);
   if(slRetomar && ROTEIROS[dest] && dest===slRetomar.roteiro){ const r=slRetomar; slRetomar=null; setTimeout(()=>slAbrir(r.i),80); }
   else if(slRetomar && ROTEIROS[dest]) slRetomar=null;
 }
@@ -2136,6 +2155,22 @@ document.addEventListener("click",async e=>{
   }
 });
 function confirmarAcao(msg){ try{ return window.confirm(msg); }catch(e){ return true; } }
+
+/* ---------- aviso de tela cheia (computador) ---------- */
+const ehComputador = () => matchMedia("(pointer:fine)").matches && innerWidth>860;
+const telaCheia = () => !!document.fullscreenElement || (innerHeight>=screen.height-2 && innerWidth>=screen.width-2);
+function avisoF11(mostrar){
+  const el=$("#aviso-f11");
+  let dispensado=false; try{ dispensado=sessionStorage.getItem("f11-ok")==="1"; }catch(e){}
+  el.hidden = !(mostrar && ehComputador() && !telaCheia() && !dispensado);
+}
+if(/Mac/i.test(navigator.platform||navigator.userAgent)) $("#f11-tecla").textContent="Control + Command + F";
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-f11-fechar]")){ try{ sessionStorage.setItem("f11-ok","1"); }catch(x){} $("#aviso-f11").hidden=true; }
+  if(e.target.closest("[data-f11-agora]")){ try{ document.documentElement.requestFullscreen().catch(()=>{}); }catch(x){} $("#aviso-f11").hidden=true; }
+});
+addEventListener("resize",()=>{ if(telaCheia()) $("#aviso-f11").hidden=true; });
+document.addEventListener("fullscreenchange",()=>{ if(document.fullscreenElement) $("#aviso-f11").hidden=true; });
 
 /* ---------- modo apresentação ---------- */
 let SL=[], slI=0, slRetomar=null;
