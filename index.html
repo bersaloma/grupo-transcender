@@ -981,6 +981,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .f11-x:hover{background:#FAD3DE}
 @keyframes f11In{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
 /* barra lateral de páginas (estilo leitor de PDF) */
+.lat-bt{all:unset;box-sizing:border-box;position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;display:none;align-items:center;gap:8px;cursor:pointer;
+  height:42px;padding:0 14px 0 12px;border-radius:999px;background:#fff;color:var(--indigo);font-size:14px;font-weight:800;box-shadow:0 6px 18px -6px rgba(23,74,107,.35)}
+.lat-bt svg{width:20px;height:20px}
+.lat-bt:hover{background:#FAD3DE}
+body.com-lateral .lat-bt{display:flex}
+.sl-esq{display:flex;align-items:center;gap:8px}
+@media (max-width:520px){ .lat-bt{bottom:calc(84px + env(safe-area-inset-bottom));left:12px;height:48px} }
+
 .lat-gatilho{position:fixed;left:0;top:76px;bottom:0;width:14px;z-index:39;display:none}
 .lat-gatilho::after{content:"";position:absolute;left:3px;top:50%;width:5px;height:64px;margin-top:-32px;border-radius:999px;background:rgba(23,74,107,.25);transition:background .2s}
 .lat-gatilho:hover::after{background:#5BCEFA}
@@ -1188,7 +1196,7 @@ Senha: 000000
 </button>
 <div class="slides" id="slides" role="dialog" aria-modal="true" aria-label="Modo apresentação" hidden>
   <div class="sl-top">
-    <span class="sl-cont" id="sl-cont">1 / 1</span>
+    <div class="sl-esq"><button class="sl-bt sl-pag" data-lat-abrir aria-label="Abrir páginas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button><span class="sl-cont" id="sl-cont">1 / 1</span></div>
     <div class="sl-acoes">
       <button class="sl-bt" data-sl-timer aria-label="Cronômetro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></button>
       <button class="sl-bt" data-sl-fechar aria-label="Sair da apresentação">✕</button>
@@ -1266,6 +1274,10 @@ Senha: 000000
   <button class="f11-x" data-f11-fechar aria-label="Fechar aviso">✕</button>
 </div>
 <div class="lat-gatilho" id="lat-gatilho" aria-hidden="true"></div>
+<button class="lat-bt" id="lat-bt" aria-label="Abrir páginas" aria-controls="lateral">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+  <span>Páginas</span>
+</button>
 <nav class="lateral" id="lateral" aria-label="Páginas do roteiro" hidden>
   <div class="lat-cab"><strong id="lat-tit">Roteiro</strong><span>Páginas</span></div>
   <ol class="lat-lista" id="lat-lista"></ol>
@@ -2220,6 +2232,9 @@ function latMarcar(){
 }
 $("#lat-gatilho").addEventListener("mouseenter",latAbrir);
 $("#lat-gatilho").addEventListener("click",latAbrir);
+document.addEventListener("click",e=>{
+  if(e.target.closest("#lat-bt,[data-lat-abrir]")){ e.stopPropagation(); const l=$("#lateral"); if(l.classList.contains("aberta")) latFechar(); else latAbrir(); }
+},true);
 $("#lateral").addEventListener("mouseenter",()=>clearTimeout(latTimer));
 $("#lateral").addEventListener("mouseleave",latFechar);
 document.addEventListener("click",e=>{
@@ -2231,7 +2246,7 @@ document.addEventListener("click",e=>{
     latMarcar(); if(matchMedia("(pointer:coarse)").matches) latFechar();
     return;
   }
-  if($("#lateral").classList.contains("aberta") && !e.target.closest("#lateral,#lat-gatilho")) latFechar();
+  if($("#lateral").classList.contains("aberta") && !e.target.closest("#lateral,#lat-gatilho,#lat-bt,[data-lat-abrir]")) latFechar();
 });
 
 /* ---------- modo apresentação ---------- */
