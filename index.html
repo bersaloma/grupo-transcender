@@ -1009,6 +1009,10 @@ body.com-lateral .lat-gatilho{display:block}
 .lat-lista .lat-n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;color:#fff;background:linear-gradient(135deg,#5BCEFA,#F5A9B8)}
 .lat-lista .lat-fase{font-family:"DM Serif Display",Georgia,serif;font-size:17px;color:var(--titulo);padding:10px 6px 2px}
 @media (pointer:coarse){ .lat-gatilho{width:18px} }
+.q-status{max-width:1060px;margin:4px auto -4px;padding:0 20px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--indigo)}
+.q-status[hidden]{display:none}
+.q-spin{width:14px;height:14px;border-radius:50%;border:2.5px solid #CFE3F2;border-top-color:#5BCEFA;animation:qgira .8s linear infinite}
+@keyframes qgira{to{transform:rotate(360deg)}}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1186,6 +1190,7 @@ Senha: 000000
     <h2>Quadro de Servidores</h2>
     <p>Grupo Transcender de Narcóticos Anônimos</p>
   </div>
+  <div class="q-status" id="q-status" hidden><span class="q-spin"></span>Atualizando com a planilha…</div>
   <div class="passos" id="lista-servidores"></div>
   <div style="height:40px"></div>
 </section>
@@ -1964,7 +1969,10 @@ function csvLinhas(txt){
     else if(c==='"') q=true; else if(c===','){row.push(cur);cur="";} else if(c==='\n'){row.push(cur);out.push(row);row=[];cur="";} else if(c!=='\r') cur+=c; }
   if(cur||row.length){row.push(cur);out.push(row);} return out;
 }
+const QCACHE="quadro-cache";
+function quadroGuardado(){ try{ const r=JSON.parse(localStorage.getItem(QCACHE)||"null"); return Array.isArray(r)&&r.length>1 ? r : null; }catch(e){ return null; } }
 function quadroDaPlanilha(rows){
+  try{ if(Array.isArray(rows) && rows.length>1) localStorage.setItem(QCACHE, JSON.stringify(rows)); }catch(e){}
   const Q={mesa:[],dias:[]}; const dias={};
   rows.slice(1).forEach(r=>{ const [g,enc,nome,fim]=r.map(x=>(x||"").trim()); if(!g||!enc) return;
     const G=g.toLowerCase();
@@ -1976,15 +1984,19 @@ function quadroDaPlanilha(rows){
   ["RSG","RSG Suplente","Secretaria","Tesouraria"].forEach(e=>{ if(!Q.mesa.some(x=>x[0].toLowerCase()===e.toLowerCase())) Q.mesa.push([e,"",""]); });
   return Q;
 }
-renderQuadro(SERVIDORES, "");
+{ const g=quadroGuardado(); renderQuadro(g ? quadroDaPlanilha(g) : SERVIDORES, ""); }
 async function carregarQuadro(){
+  const st=$("#q-status"); st.hidden=false;
+  try{ await carregarQuadroDaPlanilha(); } finally { st.hidden=true; }
+}
+async function carregarQuadroDaPlanilha(){
   if(CONFIG.QUADRO_API_URL){ try{ const r=await fetch(CONFIG.QUADRO_API_URL+"?t="+Date.now()); const j=await r.json(); if(j.ok){ renderQuadro(quadroDaPlanilha(j.linhas),"Atualizado pela planilha do grupo"); return; } }catch(e){} }
   try{
     const r=await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.QUADRO_SHEET_ID}/gviz/tq?tqx=out:csv&t=${Date.now()}`);
     if(!r.ok) throw 0; const txt=await r.text(); if(txt.trim().startsWith("<")) throw 0;
     const Q=quadroDaPlanilha(csvLinhas(txt)); if(!Q.mesa.length && !Q.dias.length) throw 0;
     renderQuadro(Q, "Atualizado pela planilha do grupo");
-  }catch(e){ renderQuadro(SERVIDORES, "Mostrando a última versão salva no site"); }
+  }catch(e){ const g=quadroGuardado(); renderQuadro(g ? quadroDaPlanilha(g) : SERVIDORES, "Mostrando a última versão salva"); }
 }
 
 /* ---------- barra superior: oculta; aparece ao tocar/clicar no topo ---------- */
