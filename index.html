@@ -928,6 +928,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .placa-ico{font-size:clamp(36px,min(7vw,9vh),84px);line-height:1}
 .placa h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(44px,min(11vw,15vh),150px);line-height:1;color:var(--titulo);margin-top:14px}
 .placa.fim h2{color:var(--rosa-forte)}
+.placa p:empty{display:none}
 .placa p{font-size:clamp(18px,min(2.8vw,4vh),34px);line-height:1.4;color:var(--indigo);margin-top:18px;max-width:22em}
 .placa-x{all:unset;position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:20px;color:var(--indigo);box-shadow:0 6px 18px -6px rgba(23,74,107,.35);cursor:pointer}
 .placa-dica{position:absolute;bottom:18px;left:0;right:0;font-size:15px;font-weight:700;color:var(--indigo)}
@@ -1013,6 +1014,17 @@ body.com-lateral .lat-gatilho{display:block}
 .q-status[hidden]{display:none}
 .q-spin{width:14px;height:14px;border-radius:50%;border:2.5px solid #CFE3F2;border-top-color:#5BCEFA;animation:qgira .8s linear infinite}
 @keyframes qgira{to{transform:rotate(360deg)}}
+/* ficha em tela baixa (celular deitado): imagem ao lado do texto */
+@media (orientation:landscape) and (max-height:520px){
+  .ficha-modal{padding:14px 70px 14px 24px!important}
+  .ficha-modal .fm-card{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto auto auto 1fr;column-gap:clamp(18px,4vw,40px);
+    max-width:860px;width:auto;margin:0 auto;text-align:left;align-items:center;justify-content:center}
+  .ficha-modal .fm-card img{grid-column:1;grid-row:1/6;height:min(82vh,330px);margin:0}
+  .ficha-modal .fm-sub{grid-column:2;grid-row:2;margin:0;font-size:clamp(15px,4.2vh,20px)}
+  .ficha-modal h3{grid-column:2;grid-row:3;font-size:clamp(28px,11vh,52px)}
+  .ficha-modal .fm-txt{grid-column:2;grid-row:4;margin:8px 0 0;max-width:none;font-size:clamp(15px,4.6vh,20px)!important;line-height:1.45}
+  .ficha-modal .fm-x{top:12px;right:12px;width:44px;height:44px}
+}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -2356,7 +2368,7 @@ addEventListener("orientationchange",()=>{ if(!$("#slides").hidden) setTimeout(s
 
 /* ---------- placas de tempo ---------- */
 const PLACAS={
-  "2min":{ico:"⏳",t:"Faltam 2 minutos",s:"Por favor, vá concluindo a sua partilha.",fim:false},
+  "2min":{ico:"⏳",t:"Faltam 2 minutos",s:"",fim:false},
   "fim":{ico:"⌛",t:"Seu tempo acabou",s:"Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.",fim:true}
 };
 function abrirPlaca(k){
