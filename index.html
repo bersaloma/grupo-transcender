@@ -1651,17 +1651,39 @@ function aplicarAta(){
 }
 function progresso(){}
 
+/* posição de leitura de cada roteiro: ao voltar de outra página (ou de um link externo), continua de onde parou */
+const POS_KEY="roteiro-posicao";
+function lerPos(){ try{ return JSON.parse(sessionStorage.getItem(POS_KEY)||localStorage.getItem(POS_KEY)||"{}"); }catch(e){ return {}; } }
+function salvarPos(){
+  if($(".view.ativa")?.id!=="roteiro" || !atual) return;
+  const p=lerPos(); p[atual]={y:Math.round(scrollY), t:Date.now()};
+  const v=JSON.stringify(p); try{ sessionStorage.setItem(POS_KEY,v); localStorage.setItem(POS_KEY,v); }catch(e){}
+}
+let posTimer=null;
+addEventListener("scroll",()=>{ clearTimeout(posTimer); posTimer=setTimeout(salvarPos,150); },{passive:true});
+addEventListener("pagehide",salvarPos);
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) salvarPos(); });
+document.addEventListener("click",e=>{ if(e.target.closest("a[href], [data-ir]")) salvarPos(); },true);
+if("scrollRestoration" in history) history.scrollRestoration="manual";
+let primeiraCarga=true;
+
 function ir(dest){
   if(dest==="voltar") dest = anterior || "home";
   const vis = $(".view.ativa")?.id;
-  if((dest==="fichas"||dest==="servidores"||dest==="ata-adm") && vis!==dest) anterior = vis==="roteiro" ? atual : "home";
+  salvarPos();
+  if((dest==="fichas"||dest==="servidores"||dest==="ata-adm"||dest==="diretrizes") && vis!==dest) anterior = vis==="roteiro" ? atual : "home";
   $$(".view").forEach(v=>v.classList.remove("ativa"));
   if(ROTEIROS[dest]){ renderRoteiro(dest); $("#roteiro").classList.add("ativa"); }
   else { $("#"+dest)?.classList.add("ativa"); }
   if(!ROTEIROS[dest]){ $("#timer-fab").hidden = true; $("#slides-fab").hidden = true; }
   if(location.hash.slice(1)!==(dest==="home"?"":dest)) history.pushState(null,"",dest==="home"?location.pathname:"#"+dest);
+  // volta para o ponto onde parou quando vem de outra página do site ou ao recarregar; vindo da home, começa do topo
+  const pos = ROTEIROS[dest] ? lerPos()[dest] : null;
+  const retomar = pos && (primeiraCarga || (vis && vis!=="home" && vis!=="roteiro")) && (Date.now()-pos.t < 12*3600*1000);
   window.scrollTo({top:0,behavior:"instant"});
-  const sv=$("#seta-voltar"); sv.hidden = dest==="home"; sv.dataset.ir = (dest==="fichas"||dest==="servidores"||dest==="ata-adm") ? "voltar" : "home";
+  if(retomar){ const y=pos.y; requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo({top:y,behavior:"instant"}))); setTimeout(()=>window.scrollTo({top:y,behavior:"instant"}),250); }
+  primeiraCarga=false;
+  const sv=$("#seta-voltar"); sv.hidden = dest==="home"; sv.dataset.ir = (dest==="fichas"||dest==="servidores"||dest==="ata-adm"||dest==="diretrizes") ? "voltar" : "home";
   if(window.__topo) window.__topo();
   if(dest==="servidores") carregarQuadro();
   if(dest==="diretrizes") carregarDiretrizes();
@@ -2376,6 +2398,7 @@ function rotaPeloHash(){
 }
 window.addEventListener("hashchange", rotaPeloHash);
 rotaPeloHash();
+primeiraCarga=false;
 </script>
 </body>
 </html>
