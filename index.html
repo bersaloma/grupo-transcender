@@ -1594,7 +1594,7 @@ const B = {
     </div>${resumo?`
     <div class="contadores"><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>
     <div class="resumo-ata"><h4>Resumo da reunião</h4><p data-resumo></p>
-      <div class="resumo-acoes"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a><button type="button" class="pill claro" data-resumo-copiar>Copiar resumo</button></div></div>`:""}`}),
+      <div class="resumo-acoes"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div></div>`:""}`}),
 };
 
 const din = (itens,cls="") => `<div class="dinamica ${cls}">${itens.map(([b,s])=>`<div class="din"><strong class="din-t">${b}</strong>${s?`<span>${s}</span>`:""}</div>`).join("")}</div>`;
