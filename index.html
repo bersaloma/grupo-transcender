@@ -748,6 +748,27 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .convite-modal[hidden]{display:none}
 .convite-modal img{max-width:min(92vw,720px);max-height:84vh;width:auto;height:auto;border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.6)}
 .convite-modal .cv-x{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:var(--indigo);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sombra)}
+/* fichas enquadradas na tela, sem rolar */
+#fichas .fichas{grid-template-columns:repeat(4,minmax(0,1fr));max-width:min(1000px,calc((100dvh - 250px) * 1.75));gap:12px;margin-top:14px}
+#fichas .ficha{padding:10px 8px}
+#fichas .ficha-img{max-height:calc((100dvh - 330px) / 2 - 20px);min-height:36px;margin-bottom:4px}
+#fichas .ficha b{font-size:clamp(17px,2.4vh,22px)}
+#fichas .ficha span{font-size:13px;margin-top:2px}
+#fichas .cab-roteiro{padding-top:6px}
+#fichas .cab-roteiro .logo{width:clamp(48px,8vh,80px)}
+@media (max-width:700px) and (orientation:portrait){
+  #fichas .fichas{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:8px}
+  #fichas .ficha-img{max-height:calc((100dvh - 330px) / 4 - 40px)}
+  #fichas .ficha{padding:8px 6px}
+  #fichas{padding-bottom:0!important}
+}
+@media (max-height:520px) and (orientation:landscape){
+  #fichas .fichas{grid-template-columns:repeat(8,minmax(0,1fr));max-width:none;gap:8px}
+  #fichas .ficha-img{max-height:calc(100dvh - 230px)}
+  #fichas .ficha b{font-size:16px}
+  #fichas .ficha span{font-size:11px}
+  #fichas{padding-bottom:0!important}
+}
 /* ficha em tela cheia */
 .ficha[data-ficha]{cursor:pointer;transition:transform .2s,box-shadow .2s}
 .ficha[data-ficha]:hover{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(120,40,110,.45)}
@@ -1186,8 +1207,7 @@ Senha: 000000
   </div>
 
   <div class="fichas" id="lista-fichas"></div>
-
-  <div style="height:70px"></div>
+  <div style="height:16px"></div>
 </section>
 
 <!-- ================= DIRETRIZES ================= -->
@@ -1398,7 +1418,6 @@ const CONCEITOS = [
 ];
 
 const FICHAS = [
-  {t:"Ingresso", d:"Ficha branca", img:"ficha-branca", msg:"Que bom ter você aqui! Esta ficha representa o desejo de parar de usar, e esse desejo já é o primeiro passo. Continue voltando."},
   {t:"30 dias", d:"Ficha laranja", img:"ficha-laranja", msg:"Parabéns pelos seus primeiros 30 dias limpos! Um mês de coragem, vivido um dia de cada vez. Continue voltando."},
   {t:"60 dias", d:"Ficha verde", img:"ficha-verde", msg:"Parabéns pelos 60 dias limpos! Dois meses de recuperação construída com o programa e com o grupo."},
   {t:"90 dias", d:"Ficha vermelha", img:"ficha-vermelha", msg:"Parabéns pelos 90 dias limpos! Três meses de compromisso com a sua recuperação. Só por hoje, mais uma vez."},
