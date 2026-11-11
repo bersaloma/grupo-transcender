@@ -1025,6 +1025,26 @@ body.com-lateral .lat-gatilho{display:block}
   .ficha-modal .fm-txt{grid-column:2;grid-row:4;margin:8px 0 0;max-width:none;font-size:clamp(15px,4.6vh,20px)!important;line-height:1.45}
   .ficha-modal .fm-x{top:12px;right:12px;width:44px;height:44px}
 }
+/* caixa de presente do Retorno Espiritual */
+.presente{display:flex;flex-direction:column;align-items:center}
+.pres-caixa{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px}
+.pres-caixa svg{width:clamp(130px,22vw,190px);height:auto;overflow:visible}
+.pres-dica{font-size:14px;font-weight:800;color:var(--rosa-forte)}
+.pc-tampa{transform-origin:100px 80px;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .6s}
+.pc-brilho{opacity:.0;transition:opacity .4s}
+.pres-caixa:hover .pc-tampa{transform:translateY(-4px) rotate(-2deg)}
+.presente.abrindo .pc-base{animation:pcTreme .5s ease-in-out}
+.presente.abrindo .pc-tampa{transform:translate(-8px,-46px) rotate(-18deg)}
+.presente.abrindo .pc-brilho{opacity:1}
+.presente.aberto .pres-caixa{display:none}
+@keyframes pcTreme{0%,100%{transform:none}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
+.pc-base{transform-origin:100px 178px}
+.presente .principio{width:100%}
+.presente .principio.sorteado{animation:presAbre .45s ease-out}
+@keyframes presAbre{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
+.pres-tempo{height:4px;border-radius:999px;background:#FCE1EC;margin-top:14px;overflow:hidden}
+.pres-tempo span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#5BCEFA,#F5A9B8);transform-origin:left;animation:presTempo 60s linear forwards}
+@keyframes presTempo{to{transform:scaleX(0)}}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
 .home-top{justify-content:flex-start!important;text-align:left}
@@ -1433,11 +1453,36 @@ const B = {
     </div>
     <div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button></div>`}),
   principios: () => ({k:"Partilhas", t:"Retorno Espiritual", azul:true, html:`
-    <div class="principio" aria-live="polite">
-      <span class="principio-n" data-princ-n>Mensagens da literatura de NA</span>
-      <p class="principio-txt" data-princ-txt>Toque em Sortear para escolher uma mensagem.</p>
+    <div class="presente" data-presente>
+      <button class="pres-caixa" data-sortear aria-label="Abrir o presente e sortear uma mensagem">
+        <svg viewBox="0 0 200 190" aria-hidden="true">
+          <ellipse cx="100" cy="182" rx="74" ry="6" fill="rgba(23,74,107,.12)"/>
+          <g class="pc-base">
+            <rect x="34" y="88" width="132" height="90" rx="10" fill="#F7B5C8"/>
+            <rect x="90" y="88" width="20" height="90" fill="#5BCEFA"/>
+            <rect x="96" y="88" width="8" height="90" fill="#fff" opacity=".85"/>
+          </g>
+          <g class="pc-tampa">
+            <rect x="26" y="66" width="148" height="28" rx="8" fill="#FAC6D6"/>
+            <rect x="90" y="66" width="20" height="28" fill="#5BCEFA"/>
+            <rect x="96" y="66" width="8" height="28" fill="#fff" opacity=".85"/>
+            <path d="M100 66 C 74 30, 44 44, 62 62 C 70 70, 90 68, 100 66 Z" fill="#5BCEFA"/>
+            <path d="M100 66 C 126 30, 156 44, 138 62 C 130 70, 110 68, 100 66 Z" fill="#5BCEFA"/>
+            <path d="M100 66 C 84 46, 64 50, 72 60 C 78 66, 92 66, 100 66 Z" fill="#fff" opacity=".7"/>
+            <path d="M100 66 C 116 46, 136 50, 128 60 C 122 66, 108 66, 100 66 Z" fill="#fff" opacity=".7"/>
+            <circle cx="100" cy="66" r="9" fill="#5BCEFA" stroke="#fff" stroke-width="3"/>
+          </g>
+          <g class="pc-brilho" fill="#F5A9B8"><path d="M30 40l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><path d="M170 30l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#5BCEFA"/><path d="M160 100l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></g>
+        </svg>
+        <span class="pres-dica">Toque para abrir</span>
+      </button>
+      <div class="principio" aria-live="polite" hidden>
+        <span class="principio-n" data-princ-n></span>
+        <p class="principio-txt" data-princ-txt></p>
+        <div class="pres-tempo"><span></span></div>
+      </div>
     </div>
-    <div class="acoes-passo"><button class="pill rosa" data-sortear>🎲 Sortear</button><button class="pill claro" data-princ-copiar hidden>📋 Copiar</button></div>
+    <div class="acoes-passo"><button class="pill rosa" data-sortear>🎁 Sortear</button><button class="pill claro" data-princ-copiar hidden>📋 Copiar</button></div>
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>`}),
   t3: () => ({k:"Melhores momentos", t:"3ª Tradição", html:`
     <div class="citacao">${T3}</div>
@@ -2402,13 +2447,24 @@ function sortearPrincipio(){
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-sortear]");
   if(b){
-    const card=b.closest(".passo"), i=sortearPrincipio();
-    const txt=card.querySelector("[data-princ-txt]");
-    txt.classList.remove("sorteado"); void txt.offsetWidth;
-    txt.textContent=PRINCIPIOS[i]; txt.classList.add("sorteado");
-    card.querySelector("[data-princ-n]").textContent="Mensagem "+(i+1)+" de "+PRINCIPIOS.length;
-    card.querySelector("[data-princ-copiar]").hidden=false;
-    b.textContent="🎲 Sortear outra";
+    const card=b.closest(".passo"), pres=card.querySelector("[data-presente]"), i=sortearPrincipio();
+    const box=pres.querySelector(".principio"), txt=card.querySelector("[data-princ-txt]"), bt=card.querySelector(".acoes-passo [data-sortear]");
+    const mostrar=()=>{
+      txt.textContent=PRINCIPIOS[i];
+      card.querySelector("[data-princ-n]").textContent="Mensagem "+(i+1)+" de "+PRINCIPIOS.length;
+      box.hidden=false; box.classList.remove("sorteado"); void box.offsetWidth; box.classList.add("sorteado");
+      const barra=box.querySelector(".pres-tempo span"); barra.style.animation="none"; void barra.offsetWidth; barra.style.animation="";
+      card.querySelector("[data-princ-copiar]").hidden=false;
+      bt.textContent="🎁 Sortear outra";
+    };
+    clearTimeout(pres._fechar);
+    if(pres.classList.contains("aberto")) mostrar();
+    else { pres.classList.add("abrindo"); setTimeout(()=>{ pres.classList.remove("abrindo"); pres.classList.add("aberto"); mostrar(); },650); }
+    // depois de 1 minuto, a caixa fecha de novo
+    pres._fechar=setTimeout(()=>{
+      pres.classList.remove("aberto"); box.hidden=true;
+      card.querySelector("[data-princ-copiar]").hidden=true; bt.textContent="🎁 Sortear";
+    },60000+650);
     return;
   }
   const c=e.target.closest("[data-princ-copiar]");
