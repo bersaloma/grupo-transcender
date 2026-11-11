@@ -1032,6 +1032,11 @@ body.com-lateral .lat-bt{display:flex}
 .presente.abrindo .pc-base{animation:pcTreme .5s ease-in-out}
 .presente.abrindo .pc-tampa{transform:translate(-10px,-56px) rotate(-16deg)}
 .presente.abrindo .pc-brilho{opacity:1}
+/* borboletas que saem da caixa */
+.borb{position:fixed;left:0;top:0;width:28px;height:23px;z-index:39;pointer-events:none;will-change:transform,opacity}
+.borb svg{width:100%;height:100%;overflow:visible;display:block}
+.borb .asas{transform-origin:12px 10px;animation:borbAsa .16s ease-in-out infinite alternate}
+@keyframes borbAsa{to{transform:scaleX(.2)}}
 .presente.aberto .pres-caixa{display:none}
 @keyframes pcTreme{0%,100%{transform:none}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
 .pc-base{transform-origin:175px 198px}
@@ -2457,6 +2462,35 @@ function sortearPrincipio(){
   if(!princSaco.length){ princSaco=PRINCIPIOS.map((_,i)=>i); for(let i=princSaco.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [princSaco[i],princSaco[j]]=[princSaco[j],princSaco[i]]; } }
   return princSaco.pop();
 }
+function soltarBorboletas(caixa){
+  if(!caixa || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const r=caixa.getBoundingClientRect(); if(!r.width) return;
+  const ox=r.left+r.width/2, oy=r.top+r.height*0.42;
+  const cores=[["#5BCEFA","#7FD3F0"],["#3FA9DD","#5BCEFA"],["#7FD3F0","#B9E8F8"],["#62C2E6","#9BDDF4"]];
+  const N=window.innerWidth<600?16:24;
+  for(let k=0;k<N;k++){
+    const [c1,c2]=cores[k%cores.length], el=document.createElement("div");
+    el.className="borb";
+    el.innerHTML=`<svg viewBox="0 0 24 20"><g class="asas" style="animation-duration:${(0.12+Math.random()*0.1).toFixed(2)}s">
+      <path d="M12 10 C 8 1, 1 1, 2 6 C 3 10, 8 10, 12 10Z" fill="${c1}"/><path d="M12 10 C 16 1, 23 1, 22 6 C 21 10, 16 10, 12 10Z" fill="${c1}"/>
+      <path d="M12 10 C 8 12, 3 16, 6 18 C 9 19, 11 14, 12 10Z" fill="${c2}"/><path d="M12 10 C 16 12, 21 16, 18 18 C 15 19, 13 14, 12 10Z" fill="${c2}"/></g>
+      <ellipse cx="12" cy="10.5" rx="1.1" ry="5" fill="#174A6B"/></svg>`;
+    document.body.appendChild(el);
+    const esc=0.6+Math.random()*0.7, ang=(-150+Math.random()*120)*Math.PI/180, forca=70+Math.random()*130;
+    const bx=Math.cos(ang)*forca, by=Math.sin(ang)*forca;
+    const lado=bx<0?-1:1, fx=bx+lado*(160+Math.random()*320), fy=-(window.innerHeight*0.6+Math.random()*window.innerHeight*0.5);
+    const mx=bx+(fx-bx)*0.5+(Math.random()*120-60), my=by+(fy-by)*0.45;
+    const g0=Math.random()*40-20, g1=Math.random()*60-30, g2=Math.random()*60-30;
+    const T=(x,y,sc,rot)=>`translate(${ox+x-14}px,${oy+y-12}px) scale(${sc}) rotate(${rot}deg)`;
+    const a=el.animate([
+      {transform:T(0,0,0.2,g0),opacity:0},
+      {transform:T(bx,by,esc,g0),opacity:1,offset:0.18},
+      {transform:T(mx,my,esc,g1),opacity:1,offset:0.6},
+      {transform:T(fx,fy,esc*0.8,g2),opacity:0}
+    ],{duration:2600+Math.random()*1600,delay:Math.random()*180,easing:"cubic-bezier(.2,.7,.4,1)",fill:"both"});
+    a.onfinish=()=>el.remove();
+  }
+}
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-sortear]");
   if(b){
@@ -2470,7 +2504,7 @@ document.addEventListener("click",e=>{
     };
     clearTimeout(pres._fechar);
     if(pres.classList.contains("aberto")) mostrar();
-    else { pres.classList.add("abrindo"); setTimeout(()=>{ pres.classList.remove("abrindo"); pres.classList.add("aberto"); mostrar(); },650); }
+    else { pres.classList.add("abrindo"); setTimeout(()=>soltarBorboletas(pres.querySelector(".pres-caixa svg")),250); setTimeout(()=>{ pres.classList.remove("abrindo"); pres.classList.add("aberto"); mostrar(); },650); }
     // depois de 30 segundos, a caixa fecha de novo
     pres._fechar=setTimeout(()=>{
       pres.classList.remove("aberto"); box.hidden=true;
