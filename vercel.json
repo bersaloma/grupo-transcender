@@ -1,5 +1,6 @@
 { "cleanUrls": true, "headers": [
   { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] },
+  { "source": "/assets/convites/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }] },
   { "source": "/", "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }] },
   { "source": "/index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }] }
 ] }
