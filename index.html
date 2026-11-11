@@ -2476,7 +2476,7 @@ document.addEventListener("click",e=>{
       card.querySelector("[data-princ-n]").textContent="Mensagem "+(i+1)+" de "+PRINCIPIOS.length;
       box.hidden=false; box.classList.remove("sorteado"); void box.offsetWidth; box.classList.add("sorteado");
       const barra=box.querySelector(".pres-tempo span"); barra.style.animation="none"; void barra.offsetWidth; barra.style.animation="";
-      bt.textContent="🎁 Sortear outra";
+      bt.textContent="🔀 Embaralhar";
     };
     clearTimeout(pres._fechar);
     if(pres.classList.contains("aberto")) mostrar();
