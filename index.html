@@ -1560,7 +1560,7 @@ const B = {
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
   literatura: () => { const c=B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Leitura dos IP’s",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
     <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="assets/livros/${f}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
-  meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária"),
+  meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}),
   soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
   retorno: (volta) => ({t:volta==="leitura"?"Retorno à leitura":"Retorno às partilhas", azul:true, html:`
     <div class="fala"><p>Vamos deixar no chat as informações do Grupo Transcender para quem quiser continuar em contato.</p></div>
