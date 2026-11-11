@@ -1581,7 +1581,8 @@ const B = {
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
   literatura: () => { const c=B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Leitura dos IP’s",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
     <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="assets/livros/${f}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
-  meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}),
+  meditacao: () => { const c=B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
+    <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`; return c; },
   soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
   retorno: (volta) => ({t:volta==="leitura"?"Retorno à leitura":"Retorno às partilhas", azul:true, html:`
     <div class="fala"><p>Vamos deixar no chat as informações do Grupo Transcender para quem quiser continuar em contato.</p></div>
@@ -1589,7 +1590,7 @@ const B = {
     <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>
     <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>
     ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>`}
-    <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`}),
+    <div class="contadores"><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`}),
   t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
   conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
     <div class="fala">
