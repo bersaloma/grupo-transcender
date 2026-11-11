@@ -1012,6 +1012,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
   .sl-palco{padding:52px 64px 8px}
   .sl-nav{width:44px;height:44px;font-size:28px}
 }
+/* pesquisa no Manual de Procedimentos (slides) */
+.sl-busca{box-sizing:border-box;min-width:0;flex:1;max-width:520px;margin:0 12px;display:flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:4px 6px 4px 14px;box-shadow:0 4px 12px -6px rgba(23,74,107,.3);color:var(--indigo)}
+.sl-busca[hidden]{display:none}
+.sl-busca input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:15px;color:var(--indigo);padding:6px 0}
+.slb-n{font-size:13px;font-weight:700;white-space:nowrap}
+.slb-nav{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:#E3F3FC}
+mark.slb-hit{background:#FDE68A;color:inherit;border-radius:4px;padding:0 2px}
+@media (orientation:portrait) and (max-width:700px){
+  .sl-top{flex-wrap:wrap;row-gap:8px}
+  .sl-busca{order:3;flex-basis:100%;width:100%;max-width:none;margin:0}
+  .sl-busca input::-webkit-search-cancel-button{display:none}
+}
 /* aviso de tela cheia (F11) */
 .aviso-f11{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:45;display:flex;align-items:center;gap:12px;
   background:#fff;border-radius:18px;padding:10px 10px 10px 16px;max-width:min(720px,calc(100vw - 140px));
@@ -1249,7 +1261,7 @@ Senha: 000000
   </header>
   <div class="cab-roteiro">
     <div class="logo" role="presentation"></div>
-    <h2>Diretrizes de Serviço</h2>
+    <h2>Manual de Procedimentos</h2>
     <p>Grupo Transcender de Narcóticos Anônimos</p>
   </div>
   <div class="dir-busca" role="search">
@@ -1302,6 +1314,13 @@ Senha: 000000
 <div class="slides" id="slides" role="dialog" aria-modal="true" aria-label="Modo apresentação" hidden>
   <div class="sl-top">
     <div class="sl-esq"><button class="sl-bt sl-pag" data-lat-abrir aria-label="Abrir páginas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button><span class="sl-cont" id="sl-cont">1 / 1</span></div>
+    <div class="sl-busca" id="sl-busca" role="search" hidden>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="slb-q" placeholder="Pesquisar palavra-chave" aria-label="Pesquisar palavra-chave no manual" autocomplete="off">
+      <span class="slb-n" id="slb-n"></span>
+      <button type="button" class="slb-nav" id="slb-ant" aria-label="Resultado anterior">‹</button>
+      <button type="button" class="slb-nav" id="slb-prox" aria-label="Próximo resultado">›</button>
+    </div>
     <div class="sl-acoes">
       <button class="sl-bt" data-sl-timer aria-label="Cronômetro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></button>
       <button class="sl-bt" data-sl-fechar aria-label="Voltar para a página inicial" title="Página inicial">✕</button>
@@ -2034,7 +2053,7 @@ function renderDiretrizes(blocos){
   $("#dir-indice").innerHTML = secoes.map((d,i)=>`<a href="#" data-dir="${i}"><span>${i+1}</span>${d.t}</a>`).join("");
   $("#dir-lista").innerHTML = (intro.length?`
   <article class="passo diretriz azul dir-capa" id="dir-0">
-    <div class="passo-head"><h3>Diretrizes de Serviço</h3></div>
+    <div class="passo-head"><h3>Manual de Procedimentos</h3></div>
     <div class="dir-txt">${intro.map(p=>`<p>${p}</p>`).join("")}</div>
   </article>`:"") + secoes.map((d,i)=>`
   <article class="passo diretriz ${i%2?"azul":""}" id="${idDir(i)}">
@@ -2460,7 +2479,7 @@ document.addEventListener("fullscreenchange",()=>setTimeout(checarTelaCheia,150)
 /* ---------- barra lateral de páginas ---------- */
 function latMontar(){
   const itens=slItens();
-  $("#lat-tit").textContent= slModo==="diretrizes" ? "Diretrizes de Serviço" : $("#r-titulo").textContent;
+  $("#lat-tit").textContent= slModo==="diretrizes" ? "Manual de Procedimentos" : $("#r-titulo").textContent;
   let n=0;
   $("#lat-lista").innerHTML=itens.map((el,i)=> el.classList.contains("fase")
     ? `<li class="lat-fase">${el.textContent.trim()}</li>`
@@ -2515,6 +2534,7 @@ function slMostrar(i){
   document.querySelector('[data-sl="-1"]').disabled = slI===0;
   document.querySelector('[data-sl="1"]').disabled = slI===SL.length-1;
   rascRender(); marcadorRender();
+  $("#sl-busca").hidden = slModo!=="diretrizes"; if(slModo==="diretrizes") slbMarcar();
   { const rv=rvAtivo(); if(rv) rvIr(rv, voltando ? 99 : 0); }
   slAjustar();
 }
@@ -2602,6 +2622,37 @@ addEventListener("orientationchange",()=>{ if(!$("#slides").hidden) setTimeout(s
     x0=null; },{passive:true});
 })();
 
+/* ---------- pesquisa no Manual de Procedimentos (modo slides) ---------- */
+let slbHits=[], slbK=-1;
+const slbNorm = t => t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+function slbMarcar(){
+  const q=slbNorm(($("#slb-q").value||"").trim()); if(q.length<2 || slModo!=="diretrizes") return;
+  const card=$("#sl-card"); const w=document.createTreeWalker(card,NodeFilter.SHOW_TEXT); const nos=[]; while(w.nextNode()) nos.push(w.currentNode);
+  nos.forEach(n=>{
+    const t=n.nodeValue, nt=t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+    if(nt.length!==t.length || nt.indexOf(q)<0) return;
+    const frag=document.createDocumentFragment(); let i=0, k;
+    while((k=nt.indexOf(q,i))>=0){ frag.appendChild(document.createTextNode(t.slice(i,k))); const m=document.createElement("mark"); m.className="slb-hit"; m.textContent=t.slice(k,k+q.length); frag.appendChild(m); i=k+q.length; }
+    frag.appendChild(document.createTextNode(t.slice(i))); n.parentNode.replaceChild(frag,n);
+  });
+  const m=card.querySelector("mark.slb-hit"); if(m) m.scrollIntoView({block:"center"});
+}
+function slbBuscar(){
+  const q=slbNorm(($("#slb-q").value||"").trim());
+  slbHits = q.length<2 ? [] : SL.map((el,i)=>slbNorm(el.textContent).includes(q)?i:-1).filter(i=>i>=0);
+  if(!slbHits.length){ $("#slb-n").textContent = q.length>=2 ? "Nada" : ""; slbK=-1; slMostrar(slI); return; }
+  slbK = Math.max(0, slbHits.findIndex(i=>i>=slI)); slbIr(slbK);
+}
+function slbIr(k){
+  if(!slbHits.length) return;
+  slbK=(k+slbHits.length)%slbHits.length;
+  $("#slb-n").textContent=(slbK+1)+" de "+slbHits.length;
+  slMostrar(slbHits[slbK]);
+}
+$("#slb-q").addEventListener("input",()=>{ clearTimeout(slbBuscar.t); slbBuscar.t=setTimeout(slbBuscar,250); });
+$("#slb-q").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); slbIr(slbK+(e.shiftKey?-1:1)); } });
+$("#slb-ant").onclick=()=>slbIr(slbK-1);
+$("#slb-prox").onclick=()=>slbIr(slbK+1);
 /* ---------- placas de tempo ---------- */
 const PLACAS={
   "5min":{ico:"⏳",t:"Faltam 5 minutos",s:"",fim:false},
