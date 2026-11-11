@@ -2115,15 +2115,16 @@ async function carregarQuadroDaPlanilha(){
 window.__topo && window.__topo();
 
 /* ---------- ficha em tela cheia ---------- */
+const FICHA_BRANCA={t:"Ingresso", d:"Ficha branca", img:"ficha-branca", msg:"Que bom ter você aqui! Esta ficha representa o desejo de parar de usar, e esse desejo já é o primeiro passo. Continue voltando."};
 function abrirFicha(i){
-  const f=FICHAS[i]; const m=$("#ficha-modal");
+  const f= i==="branca" ? FICHA_BRANCA : FICHAS[i]; const m=$("#ficha-modal");
   $("#fm-img").src=`assets/${f.img}.png`; $("#fm-img").alt=f.d;
   $("#fm-sub").textContent=f.t; $("#fm-tit").textContent=f.d; $("#fm-txt").textContent=f.msg;
   m.hidden=false; document.body.style.overflow="hidden";
 }
 function fecharFicha(){ $("#ficha-modal").hidden=true; document.body.style.overflow=""; }
 document.addEventListener("click",e=>{
-  if(e.target.closest("[data-ficha-branca]")){ abrirFicha(0); return; }
+  if(e.target.closest("[data-ficha-branca]")){ abrirFicha("branca"); return; }
   const c=e.target.closest("[data-ficha]"); if(c){ abrirFicha(+c.dataset.ficha); return; }
   if(e.target.closest("[data-fm-fechar]") || e.target.id==="ficha-modal") fecharFicha();
 });
