@@ -1040,7 +1040,7 @@ body.com-lateral .lat-gatilho{display:block}
 .presente.aberto .pres-caixa{display:none}
 @keyframes pcTreme{0%,100%{transform:none}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
 .pc-base{transform-origin:122px 210px}
-.presente .principio{width:100%;box-shadow:none;background:transparent;padding:6px 8px}
+.presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
 .presente.aberto{justify-content:center}
 .presente .principio.sorteado{animation:presAbre .45s ease-out}
 @keyframes presAbre{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
@@ -1492,13 +1492,12 @@ const B = {
         </svg>
         <span class="pres-dica">Toque para abrir</span>
       </button>
-      <div class="principio" aria-live="polite" hidden>
+      <div class="principio" data-sortear role="button" tabindex="0" aria-label="Trocar a mensagem" aria-live="polite" hidden>
         <span class="principio-n" data-princ-n></span>
         <p class="principio-txt" data-princ-txt></p>
         <div class="pres-tempo"><span></span></div>
       </div>
     </div>
-    <div class="acoes-passo"><button class="pill rosa" data-sortear>🎁 Sortear</button></div>
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>`}),
   t3: () => ({k:"Melhores momentos", t:"3ª Tradição", html:`
     <div class="citacao">${T3}</div>
@@ -2470,13 +2469,12 @@ document.addEventListener("click",e=>{
   const b=e.target.closest("[data-sortear]");
   if(b){
     const card=b.closest(".passo"), pres=card.querySelector("[data-presente]"), i=sortearPrincipio();
-    const box=pres.querySelector(".principio"), txt=card.querySelector("[data-princ-txt]"), bt=card.querySelector(".acoes-passo [data-sortear]");
+    const box=pres.querySelector(".principio"), txt=card.querySelector("[data-princ-txt]");
     const mostrar=()=>{
       txt.textContent=PRINCIPIOS[i];
       card.querySelector("[data-princ-n]").textContent="Mensagem "+(i+1)+" de "+PRINCIPIOS.length;
       box.hidden=false; box.classList.remove("sorteado"); void box.offsetWidth; box.classList.add("sorteado");
       const barra=box.querySelector(".pres-tempo span"); barra.style.animation="none"; void barra.offsetWidth; barra.style.animation="";
-      bt.textContent="🔀 Embaralhar";
     };
     clearTimeout(pres._fechar);
     if(pres.classList.contains("aberto")) mostrar();
@@ -2484,7 +2482,6 @@ document.addEventListener("click",e=>{
     // depois de 30 segundos, a caixa fecha de novo
     pres._fechar=setTimeout(()=>{
       pres.classList.remove("aberto"); box.hidden=true;
-      bt.textContent="🎁 Sortear";
     },30000+650);
     return;
   }
