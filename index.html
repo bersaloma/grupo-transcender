@@ -1036,6 +1036,7 @@ body.com-lateral .lat-bt{display:flex}
 @keyframes pcTreme{0%,100%{transform:none}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
 .pc-base{transform-origin:122px 210px}
 .presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
+.fala + .oracao{margin-top:22px}
 .presente.aberto{justify-content:center}
 .principio-ref{margin:6px 0 0;font-size:15px;font-weight:700;color:var(--indigo);text-align:right}
 .presente .principio.sorteado{animation:presAbre .45s ease-out}
@@ -1432,7 +1433,7 @@ const B = {
           </div>
           <button class="pill claro ajuda-copiar" data-copiar="Linha de Ajuda Nacional de NA: 132 | 3003-5222 | 0800 221 0221" data-msg="Números copiados">📋 Copiar números</button>
         </div>`}),
-  oracao: () => ({k:"Todas as pessoas", t:"Oração da Serenidade", html:`<div class="oracao">${ORACAO_SERENIDADE}</div>`}),
+  oracao: (fim) => ({k:"Todas as pessoas", t:"Oração da Serenidade", html:`${fim?`<div class="fala"><p>Para encerrar, um instante de silêncio pelas pessoas adictas que ainda sofrem, dentro e fora das salas, seguido da <span class="rosa">Oração da Serenidade</span>.</p></div>`:""}<div class="oracao">${ORACAO_SERENIDADE}</div>`}),
   boasVindas: () => ({k:"Acolhimento", t:"Boas-vindas", html:`
     <div class="perguntas">
       <div>Gostaríamos de saber se há alguém nos visitando pela primeira vez.<span>Sinta-se à vontade para abrir o áudio e se apresentar.</span></div>
@@ -1558,8 +1559,7 @@ const B = {
   encerramento: () => ({k:"Fim", t:"Encerramento", html:`
     <div class="fala">
       <p>Agradecemos a presença de todas as pessoas. Faremos um breve resumo da ata.</p>
-      <div class="acoes-passo" style="margin-bottom:18px"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>
-      <p>Para encerrar, um instante de silêncio pelas pessoas adictas que ainda sofrem, dentro e fora das salas, seguido da <span class="rosa">Oração da Serenidade</span>.</p>
+      <div class="acoes-passo"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>
     </div>`}),
 };
 
@@ -1594,7 +1594,7 @@ const ROTEIROS = {
       FASE("Encerramento"),
       B.t12(),
       B.encerramento(),
-      B.oracao(),
+      B.oracao(true),
     ]
   },
 
@@ -1625,7 +1625,7 @@ const ROTEIROS = {
       FASE("Encerramento"),
       B.t12(),
       B.encerramento(),
-      B.oracao(),
+      B.oracao(true),
     ]
   },
 
@@ -1658,7 +1658,7 @@ const ROTEIROS = {
       FASE("Encerramento"),
       B.t12(),
       B.encerramento(),
-      B.oracao(),
+      B.oracao(true),
     ]
   },
 
@@ -1677,7 +1677,7 @@ const ROTEIROS = {
       {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><button class="pill" data-ir="ata-adm">📄 Abrir Ata Administrativa</button></div>`},
       FASE("Encerramento"),
       B.encerramento(),
-      B.oracao(),
+      B.oracao(true),
     ]
   }
 };
