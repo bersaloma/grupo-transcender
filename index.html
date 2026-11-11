@@ -1859,9 +1859,8 @@ function iniciar(){
 }
 function parar(){ clearInterval(tick); tick=null; render(); }
 function mostrar(t,s,ico,fim){
-  $("#ov-tit").textContent=t; $("#ov-sub").textContent=s; $("#ov-ico").textContent=ico||"⏳";
-  $("#ov-card").classList.toggle("esgotado",!!fim); $("#ov-ok").textContent = fim ? "Ok" : "Ok, continuar";
-  $("#overlay").classList.add("on");
+  // usa a mesma placa dos botões "Faltam 2 minutos" e "Seu tempo acabou"
+  abrirPlaca(fim ? "fim" : "2min");
   try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
 }
 $("#ov-ok").onclick=()=>$("#overlay").classList.remove("on");
