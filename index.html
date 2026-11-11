@@ -1046,6 +1046,24 @@ body.com-lateral .lat-bt{display:flex}
 .presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
 .fala + .oracao{margin-top:22px}
 .passo.azul .nota.azul{background:rgba(255,255,255,.75)}
+.contadores{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.contador,.conq-ata{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #CBE7F7;border-radius:999px;padding:5px 6px 5px 14px}
+.ct-rot{font-size:14px;font-weight:800;color:var(--indigo);letter-spacing:.02em}
+.ct-bt{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#E3F3FC;color:var(--indigo);font-size:18px;font-weight:800}
+.ct-bt:hover{background:#CBE7F7}
+.ct-v{min-width:22px;text-align:center;font-size:16px;color:var(--indigo)}
+.conq-ata{flex-wrap:wrap;border-radius:18px;margin-top:14px;padding:8px 10px 8px 14px}
+.conq-in{border:1px solid #CBE7F7;border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;color:var(--indigo);width:130px;min-width:0}
+.ct-add{all:unset;cursor:pointer;font-size:13px;font-weight:800;color:var(--indigo);background:#E3F3FC;border-radius:999px;padding:7px 12px}
+.conq-chips{display:flex;flex-wrap:wrap;gap:6px}
+.conq-chips:empty{display:none}
+.conq-chip{display:inline-flex;align-items:center;gap:6px;background:#FCE1EC;color:var(--indigo);font-size:13px;font-weight:700;border-radius:999px;padding:4px 6px 4px 10px}
+.conq-chip button{all:unset;cursor:pointer;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:#fff}
+.resumo-ata{margin-top:16px;background:#E3F3FC;border:1px solid #CBE7F7;border-radius:18px;padding:14px 18px}
+.resumo-ata h4{font-size:14px;font-weight:800;color:var(--titulo);letter-spacing:.03em;text-transform:uppercase}
+.resumo-ata p{margin:6px 0 0;font-size:17px;line-height:1.5;color:var(--indigo)}
+.resumo-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.resumo-acoes .pill{font-size:14px;padding:8px 14px}
 .avisos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
 .aviso{background:#E3F3FC;border:1px solid #CBE7F7;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
 .aviso p{margin:0;color:var(--indigo);font-size:17px;line-height:1.5}
@@ -1460,7 +1478,8 @@ const B = {
     <div class="perguntas">
       <div>Gostaríamos de saber se tem alguém nos visitando pela primeira vez.<span>Sinta-se à vontade para abrir o áudio e se apresentar.</span></div>
       <div>Se você ainda não é membro de NA, sugerimos que fique até o final da reunião.<span>Teremos um momento especial para acolher você.</span></div>
-    </div>`}),
+    </div>
+    <div class="contadores"><div class="contador" data-cont="visitantes"><span class="ct-rot">Visitantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`}),
   t1: (depois) => ({k:"Tradição", t:"1ª Tradição", html:`<div class="citacao">${T1}</div>${depois?`<div class="nota">${depois}</div>`:""}`}),
   partilhas: () => ({k:"Partilhas", t:"Início das partilhas", html:`
     <div class="fala">
@@ -1525,7 +1544,8 @@ const B = {
       <p>Se você se identificou, pode abrir o áudio e se apresentar. Você é a pessoa mais importante desta reunião, e este momento é para te receber.</p>
     </div>
     <div class="nota azul">Havendo ingresso, leia o IP nº 22, Bem-vindo a Narcóticos Anônimos, e entregue a ficha branca. Deixe o link no chat.</div>
-    <div class="acoes-passo"><a class="pill claro" href="assets/livros/ip22.pdf" target="_blank" rel="noopener">📄 Leitura do IP 22</a><button class="pill claro" data-ficha-branca>🤍 Ficha branca</button></div>`}),
+    <div class="acoes-passo"><a class="pill claro" href="assets/livros/ip22.pdf" target="_blank" rel="noopener">📄 Leitura do IP 22</a><button class="pill claro" data-ficha-branca>🤍 Ficha branca</button></div>
+    <div class="contadores"><div class="contador" data-cont="ingressos"><span class="ct-rot">Ingressos</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`}),
   t7: () => ({k:"Tradição", t:"7ª Tradição", azul:true, html:`
     <div class="citacao">${T7}</div>
     <div class="pix">
@@ -1575,6 +1595,7 @@ const B = {
       <p>Agora é o momento da troca de fichas. Alguém vai trocar de ficha hoje? Pode abrir o áudio, se apresentar, dizer seu tempo limpo e quem vai entregar sua ficha.</p>
     </div>
     <div class="acoes-passo"><button class="pill rosa" data-ir="fichas">Abrir fichas de tempo limpo</button></div>
+    <div class="conq-ata"><span class="ct-rot">Tempo</span><input type="text" class="conq-in" placeholder="ex: 30 dias" aria-label="Tempo limpo da conquista"><button type="button" class="ct-add" data-conq-add>Adicionar</button><div class="conq-chips" data-conq-chips></div></div>
     <div class="nota azul">Em caso de conquista de tempo limpo, quem entrega a ficha partilha primeiro, por 3 minutos. Depois, a ficha é apresentada e a palavra passa para a pessoa que está comemorando o tempo limpo, também por 3 minutos. Ao final da partilha, comemoramos juntos.</div>`}),
   evite: () => ({k:"Para lembrar", t:"Evite e Procure", html:`
     <div class="ep">
@@ -1582,11 +1603,14 @@ const B = {
       <div class="ep-card ep-procure"><h4>Procure</h4><ul>${PROCURE.map(x=>`<li>${x}</li>`).join("")}</ul></div>
     </div>
     <div class="alerta">Álcool e maconha são drogas.</div>`}),
-  encerramento: () => ({k:"Fim", t:"Encerramento", html:`
+  encerramento: (resumo) => ({k:"Fim", t:"Encerramento", html:`
     <div class="fala">
       <p>Agradecemos a presença de todas as pessoas. Faremos um breve resumo da ata.</p>
       <div class="acoes-passo"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>
-    </div>`}),
+    </div>${resumo?`
+    <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>
+    <div class="resumo-ata"><h4>Resumo da reunião</h4><p data-resumo></p>
+      <div class="resumo-acoes"><button type="button" class="pill claro" data-resumo-copiar>Copiar resumo</button><button type="button" class="pill claro" data-resumo-zerar>Zerar</button></div></div>`:""}`}),
 };
 
 const din = (itens,cls="") => `<div class="dinamica ${cls}">${itens.map(([b,s])=>`<div class="din"><strong class="din-t">${b}</strong>${s?`<span>${s}</span>`:""}</div>`).join("")}</div>`;
@@ -1617,7 +1641,7 @@ const ROTEIROS = {
       B.avisos(),
       B.meditacao(),
       B.retorno("leitura"),
-      B.encerramento(),
+      B.encerramento(true),
       B.t12(),
       B.oracao(true),
     ]
@@ -1647,7 +1671,7 @@ const ROTEIROS = {
       B.avisos(),
       B.meditacao(),
       B.retorno("partilhas"),
-      B.encerramento(),
+      B.encerramento(true),
       B.t12(),
       B.oracao(true),
     ]
@@ -1679,7 +1703,7 @@ const ROTEIROS = {
       B.servico(),
       B.avisos(),
       B.retorno("partilhas"),
-      B.encerramento(),
+      B.encerramento(true),
       B.t12(),
       B.oracao(true),
     ]
@@ -2404,6 +2428,7 @@ function slMostrar(i){
   $("#sl-cont").textContent=(slI+1)+" / "+SL.length;
   document.querySelector('[data-sl="-1"]').disabled = slI===0;
   document.querySelector('[data-sl="1"]').disabled = slI===SL.length-1;
+  rascRender();
   slAjustar();
 }
 /* Todos os slides têm o mesmo tamanho (a tela toda). O texto usa um tamanho padrão;
@@ -2524,6 +2549,38 @@ document.addEventListener("click",e=>{
   if(!m.hidden && (e.target.closest("[data-convite-fechar]") || e.target===m)){ m.hidden=true; }
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("#convite-modal").hidden){ $("#convite-modal").hidden=true; e.stopPropagation(); } },true);
+/* ---------- rascunho da ata (contadores dos cards) ---------- */
+const RASC_KEY="ata-rascunho";
+function hojeISO(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function rascNovo(){ return {data:hojeISO(),visitantes:0,ingressos:0,participantes:0,partilhas:0,conquistas:[]}; }
+function rascLer(){ let r=null; try{ r=JSON.parse(localStorage.getItem(RASC_KEY)||"null"); }catch(e){} if(!r || r.data!==hojeISO()) r=rascNovo(); return r; }
+function rascSalvar(r){ try{ localStorage.setItem(RASC_KEY,JSON.stringify(r)); }catch(e){} rascRender(); if(!$("#slides").hidden) slAjustar(); }
+const plural=(n,um,varios)=>n+" "+(n===1?um:varios);
+function rascTexto(r){
+  const [a,m,d]=r.data.split("-");
+  let t=`Reunião de ${d}/${m}: ${plural(r.participantes,"participante","participantes")}, ${plural(r.visitantes,"visitante","visitantes")}, ${plural(r.ingressos,"ingresso","ingressos")} e ${plural(r.partilhas,"partilha","partilhas")}.`;
+  t+= r.conquistas.length ? ` Conquistas de tempo limpo: ${r.conquistas.join(", ")}.` : " Sem conquistas de tempo limpo.";
+  return t;
+}
+function rascRender(){
+  const r=rascLer();
+  document.querySelectorAll("[data-cont]").forEach(c=>{ const v=c.querySelector("[data-ct-v]"); if(v) v.textContent=r[c.dataset.cont]||0; });
+  document.querySelectorAll("[data-conq-chips]").forEach(el=>{ el.innerHTML=r.conquistas.map((t,i)=>`<span class="conq-chip">${t.replace(/[<>&]/g,"")}<button type="button" data-conq-del="${i}" aria-label="Remover">✕</button></span>`).join(""); });
+  document.querySelectorAll("[data-resumo]").forEach(el=>{ el.textContent=rascTexto(r); });
+}
+function conqAdicionar(box){
+  const inp=box.querySelector(".conq-in"); const v=(inp.value||"").trim(); if(!v) return;
+  const r=rascLer(); r.conquistas.push(v.slice(0,40)); inp.value=""; rascSalvar(r);
+}
+document.addEventListener("click",e=>{
+  const ct=e.target.closest("[data-ct]");
+  if(ct){ const k=ct.closest("[data-cont]").dataset.cont, r=rascLer(); r[k]=Math.max(0,(r[k]||0)+parseInt(ct.dataset.ct,10)); rascSalvar(r); return; }
+  const add=e.target.closest("[data-conq-add]"); if(add){ conqAdicionar(add.closest(".conq-ata")); return; }
+  const del=e.target.closest("[data-conq-del]"); if(del){ const r=rascLer(); r.conquistas.splice(+del.dataset.conqDel,1); rascSalvar(r); return; }
+  if(e.target.closest("[data-resumo-copiar]")){ copiar(rascTexto(rascLer()),"Resumo copiado"); return; }
+  if(e.target.closest("[data-resumo-zerar]")){ if(confirmarAcao("Zerar os números desta reunião?")) rascSalvar(rascNovo()); return; }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Enter" && e.target.classList && e.target.classList.contains("conq-in")){ e.preventDefault(); conqAdicionar(e.target.closest(".conq-ata")); } });
 /* ---------- start ---------- */
 aplicarAta();
 function rotaPeloHash(){
