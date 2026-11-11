@@ -915,7 +915,7 @@ input[type="date"]::-webkit-date-and-time-value{text-align:left;margin:0}
 input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .principio{background:#fff;border-radius:18px;padding:18px 20px;box-shadow:0 8px 24px -14px rgba(23,74,107,.35)}
 .principio-n{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--rosa-forte)}
-.principio-txt{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(22px,2.6vw,27px);line-height:1.3;color:var(--titulo);margin-top:8px}
+.principio-txt{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(22px,2.6vw,27px);line-height:1.3;color:var(--titulo);margin-top:0}
 .principio-txt.sorteado{animation:ovIn .3s ease-out}
 .principio-fonte{font-size:15px;color:var(--indigo);margin:-4px 0 14px}
 /* placas de tempo em tela cheia */
@@ -1489,7 +1489,6 @@ const B = {
         <span class="pres-dica">Toque para abrir</span>
       </button>
       <div class="principio" data-sortear role="button" tabindex="0" aria-label="Trocar a mensagem" aria-live="polite" hidden>
-        <span class="principio-n" data-princ-n></span>
         <p class="principio-txt" data-princ-txt></p>
         <p class="principio-ref" data-princ-ref hidden></p>
         <div class="pres-tempo"><span></span></div>
@@ -2468,7 +2467,6 @@ document.addEventListener("click",e=>{
     const box=pres.querySelector(".principio"), txt=card.querySelector("[data-princ-txt]");
     const mostrar=()=>{
       txt.textContent=PRINCIPIOS[i];
-      card.querySelector("[data-princ-n]").textContent="Mensagem "+(i+1)+" de "+PRINCIPIOS.length;
       const ref=card.querySelector("[data-princ-ref]"); if(ref){ ref.textContent=PRINC_REF[i]||""; ref.hidden=!PRINC_REF[i]; }
       box.hidden=false; box.classList.remove("sorteado"); void box.offsetWidth; box.classList.add("sorteado");
       const barra=box.querySelector(".pres-tempo span"); barra.style.animation="none"; void barra.offsetWidth; barra.style.animation="";
