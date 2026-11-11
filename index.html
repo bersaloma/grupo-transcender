@@ -1187,25 +1187,6 @@ Senha: 000000
 
   <div class="fichas" id="lista-fichas"></div>
 
-  <div class="calc">
-    <div class="card">
-      <h3>Qual ficha é a próxima?</h3>
-      <p>Informe a data limpa para ver o tempo limpo e a ficha que a pessoa pode receber.</p>
-      <label class="calc-lab" for="data-limpa">Data limpa</label>
-      <input type="date" id="data-limpa" aria-label="Data limpa">
-      <div class="res" id="calc-res"></div>
-    </div>
-  </div>
-
-  <div class="passos" style="margin-top:22px">
-    <div class="passo azul">
-      <div class="passo-head"><h3>Como conduzir a troca</h3></div>
-      <div class="fala">
-        <p>Alguém vai trocar de ficha hoje? De quanto tempo e quem vai entregar?</p>
-      </div>
-      <div class="nota azul">Quem entrega a ficha costuma ser a pessoa que apadrinha ou alguém escolhido por quem vai receber. Depois, todo o grupo celebra. Registre as trocas na ata.</div>
-    </div>
-  </div>
   <div style="height:70px"></div>
 </section>
 
@@ -1927,37 +1908,6 @@ $("#lista-fichas").innerHTML = FICHAS.map((f,i)=>`
   </div>`).join("");
 
 const MARCOS = [ {d:0,f:0},{m:1,f:1},{m:2,f:2},{m:3,f:3},{m:6,f:4},{m:9,f:5},{m:12,f:6},{m:18,f:7},{m:24,f:8} ];
-function addMeses(dt,m){ const d=new Date(dt); d.setMonth(d.getMonth()+m); return d; }
-$("#data-limpa").addEventListener("change",e=>{
-  const v=e.target.value; const out=$("#calc-res");
-  if(!v){ out.innerHTML=""; return; }
-  const ini=new Date(v+"T00:00:00"), hoje=new Date(); hoje.setHours(0,0,0,0);
-  if(ini>hoje){ out.textContent="A data limpa não pode estar no futuro."; return; }
-  const dias=Math.round((hoje-ini)/864e5);
-  let anos=hoje.getFullYear()-ini.getFullYear(), meses=hoje.getMonth()-ini.getMonth();
-  if(hoje.getDate()<ini.getDate()) meses--;
-  if(meses<0){ anos--; meses+=12; }
-  const totalMeses=anos*12+meses;
-  let atualF=FICHAS[0];
-  if(dias>=30) atualF=FICHAS[1];
-  if(dias>=60) atualF=FICHAS[2];
-  if(dias>=90) atualF=FICHAS[3];
-  if(totalMeses>=6) atualF=FICHAS[4];
-  if(totalMeses>=9) atualF=FICHAS[5];
-  if(totalMeses>=12) atualF=FICHAS[6];
-  if(totalMeses>=18) atualF=FICHAS[7];
-  if(totalMeses>=24) atualF=FICHAS[8];
-  const partes=[]; if(anos) partes.push(anos+(anos>1?" anos":" ano")); if(meses) partes.push(meses+(meses>1?" meses":" mês"));
-  const tempo = partes.length ? partes.join(" e ") : dias+(dias===1?" dia":" dias");
-  let prox="";
-  const etapas=[[30,"30 dias",1,"d"],[60,"60 dias",2,"d"],[90,"90 dias",3,"d"],[6,"6 meses",4,"m"],[9,"9 meses",5,"m"],[12,"1 ano",6,"m"],[18,"18 meses",7,"m"]];
-  for(const [n,label,,tipo] of etapas){
-    const dataMarco = tipo==="d" ? new Date(ini.getTime()+n*864e5) : addMeses(ini,n);
-    if(dataMarco>hoje){ prox=`Próxima conquista: <strong>${label}</strong>, em ${dataMarco.toLocaleDateString("pt-BR")}.`; break; }
-  }
-  if(!prox){ const a=anos+1; prox=`Próxima conquista: <strong>${a} anos</strong>, em ${addMeses(ini,a*12).toLocaleDateString("pt-BR")}.`; }
-  out.innerHTML=`Tempo limpo: <strong>${tempo}</strong> (${dias.toLocaleString("pt-BR")} dias).<br>Ficha do momento: <strong>${atualF.t} · ${atualF.d}</strong>.<br>${prox}`;
-});
 
 /* ---------- diretrizes ---------- */
 /* Diretrizes: o texto vem do Google Docs do manual (via Apps Script).
