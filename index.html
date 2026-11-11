@@ -1589,8 +1589,7 @@ const B = {
     <pre class="info-pre">${INFO_HTML}</pre>
     <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>
     <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>
-    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>`}
-    <div class="contadores"><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`}),
+    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>`}`}),
   t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
   conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
     <div class="fala">
@@ -1610,6 +1609,7 @@ const B = {
       <p>Agradecemos a presença de todas as pessoas. Faremos um breve resumo da ata.</p>
       ${resumo?"":`<div class="acoes-passo"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>`}
     </div>${resumo?`
+    <div class="contadores"><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>
     <div class="resumo-ata"><h4>Resumo da reunião</h4><p data-resumo></p>
       <div class="resumo-acoes"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a><button type="button" class="pill claro" data-resumo-copiar>Copiar resumo</button></div></div>`:""}`}),
 };
