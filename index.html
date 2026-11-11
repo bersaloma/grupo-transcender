@@ -754,9 +754,18 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 #fichas .ficha-img{max-height:calc((100dvh - 330px) / 2 - 20px);min-height:36px;margin-bottom:4px}
 #fichas .ficha b{font-size:clamp(17px,2.4vh,22px)}
 #fichas .ficha span{font-size:13px;margin-top:2px}
-#fichas .cab-roteiro{padding-top:6px}
-#fichas .cab-roteiro .logo{width:clamp(48px,8vh,80px)}
+#fichas .cab-roteiro .logo{width:clamp(48px,8vh,72px)!important}
+@media (min-width:701px) and (min-height:521px){
+  #fichas.ativa{display:flex;flex-direction:column;min-height:100dvh}
+  #fichas .cab-roteiro{padding:clamp(28px,5vh,48px) 20px 0}
+  #fichas .fichas{margin:auto;width:100%;max-width:min(1100px,calc((100dvh - 200px) * 1.6));gap:clamp(12px,2vh,20px);padding:clamp(16px,3vh,32px) 24px}
+  #fichas .ficha{padding:clamp(12px,2vh,20px) 10px;border-radius:22px}
+  #fichas .ficha-img{max-height:calc((100dvh - 400px) / 2)}
+  #fichas .ficha b{font-size:clamp(18px,2.8vh,26px)}
+  #fichas .ficha span{font-size:clamp(13px,1.7vh,15px)}
+}
 @media (max-width:700px) and (orientation:portrait){
+  #fichas .cab-roteiro{padding-top:14px}
   #fichas .fichas{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:8px}
   #fichas .ficha-img{max-height:calc((100dvh - 330px) / 4 - 40px)}
   #fichas .ficha{padding:8px 6px}
