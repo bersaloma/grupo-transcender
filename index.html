@@ -1026,20 +1026,22 @@ body.com-lateral .lat-gatilho{display:block}
   .ficha-modal .fm-x{top:12px;right:12px;width:44px;height:44px}
 }
 /* caixa de presente do Retorno Espiritual */
-.presente{display:flex;flex-direction:column;align-items:center}
-.pres-caixa{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 10px}
-.pres-caixa svg{width:clamp(130px,22vw,190px);height:auto;overflow:visible}
+.presente{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:260px;background:#fff;border-radius:20px;
+  padding:18px;box-shadow:0 10px 28px -16px rgba(23,74,107,.4);background-image:radial-gradient(90% 80% at 50% 0%,#FFF1F6 0%,#fff 70%)}
+.pres-caixa{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 10px}
+.pres-caixa svg{width:clamp(150px,24vw,210px);height:auto;overflow:visible}
 .pres-dica{font-size:14px;font-weight:800;color:var(--rosa-forte)}
-.pc-tampa{transform-origin:100px 80px;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .6s}
-.pc-brilho{opacity:.0;transition:opacity .4s}
+.pc-tampa{transform-origin:120px 90px;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .6s}
+.pc-brilho{opacity:.55;transition:opacity .4s,transform .4s}
 .pres-caixa:hover .pc-tampa{transform:translateY(-4px) rotate(-2deg)}
 .presente.abrindo .pc-base{animation:pcTreme .5s ease-in-out}
-.presente.abrindo .pc-tampa{transform:translate(-8px,-46px) rotate(-18deg)}
+.presente.abrindo .pc-tampa{transform:translate(-10px,-56px) rotate(-16deg)}
 .presente.abrindo .pc-brilho{opacity:1}
 .presente.aberto .pres-caixa{display:none}
 @keyframes pcTreme{0%,100%{transform:none}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
-.pc-base{transform-origin:100px 178px}
-.presente .principio{width:100%}
+.pc-base{transform-origin:122px 210px}
+.presente .principio{width:100%;box-shadow:none;background:transparent;padding:6px 8px}
+.presente.aberto{justify-content:center}
 .presente .principio.sorteado{animation:presAbre .45s ease-out}
 @keyframes presAbre{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
 .pres-tempo{height:4px;border-radius:999px;background:#FCE1EC;margin-top:14px;overflow:hidden}
@@ -1455,24 +1457,38 @@ const B = {
   principios: () => ({k:"Partilhas", t:"Retorno Espiritual", azul:true, html:`
     <div class="presente" data-presente>
       <button class="pres-caixa" data-sortear aria-label="Abrir o presente e sortear uma mensagem">
-        <svg viewBox="0 0 200 190" aria-hidden="true">
-          <ellipse cx="100" cy="182" rx="74" ry="6" fill="rgba(23,74,107,.12)"/>
+        <svg viewBox="0 0 240 230" aria-hidden="true">
+          <ellipse cx="122" cy="214" rx="92" ry="8" fill="rgba(23,74,107,.13)"/>
           <g class="pc-base">
-            <rect x="34" y="88" width="132" height="90" rx="10" fill="#F7B5C8"/>
-            <rect x="90" y="88" width="20" height="90" fill="#5BCEFA"/>
-            <rect x="96" y="88" width="8" height="90" fill="#fff" opacity=".85"/>
+            <polygon points="40,104 150,104 150,210 40,210" fill="#F8C0D1"/>
+            <polygon points="150,104 204,86 204,192 150,210" fill="#EEA6BD"/>
+            <rect x="116" y="104" width="16" height="106" fill="#7FD3F0"/>
+            <rect x="116" y="104" width="5" height="106" fill="#fff" opacity=".45"/>
+            <polygon points="177,95 186,92 186,198 177,201" fill="#62C2E6"/>
+            <text x="78" y="186" text-anchor="middle" font-family="DM Serif Display,Georgia,serif" font-size="78" fill="#E9B949" stroke="#D49A2A" stroke-width="1.2">?</text>
+            <rect x="40" y="104" width="110" height="7" fill="#000" opacity=".05"/>
           </g>
           <g class="pc-tampa">
-            <rect x="26" y="66" width="148" height="28" rx="8" fill="#FAC6D6"/>
-            <rect x="90" y="66" width="20" height="28" fill="#5BCEFA"/>
-            <rect x="96" y="66" width="8" height="28" fill="#fff" opacity=".85"/>
-            <path d="M100 66 C 74 30, 44 44, 62 62 C 70 70, 90 68, 100 66 Z" fill="#5BCEFA"/>
-            <path d="M100 66 C 126 30, 156 44, 138 62 C 130 70, 110 68, 100 66 Z" fill="#5BCEFA"/>
-            <path d="M100 66 C 84 46, 64 50, 72 60 C 78 66, 92 66, 100 66 Z" fill="#fff" opacity=".7"/>
-            <path d="M100 66 C 116 46, 136 50, 128 60 C 122 66, 108 66, 100 66 Z" fill="#fff" opacity=".7"/>
-            <circle cx="100" cy="66" r="9" fill="#5BCEFA" stroke="#fff" stroke-width="3"/>
+            <polygon points="30,80 82,62 214,62 162,80" fill="#FCD6E2"/>
+            <polygon points="30,80 162,80 162,108 30,108" fill="#FACBDA"/>
+            <polygon points="162,80 214,62 214,90 162,108" fill="#F0B0C4"/>
+            <polygon points="112,80 128,80 180,62 164,62" fill="#7FD3F0"/>
+            <rect x="112" y="80" width="16" height="28" fill="#7FD3F0"/>
+            <rect x="112" y="80" width="5" height="28" fill="#fff" opacity=".45"/>
+            <polygon points="183,73 192,70 192,98 183,101" fill="#62C2E6"/>
+            <path d="M146 70 C 112 30, 70 34, 92 62 C 104 76, 132 74, 146 70 Z" fill="#7FD3F0"/>
+            <path d="M146 70 C 176 26, 222 36, 196 62 C 182 74, 158 74, 146 70 Z" fill="#6CCAEC"/>
+            <path d="M146 70 C 122 46, 96 46, 104 60 C 112 70, 132 70, 146 70 Z" fill="#fff" opacity=".45"/>
+            <path d="M146 70 C 168 44, 196 46, 188 60 C 180 70, 160 70, 146 70 Z" fill="#fff" opacity=".35"/>
+            <path d="M140 74 C 128 92, 116 100, 104 104 L 112 110 C 126 102, 138 92, 146 78 Z" fill="#62C2E6"/>
+            <path d="M152 74 C 166 90, 180 96, 192 98 L 186 106 C 172 102, 160 92, 148 78 Z" fill="#62C2E6"/>
+            <ellipse cx="146" cy="71" rx="11" ry="9" fill="#5BCEFA"/>
           </g>
-          <g class="pc-brilho" fill="#F5A9B8"><path d="M30 40l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><path d="M170 30l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#5BCEFA"/><path d="M160 100l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></g>
+          <g class="pc-brilho">
+            <path d="M118 14l3.5 9 9 3.5-9 3.5-3.5 9-3.5-9-9-3.5 9-3.5z" fill="#E9B949"/>
+            <path d="M150 6l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#F5A9B8"/>
+            <circle cx="170" cy="22" r="4" fill="#F5A9B8"/><circle cx="96" cy="30" r="3" fill="#7FD3F0"/>
+          </g>
         </svg>
         <span class="pres-dica">Toque para abrir</span>
       </button>
