@@ -242,7 +242,7 @@ body.topo-on .seta-voltar{display:none}
 .copiar{margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:var(--indigo);color:#fff;font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px}
 
 .acoes-passo{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.acoes-passo .pill{font-size:15px;padding:11px 16px}
+.acoes-passo .pill{font-size:15px;padding:11px 16px;white-space:nowrap;flex:none;max-width:100%}
 
 .fim{max-width:880px;margin:0 auto;padding:0 16px 60px;text-align:center}
 .fim .card{background:#E3F6FE;border:2px solid #5BCEFA;color:var(--indigo);border-radius:var(--raio);padding:26px 20px;box-shadow:var(--sombra)}
@@ -748,6 +748,9 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .convite-modal[hidden]{display:none}
 .convite-modal img{max-width:min(92vw,720px);max-height:84vh;width:auto;height:auto;border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.6)}
 .convite-modal .cv-x{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:var(--indigo);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sombra)}
+@media (max-width:700px) and (orientation:portrait){
+  #slides .info-pre{font-size:13px;line-height:1.4;padding:10px 12px;max-height:26vh;overflow:auto}
+}
 /* ficha em tela cheia */
 .ficha[data-ficha]{cursor:pointer;transition:transform .2s,box-shadow .2s}
 .ficha[data-ficha]:hover{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(120,40,110,.45)}
