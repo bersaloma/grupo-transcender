@@ -756,6 +756,7 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .rv-item{position:absolute;left:50%;top:44%;width:min(680px,100%);transform:translate(-50%,-20%);opacity:0;pointer-events:none;
   background:#fff;border-radius:22px;padding:22px 26px;box-shadow:0 22px 50px -24px rgba(23,74,107,.45);border:1px solid #CBE7F7;text-align:center;
   transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s ease}
+.revela.azul .rv-item{background:#E3F3FC;border-color:#BFE3F6}
 .rv-item.on{opacity:1;transform:translate(-50%,-50%);pointer-events:auto}
 .rv-item.saiu{opacity:0;transform:translate(-50%,-85%)}
 .rv-n{display:inline-block;font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rosa-forte);background:#FCE1EC;border-radius:999px;padding:5px 12px}
@@ -1639,7 +1640,7 @@ const B = {
 };
 
 // tradições e conceitos um de cada vez, surgindo num card no meio da tela
-const revela = (lista,rotulo) => `<div class="revela" data-revela data-k="0">${lista.map((x,i)=>`<div class="rv-item${i===0?" on":""}"><span class="rv-n">${rotulo(i)}</span><p>${x}</p></div>`).join("")}
+const revela = (lista,rotulo,cls="") => `<div class="revela ${cls}" data-revela data-k="0">${lista.map((x,i)=>`<div class="rv-item${i===0?" on":""}"><span class="rv-n">${rotulo(i)}</span><p>${x}</p></div>`).join("")}
   <div class="rv-pe"><div class="rv-prog"><span style="width:${100/lista.length}%"></span></div><span class="rv-cont">1 de ${lista.length}</span><span class="rv-dica">Role para ver a próxima</span></div></div>`;
 const din = (itens,cls="") => `<div class="dinamica ${cls}">${itens.map(([b,s])=>`<div class="din"><strong class="din-t">${b}</strong>${s?`<span>${s}</span>`:""}</div>`).join("")}</div>`;
 
@@ -1759,7 +1760,7 @@ const ROTEIROS = {
       B.acolhimento(),
       B.convivencia(),
       B.usou(),
-      {k:"Leitura", t:"As 12 Tradições de NA", html: revela(TRADICOES,i=>`${i+1}ª Tradição`)},
+      {k:"Leitura", t:"As 12 Tradições de NA", html: revela(TRADICOES,i=>`${i+1}ª Tradição`,"azul")},
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html: revela(CONCEITOS,i=>`${i+1}º Conceito`)},
       {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><button class="pill" data-ir="ata-adm">📄 Abrir Ata Administrativa</button></div>`},
       B.encerramento(),
