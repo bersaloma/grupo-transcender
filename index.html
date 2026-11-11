@@ -1089,6 +1089,8 @@ body.com-lateral .lat-bt{display:flex}
 .resumo-ata p[data-resumo]{outline:none;border-radius:10px;padding:6px 8px;margin-left:-8px;margin-right:-8px;cursor:text;border:1px dashed transparent}
 .resumo-ata p[data-resumo]:hover,.resumo-ata p[data-resumo]:focus{background:#fff;border-color:#9BD3F0}
 .resumo-dica{display:block;font-size:13px;font-weight:700;color:var(--indigo);margin-top:4px}
+.marcador{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid #CBE7F7;border-radius:18px;padding:10px 14px;margin-top:14px}
+.marcador-in{flex:1;min-width:200px;border:1px solid #CBE7F7;border-radius:999px;padding:9px 14px;font:inherit;font-size:16px;color:var(--indigo)}
 .resumo-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .resumo-acoes .pill{font-size:14px;padding:8px 14px}
 .avisos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
@@ -1508,6 +1510,11 @@ const B = {
     <div class="fala"><p>Vamos deixar no chat as informações do Grupo Transcender para quem quiser continuar em contato.</p></div>
     <pre class="info-pre">${INFO_HTML}</pre>
     <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>`}),
+  estudoTrecho: () => ({k:"Estudo", t:"Estudo da literatura", azul:true, html:`
+    <div class="fala"><p>Vamos continuar o estudo de onde paramos. Uma pessoa lê um trecho e, em seguida, abrimos para partilhas de 3 minutos sobre o que foi lido. Depois, lemos o próximo trecho e abrimos de novo para as partilhas.</p></div>
+    <div class="marcador"><span class="ct-rot">Onde paramos</span><input type="text" class="marcador-in" data-marcador placeholder="ex: Texto Básico, p. 52, 2º parágrafo" aria-label="Onde paramos na leitura"></div>
+    <div class="acoes-passo"><button class="pill" data-timer="3" data-timer-fim="fim">Iniciar 3 minutos</button><a class="pill claro" href="placas.html?seq=1min,fim" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>
+    <div class="nota azul">As placas aparecem sozinhas: quando faltar 1 minuto e quando o tempo acabar.</div>`}),
   principios: () => ({k:"Partilhas", t:"Retorno Espiritual", azul:true, html:`
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>
     <div class="presente" data-presente>
@@ -1596,7 +1603,7 @@ const B = {
   leitura: (titulo, frase, link, botao, op={}) => ({t:titulo, azul:true, html:`
     <div class="fala"><p>${op.fala || `Vamos fazer agora a leitura ${frase}.`}</p></div>
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
-  literatura: () => { const c=B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Leitura dos IP’s",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
+  literatura: (biblioteca) => { const c=B.leitura(biblioteca?"Biblioteca de Literaturas":"Leitura da literatura","da literatura de NA","IP22_URL","Leitura dos IP’s",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); if(biblioteca) c.html=c.html.replace(/<div class="fala">[\s\S]*?<\/div>/,""); c.html+=`
     <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="livro.html?f=${f}&t=${encodeURIComponent(n)}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
   meditacao: (semContador) => { const c=B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); if(semContador) return c; c.html+=`
     <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`; return c; },
@@ -1651,7 +1658,8 @@ const ROTEIROS = {
       B.evite(),
       B.t1(),
       {t:"Dinâmica da Reunião", azul:true, html: din([["Estudo da<br>literatura",""],["Partilhas<br>livres",""],["Melhores<br>momentos",""]],"tri")},
-      B.literatura(),
+      B.literatura(true),
+      B.estudoTrecho(),
       B.partilhas(),
       B.principios(),
       FASE("Melhores Momentos"),
@@ -1866,7 +1874,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".js-ata-adm") && !CONFIG.ATA_ADM_URL){ e.preventDefault(); toast("Link da ata administrativa ainda não configurado"); return; }
   if(ata && !CONFIG.ATA_URL){ e.preventDefault(); toast("Link da ata ainda não configurado"); return; }
   const tm = e.target.closest("[data-timer]");
-  if(tm){ abrirSheet(); escolher(+tm.dataset.timer); iniciar(); return; }
+  if(tm){ abrirSheet(); escolher(+tm.dataset.timer); timerFim=tm.dataset.timerFim||null; iniciar(); return; }
 });
 
 
@@ -1879,7 +1887,7 @@ let toastT;
 function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),2200); }
 
 /* ---------- timer ---------- */
-let total=180, resta=180, tick=null, avisou=false;
+let total=180, resta=180, tick=null, avisou=false, timerFim=null;
 function fmt(s){ const m=Math.floor(s/60), r=s%60; return m+":"+String(r).padStart(2,"0"); }
 function setupTimer(presets){
   const fab=$("#timer-fab");
@@ -1913,7 +1921,7 @@ function iniciar(){
     const longo = total>=1200;                                        // temática (30 min): avisa com 5 e com 2 minutos
     const avisos = curto ? [[60,"1min"]] : longo ? [[300,"5min"],[120,"2min"]] : [[120,"2min"]];
     for(const [seg,placa] of avisos){ if(total>seg && resta===seg){ avisou=true; abrirPlaca(placa); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} } }
-    if(resta<=0){ parar(); resta=0; abrirPlaca(curto?"fim-curto":"fim"); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
+    if(resta<=0){ parar(); resta=0; abrirPlaca(timerFim || (curto?"fim-curto":"fim")); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
     render();
   },1000);
   render();
@@ -2434,7 +2442,7 @@ function slMostrar(i){
   $("#sl-cont").textContent=(slI+1)+" / "+SL.length;
   document.querySelector('[data-sl="-1"]').disabled = slI===0;
   document.querySelector('[data-sl="1"]').disabled = slI===SL.length-1;
-  rascRender();
+  rascRender(); marcadorRender();
   { const rv=rvAtivo(); if(rv) rvIr(rv, voltando ? 99 : 0); }
   slAjustar();
 }
@@ -2623,6 +2631,9 @@ document.addEventListener("input",e=>{
   const r=rascLer(); r.resumoEditado=e.target.innerText.trim(); try{ localStorage.setItem(RASC_KEY,JSON.stringify(r)); }catch(x){}
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Enter" && e.target.classList && e.target.classList.contains("conq-in")){ e.preventDefault(); conqAdicionar(e.target.closest(".conq-ata")); } });
+/* marcador de onde a leitura parou (Estudo): fica salvo até ser trocado */
+function marcadorRender(){ let v=""; try{ v=localStorage.getItem("estudo-marcador")||""; }catch(e){} document.querySelectorAll("[data-marcador]").forEach(el=>{ if(document.activeElement!==el) el.value=v; }); }
+document.addEventListener("input",e=>{ if(e.target.matches && e.target.matches("[data-marcador]")){ try{ localStorage.setItem("estudo-marcador",e.target.value); }catch(x){} } });
 /* ---------- start ---------- */
 aplicarAta();
 function rotaPeloHash(){
