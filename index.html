@@ -1470,7 +1470,7 @@ const B = {
       <div><strong>No computador</strong><span>Clique em <b>Reações</b> na barra de baixo do Zoom e depois em <b>Levantar a mão</b> ✋</span></div>
       <div><strong>No celular</strong><span>Toque em <b>Mais (•••)</b> no canto de baixo e depois em <b>Levantar a mão</b> ✋</span></div>
     </div>
-    <div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><button type="button" class="pill claro" data-placas-janela>Abrir placas</button></div>`}),
+    <div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placa em nova aba</a></div>`}),
   principios: () => ({k:"Partilhas", t:"Retorno Espiritual", azul:true, html:`
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>
     <div class="presente" data-presente>
@@ -1567,7 +1567,7 @@ const B = {
     <pre class="info-pre">${INFO_HTML}</pre>
     <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>
     <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>
-    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><button type="button" class="pill claro" data-placas-janela>Abrir placas</button></div>`}`}),
+    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placa em nova aba</a></div>`}`}),
   t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
   conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
     <div class="fala">
@@ -2451,12 +2451,6 @@ addEventListener("orientationchange",()=>{ if(!$("#slides").hidden) setTimeout(s
 })();
 
 /* ---------- placas de tempo ---------- */
-document.addEventListener("click",e=>{
-  if(!e.target.closest("[data-placas-janela]")) return;
-  const w=Math.min(1280,screen.availWidth||1280), h=Math.round(w*9/16);
-  const j=window.open("placas.html","placas-transcender",`popup=yes,width=${w},height=${h}`);
-  if(j){ try{ j.focus(); }catch(x){} } else toast("Permita pop-ups deste site para abrir as placas");
-});
 const PLACAS={
   "2min":{ico:"⏳",t:"Faltam 2 minutos",s:"",fim:false},
   "fim":{ico:"⌛",t:"Seu tempo acabou",s:"Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.",fim:true}
