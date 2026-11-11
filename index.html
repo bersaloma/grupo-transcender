@@ -1682,7 +1682,7 @@ addEventListener("pagehide",salvarPos);
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) salvarPos(); });
 document.addEventListener("click",e=>{ if(e.target.closest("a[href], [data-ir]")) salvarPos(); },true);
 if("scrollRestoration" in history) history.scrollRestoration="manual";
-let primeiraCarga=true;
+let primeiraCarga=true, irPorClique=false;
 
 function ir(dest){
   if(dest==="voltar") dest = anterior || "home";
@@ -1708,13 +1708,16 @@ function ir(dest){
   avisoF11(!!ROTEIROS[dest]);
   document.body.classList.toggle("com-lateral", !!ROTEIROS[dest]);
   if(ROTEIROS[dest]) latMontar(); else { $("#lateral").classList.remove("aberta"); }
-  if(slRetomar && ROTEIROS[dest] && dest===slRetomar.roteiro){ const r=slRetomar; slRetomar=null; setTimeout(()=>slAbrir(r.i),80); }
+  // ao escolher um roteiro na página inicial, já abre no modo apresentação (exceto celular em pé)
+  const celularEmPe = innerHeight>innerWidth && innerWidth<=700;
+  if(ROTEIROS[dest] && irPorClique && vis==="home" && !celularEmPe && !slRetomar){ slAbrir(0); }
+  else if(slRetomar && ROTEIROS[dest] && dest===slRetomar.roteiro){ const r=slRetomar; slRetomar=null; setTimeout(()=>slAbrir(r.i),80); }
   else if(slRetomar && ROTEIROS[dest]) slRetomar=null;
 }
 
 document.addEventListener("click", e=>{
   const go = e.target.closest("[data-ir]");
-  if(go){ e.preventDefault(); ir(go.dataset.ir); return; }
+  if(go){ e.preventDefault(); irPorClique=true; ir(go.dataset.ir); irPorClique=false; return; }
   const ck = e.target.closest(".check");
   if(ck){ ck.closest(".passo").classList.toggle("feito"); progresso(); return; }
   const cp = e.target.closest("[data-copiar]");
