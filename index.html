@@ -1482,6 +1482,10 @@ const B = {
       <div><strong>No celular</strong><span>Toque em <b>Mais (•••)</b> no canto de baixo e depois em <b>Levantar a mão</b> ✋</span></div>
     </div>
     <div class="acoes-passo"><button class="pill" data-timer="10">Iniciar 10 minutos</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div><div class="nota azul">As placas aparecem sozinhas: quando faltarem 2 minutos e quando o tempo acabar.</div>`}),
+  chat: () => ({k:"Chat", t:"Informações no chat", azul:true, html:`
+    <div class="fala"><p>Vamos deixar no chat as informações do Grupo Transcender para quem quiser continuar em contato.</p></div>
+    <pre class="info-pre">${INFO_HTML}</pre>
+    <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>`}),
   principios: () => ({k:"Partilhas", t:"Retorno Espiritual", azul:true, html:`
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>
     <div class="presente" data-presente>
@@ -1703,6 +1707,7 @@ const ROTEIROS = {
       B.t7(),
       B.servico(),
       B.avisos(),
+      B.chat(),
       B.partilhas(),
       B.principios(),
       B.encerramento(true),
