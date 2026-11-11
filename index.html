@@ -1547,14 +1547,14 @@ const B = {
         <div class="acoes-passo"><button class="pill claro" data-ir="servidores">👥 Quadro de servidores</button></div>
         <div class="fala" style="margin-top:14px"><p>Alguém gostaria de se indicar para servir?</p></div>
         <div class="nota azul">Em caso de eletiva, abriremos para perguntas. Em seguida, levaremos a pessoa autoindicada para a sala de espera e iniciaremos a votação. Após a decisão coletiva, receberemos a pessoa autoindicada de volta com respeito e amorosidade.</div>`}),
-  avisos: () => ({t:"Avisos e recados da irmandade", html:`
+  avisos: () => ({t:"Avisos e recados à irmandade", html:`
     <div class="avisos">
       <div class="aviso"><p>Neste sábado, 14/11, às 19h, Reunião Temática com o tema Perseverança e participação especial do Vovô Serginho. Vem partilhar com a gente!</p>
         <button type="button" class="pill claro" data-convite="assets/convites/perseveranca.jpg">💌 Ver convite</button></div>
       <div class="aviso"><p>3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições em <a href="https://www.encontemas-diversida.de/" target="_blank" rel="noopener">encontemas-diversida.de</a></p>
         <button type="button" class="pill claro" data-convite="assets/convites/encontemas-cartaz.jpg">💌 Ver convite</button></div>
     </div>
-    <div class="fala" style="margin-top:16px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
+    <div class="fala" style="margin-top:16px"><p>Alguém tem mais algum aviso ou recado à irmandade?</p></div>`}),
   leitura: (titulo, frase, link, botao, op={}) => ({t:titulo, azul:true, html:`
     <div class="fala"><p>${op.fala || `Vamos fazer agora a leitura ${frase}.`}</p></div>
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
