@@ -1067,6 +1067,9 @@ body.com-lateral .lat-bt{display:flex}
 .resumo-ata{margin-top:16px;background:#E3F3FC;border:1px solid #CBE7F7;border-radius:18px;padding:14px 18px}
 .resumo-ata h4{font-size:14px;font-weight:800;color:var(--titulo);letter-spacing:.03em;text-transform:uppercase}
 .resumo-ata p{margin:6px 0 0;font-size:17px;line-height:1.5;color:var(--indigo)}
+.resumo-ata p[data-resumo]{outline:none;border-radius:10px;padding:6px 8px;margin-left:-8px;margin-right:-8px;cursor:text;border:1px dashed transparent}
+.resumo-ata p[data-resumo]:hover,.resumo-ata p[data-resumo]:focus{background:#fff;border-color:#9BD3F0}
+.resumo-dica{display:block;font-size:13px;font-weight:700;color:var(--indigo);margin-top:4px}
 .resumo-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .resumo-acoes .pill{font-size:14px;padding:8px 14px}
 .avisos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
@@ -1605,7 +1608,7 @@ const B = {
       ${resumo?"":`<div class="acoes-passo"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>`}
     </div>${resumo?`
     <div class="contadores"><div class="contador" data-cont="partilhas"><span class="ct-rot">Partilhas</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>
-    <div class="resumo-ata"><h4>Resumo da reunião</h4><p data-resumo></p>
+    <div class="resumo-ata"><h4>Resumo da reunião</h4><p data-resumo contenteditable="true" spellcheck="true" aria-label="Resumo da reunião (toque para editar)"></p><span class="resumo-dica">Toque no texto para editar.</span>
       <div class="resumo-acoes"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div></div>`:""}`}),
 };
 
@@ -2451,7 +2454,7 @@ document.addEventListener("click",e=>{
 }, true);
 document.addEventListener("keydown",e=>{
   if($("#slides").hidden || !$("#placa").hidden) return;
-  if(/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||"")) return;
+  if(/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||"") || (document.activeElement&&document.activeElement.isContentEditable)) return;
   if(["ArrowRight","PageDown"," "].includes(e.key)){ e.preventDefault(); slMostrar(slI+1); }
   else if(["ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); slMostrar(slI-1); }
 
@@ -2551,19 +2554,24 @@ function rascRender(){
   const r=rascLer();
   document.querySelectorAll("[data-cont]").forEach(c=>{ const v=c.querySelector("[data-ct-v]"); if(v) v.textContent=r[c.dataset.cont]||0; });
   document.querySelectorAll("[data-conq-chips]").forEach(el=>{ el.innerHTML=r.conquistas.map((t,i)=>`<span class="conq-chip">${t.replace(/[<>&]/g,"")}<button type="button" data-conq-del="${i}" aria-label="Remover">✕</button></span>`).join(""); });
-  document.querySelectorAll("[data-resumo]").forEach(el=>{ el.textContent=rascTexto(r); });
+  const txt = r.resumoEditado!=null ? r.resumoEditado : rascTexto(r);
+  document.querySelectorAll("[data-resumo]").forEach(el=>{ if(document.activeElement!==el) el.textContent=txt; });
 }
 function conqAdicionar(box){
   const inp=box.querySelector(".conq-in"); const v=(inp.value||"").trim(); if(!v) return;
-  const r=rascLer(); r.conquistas.push(v.slice(0,40)); inp.value=""; rascSalvar(r);
+  const r=rascLer(); r.conquistas.push(v.slice(0,40)); delete r.resumoEditado; inp.value=""; rascSalvar(r);
 }
 document.addEventListener("click",e=>{
   const ct=e.target.closest("[data-ct]");
-  if(ct){ const k=ct.closest("[data-cont]").dataset.cont, r=rascLer(); r[k]=Math.max(0,(r[k]||0)+parseInt(ct.dataset.ct,10)); rascSalvar(r); return; }
+  if(ct){ const k=ct.closest("[data-cont]").dataset.cont, r=rascLer(); r[k]=Math.max(0,(r[k]||0)+parseInt(ct.dataset.ct,10)); delete r.resumoEditado; rascSalvar(r); return; }
   const add=e.target.closest("[data-conq-add]"); if(add){ conqAdicionar(add.closest(".conq-ata")); return; }
-  const del=e.target.closest("[data-conq-del]"); if(del){ const r=rascLer(); r.conquistas.splice(+del.dataset.conqDel,1); rascSalvar(r); return; }
+  const del=e.target.closest("[data-conq-del]"); if(del){ const r=rascLer(); r.conquistas.splice(+del.dataset.conqDel,1); delete r.resumoEditado; rascSalvar(r); return; }
   if(e.target.closest("[data-resumo-copiar]")){ copiar(rascTexto(rascLer()),"Resumo copiado"); return; }
   if(e.target.closest("[data-resumo-zerar]")){ if(confirmarAcao("Zerar os números desta reunião?")) rascSalvar(rascNovo()); return; }
+});
+document.addEventListener("input",e=>{
+  if(!e.target.matches || !e.target.matches("[data-resumo]")) return;
+  const r=rascLer(); r.resumoEditado=e.target.innerText.trim(); try{ localStorage.setItem(RASC_KEY,JSON.stringify(r)); }catch(x){}
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Enter" && e.target.classList && e.target.classList.contains("conq-in")){ e.preventDefault(); conqAdicionar(e.target.closest(".conq-ata")); } });
 /* ---------- start ---------- */
