@@ -1572,7 +1572,7 @@ const B = {
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
   literatura: () => { const c=B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Leitura dos IP’s",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
     <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="livro.html?f=${f}&t=${encodeURIComponent(n)}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
-  meditacao: () => { const c=B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
+  meditacao: (semContador) => { const c=B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); if(semContador) return c; c.html+=`
     <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`; return c; },
   soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
   retorno: (volta) => ({t:volta==="leitura"?"Retorno à leitura":"Retorno às partilhas", azul:true, html:`
@@ -1684,7 +1684,7 @@ const ROTEIROS = {
       B.evite(),
       B.t1(),
       {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>30 minutos",""],["Melhores<br>momentos",""]],"tri")},
-      B.meditacao(),
+      B.meditacao(true),
       {k:"Temática", t:"Início da Temática", html:`<div class="fala"><p>Vamos iniciar nossa temática. Gostaríamos de agradecer sua presença por ter aceito nosso convite. A partilha será de 30 minutos. Boa partilha!</p></div>
         <div class="acoes-passo"><button class="pill" data-placa="5min">Faltam 5 minutos</button><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button></div>`},
       {k:"Temática", t:"Perguntas e respostas", html:`<div class="fala"><p>Agora é o momento de perguntas e respostas.</p></div>
