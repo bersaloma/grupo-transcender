@@ -1481,7 +1481,7 @@ const B = {
       <div><strong>No computador</strong><span>Clique em <b>Reações</b> na barra de baixo do Zoom e depois em <b>Levantar a mão</b> ✋</span></div>
       <div><strong>No celular</strong><span>Toque em <b>Mais (•••)</b> no canto de baixo e depois em <b>Levantar a mão</b> ✋</span></div>
     </div>
-    <div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>`}),
+    <div class="acoes-passo"><button class="pill" data-timer="10">Iniciar 10 minutos</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div><div class="nota azul">As placas aparecem sozinhas: quando faltarem 2 minutos e quando o tempo acabar.</div>`}),
   principios: () => ({k:"Partilhas", t:"Retorno Espiritual", azul:true, html:`
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>
     <div class="presente" data-presente>
@@ -1580,7 +1580,7 @@ const B = {
     <pre class="info-pre">${INFO_HTML}</pre>
     <div class="acoes-passo"><button class="pill rosa" data-copiar-info>📋 Copiar texto</button></div>
     <div class="fala" style="margin-top:14px"><p>${volta==="leitura"?"Voltamos à leitura.":"Voltamos às partilhas."}</p></div>
-    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>`}`}),
+    ${volta==="leitura"?"":`<div class="acoes-passo"><button class="pill" data-timer="10">Iniciar 10 minutos</button><a class="pill claro" href="placas.html" target="_blank" rel="noopener">Abrir placas em nova janela</a></div><div class="nota azul">As placas aparecem sozinhas: quando faltarem 2 minutos e quando o tempo acabar.</div>`}`}),
   t12: () => ({k:"Tradição", t:"12ª Tradição", html:`<div class="citacao">${T12}</div>`}),
   conquistas: () => ({k:"Celebração", t:"Conquistas de Tempo Limpo", azul:true, html:`
     <div class="fala">
@@ -1686,13 +1686,15 @@ const ROTEIROS = {
       {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>30 minutos",""],["Melhores<br>momentos",""]],"tri")},
       B.meditacao(true),
       {k:"Temática", t:"Início da Temática", html:`<div class="fala"><p>Vamos iniciar nossa temática. Gostaríamos de agradecer sua presença por ter aceito nosso convite. A partilha será de 30 minutos. Boa partilha!</p></div>
-        <div class="acoes-passo"><button class="pill" data-timer="30">Iniciar 30 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html?seq=5min,2min,fim" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>
-        <div class="nota azul">O cronômetro mostra as placas sozinho: faltando 5 minutos, faltando 2 minutos e quando o tempo acabar.</div>`},
+        <div class="acoes-passo"><button class="pill" data-timer="30">Iniciar 30 minutos</button><a class="pill claro" href="placas.html?seq=5min,2min,fim" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>
+        <div class="nota azul">As placas aparecem sozinhas: quando faltarem 5 minutos, quando faltarem 2 minutos e quando o tempo acabar.</div>`},
       {k:"Temática", t:"Perguntas e respostas", html:`<div class="fala"><p>Agora é o momento de perguntas e respostas.</p></div>
         <div class="avisos qa">
-          <div class="aviso"><p><strong>Pergunta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill claro" data-timer="3">Iniciar 3 minutos</button><button class="pill" data-placa="1min">Falta 1 minuto</button><button class="pill rosa" data-placa="fim-curto">Seu tempo acabou</button></div></div>
-          <div class="aviso"><p><strong>Resposta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill claro" data-timer="3">Iniciar 3 minutos</button><button class="pill" data-placa="1min">Falta 1 minuto</button><button class="pill rosa" data-placa="fim-curto">Seu tempo acabou</button></div></div>
+          <div class="aviso"><p><strong>Pergunta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill" data-timer="3">Iniciar 3 minutos</button></div></div>
+          <div class="aviso"><p><strong>Resposta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill" data-timer="3">Iniciar 3 minutos</button></div></div>
         </div>
+        <div class="acoes-passo"><a class="pill claro" href="placas.html?seq=1min,fimc" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>
+        <div class="nota azul">As placas aparecem sozinhas: quando faltar 1 minuto e quando o tempo acabar.</div>
         <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`},
       {k:"Temática", t:"Momento de agradecimento", azul:true, html:`<div class="fala"><p>O grupo agradece pela oportunidade de construirmos juntos a nossa recuperação. Nada se compara à energia de um grupo de pessoas buscando e alcançando o mesmo propósito.</p><p>Vamos abrir os áudios e agradecer pela partilha!</p></div>`},
       FASE("Melhores Momentos"),

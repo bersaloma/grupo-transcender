@@ -58,7 +58,8 @@
     "5min": { t: "Faltam 5 minutos", s: "", fim: false },
     "2min": { t: "Faltam 2 minutos", s: "", fim: false },
     "1min": { t: "Falta 1 minuto", s: "", fim: false },
-    "fim":  { t: "Seu tempo acabou", s: "Agradecemos a sua partilha.", fim: true }
+    "fim":  { t: "Seu tempo acabou", s: "Agradecemos a sua partilha.", fim: true },
+    "fimc": { t: "Seu tempo acabou", s: "", fim: true }
   };
   const q = new URLSearchParams(location.search);
   const PLACAS = (q.get("seq") || "2min,fim").split(",").map(k => TODAS[k]).filter(Boolean);
