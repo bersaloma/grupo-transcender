@@ -1591,9 +1591,8 @@ const ROTEIROS = {
       B.avisos(),
       B.meditacao(),
       B.retorno("leitura"),
-      FASE("Encerramento"),
-      B.t12(),
       B.encerramento(),
+      B.t12(),
       B.oracao(true),
     ]
   },
@@ -1622,9 +1621,8 @@ const ROTEIROS = {
       B.avisos(),
       B.meditacao(),
       B.retorno("partilhas"),
-      FASE("Encerramento"),
-      B.t12(),
       B.encerramento(),
+      B.t12(),
       B.oracao(true),
     ]
   },
@@ -1655,9 +1653,8 @@ const ROTEIROS = {
       B.servico(),
       B.avisos(),
       B.retorno("partilhas"),
-      FASE("Encerramento"),
-      B.t12(),
       B.encerramento(),
+      B.t12(),
       B.oracao(true),
     ]
   },
@@ -1675,7 +1672,6 @@ const ROTEIROS = {
       {k:"Leitura", t:"As 12 Tradições de NA", html:`<ol class="lista">${TRADICOES.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html:`<ol class="lista">${CONCEITOS.map((x,i)=>`<li><span class="n">${i+1}</span>${x}</li>`).join("")}</ol>`},
       {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><button class="pill" data-ir="ata-adm">📄 Abrir Ata Administrativa</button></div>`},
-      FASE("Encerramento"),
       B.encerramento(),
       B.oracao(true),
     ]
