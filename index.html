@@ -1045,6 +1045,11 @@ body.com-lateral .lat-bt{display:flex}
 .pc-base{transform-origin:122px 210px}
 .presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
 .fala + .oracao{margin-top:22px}
+.avisos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.aviso{background:#E3F3FC;border:1px solid #CBE7F7;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.aviso p{margin:0;color:var(--indigo);font-size:17px;line-height:1.5}
+.aviso a{color:var(--indigo);font-weight:600}
+.aviso .pill{margin-top:auto}
 .livros{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .livros .pill{font-size:15px}
 .presente.aberto{justify-content:center}
@@ -1543,15 +1548,13 @@ const B = {
         <div class="fala" style="margin-top:14px"><p>Alguém gostaria de se indicar para servir?</p></div>
         <div class="nota azul">Em caso de eletiva, abriremos para perguntas. Em seguida, levaremos a pessoa autoindicada para a sala de espera e iniciaremos a votação. Após a decisão coletiva, receberemos a pessoa autoindicada de volta com respeito e amorosidade.</div>`}),
   avisos: () => ({t:"Avisos e recados da irmandade", html:`
-    <ul class="lista" style="margin-top:12px">
-      <li><span class="n">📌</span>Neste sábado, 14/11, às 19h, Reunião Temática com o tema Perseverança e participação especial do Vovô Serginho. Vem partilhar com a gente!</li>
-    </ul>
-    <div class="acoes-passo"><button type="button" class="pill claro" data-convite="assets/convites/perseveranca.jpg">💌 Ver convite</button></div>
-    <ul class="lista" style="margin-top:12px">
-      <li><span class="n">📌</span>3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições em <a href="https://www.encontemas-diversida.de/" target="_blank" rel="noopener">encontemas-diversida.de</a></li>
-    </ul>
-    <div class="acoes-passo"><button type="button" class="pill claro" data-convite="assets/convites/encontemas-cartaz.jpg">💌 Ver convite</button></div>
-    <div class="fala" style="margin-top:12px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
+    <div class="avisos">
+      <div class="aviso"><p>Neste sábado, 14/11, às 19h, Reunião Temática com o tema Perseverança e participação especial do Vovô Serginho. Vem partilhar com a gente!</p>
+        <button type="button" class="pill claro" data-convite="assets/convites/perseveranca.jpg">💌 Ver convite</button></div>
+      <div class="aviso"><p>3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições em <a href="https://www.encontemas-diversida.de/" target="_blank" rel="noopener">encontemas-diversida.de</a></p>
+        <button type="button" class="pill claro" data-convite="assets/convites/encontemas-cartaz.jpg">💌 Ver convite</button></div>
+    </div>
+    <div class="fala" style="margin-top:16px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
   leitura: (titulo, frase, link, botao, op={}) => ({t:titulo, azul:true, html:`
     <div class="fala"><p>${op.fala || `Vamos fazer agora a leitura ${frase}.`}</p></div>
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
