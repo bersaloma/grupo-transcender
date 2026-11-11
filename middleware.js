@@ -7,11 +7,11 @@
 export const config = { matcher: "/:path*" };
 
 const COOKIE = "transcender_acesso";
-const DIAS = 30;
+const HORAS = 3;
 const LIVRES = ["/assets/logo.png", "/assets/bg-porta.jpg", "/favicon.ico"];
 
 async function tokenDa(senha) {
-  const dados = new TextEncoder().encode("grupo-transcender:" + senha);
+  const dados = new TextEncoder().encode("grupo-transcender:v2:" + senha);
   const hash = await crypto.subtle.digest("SHA-256", dados);
   return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
@@ -40,7 +40,7 @@ export default async function middleware(req) {
         status: 303,
         headers: {
           "Location": volta,
-          "Set-Cookie": `${COOKIE}=${token}; Path=/; Max-Age=${DIAS * 86400}; HttpOnly; Secure; SameSite=Lax`,
+          "Set-Cookie": `${COOKIE}=${token}; Path=/; Max-Age=${HORAS * 3600}; HttpOnly; Secure; SameSite=Lax`,
           "Cache-Control": "no-store"
         }
       });
