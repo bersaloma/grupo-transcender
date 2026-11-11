@@ -1072,6 +1072,7 @@ body.com-lateral .lat-bt{display:flex}
 .presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
 .fala + .oracao{margin-top:22px}
 .passo.azul .nota.azul{background:#D6ECF8}
+#slides .nota{font-size:calc(14px * var(--zr,1));line-height:1.5}
 .contadores{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 .contador,.conq-ata{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #CBE7F7;border-radius:999px;padding:5px 6px 5px 14px}
 .ct-rot{font-size:14px;font-weight:800;color:var(--indigo);letter-spacing:.02em}
@@ -2480,8 +2481,10 @@ function slAjustar(){
   const emPe = innerHeight>innerWidth && innerWidth<=700;
   const padrao = emPe ? 1 : Math.max(0.8, Math.min(1.9, H/430, W/720));   // mesmo tamanho de texto em todos os slides
   const minimo = emPe ? 0.8 : 0.45;
-  let z=padrao; cont.style.zoom=z;
-  for(let k=0;k<40 && passo.scrollHeight>passo.clientHeight+1 && z>minimo;k++){ z=+(z-0.04).toFixed(2); cont.style.zoom=z; }
+  // --zr mantém as notas de rodapé no mesmo tamanho em todos os slides, mesmo quando o card encolhe para caber
+  const aplica=v=>{ cont.style.zoom=v; cont.style.setProperty("--zr",(padrao/v).toFixed(3)); };
+  let z=padrao; aplica(z);
+  for(let k=0;k<40 && passo.scrollHeight>passo.clientHeight+1 && z>minimo;k++){ z=+(z-0.04).toFixed(2); aplica(z); }
   passo.style.overflowY = passo.scrollHeight>passo.clientHeight+1 ? "auto" : "hidden";   // no celular em pé, rola dentro do card
 }
 function slAbrir(inicio){
