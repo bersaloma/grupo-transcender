@@ -1074,6 +1074,12 @@ body.com-lateral .lat-bt{display:flex}
 .aviso p{margin:0;color:var(--indigo);font-size:17px;line-height:1.5}
 .aviso a{color:var(--indigo);font-weight:600}
 .aviso .pill{margin-top:auto}
+.aviso .acoes-passo{width:100%;align-self:stretch}
+.avisos.qa{grid-template-columns:1fr}
+.avisos.qa .aviso{flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.avisos.qa .aviso p{flex:none}
+.avisos.qa .aviso .acoes-passo{width:auto;flex:1}
+.aviso .acoes-passo .pill{margin-top:0}
 .livros{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .livros .pill{font-size:15px}
 .presente.aberto{justify-content:center}
@@ -1664,7 +1670,7 @@ const ROTEIROS = {
   },
 
   tematica: {
-    nome:"Reunião Temática", sub:"Só por Hoje e partilha temática 25+5.", timer:[10],
+    nome:"Reunião Temática", sub:"Só por Hoje e partilha temática de 30 minutos.", timer:[10],
     passos:[
       abertura(FECHADA("reunião temática")),
       B.oracao(),
@@ -1675,20 +1681,25 @@ const ROTEIROS = {
       B.usou(),
       B.evite(),
       B.t1(),
-      {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>25+5",""],["Melhores<br>momentos",""]],"tri")},
+      {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>30 minutos",""],["Melhores<br>momentos",""]],"tri")},
       B.meditacao(),
-      {k:"Temática", t:"Início da Temática", html:`<div class="citacao" style="font-style:normal;font-weight:700">Agora é o momento da partilha temática <span style="color:var(--rosa-forte)">(25+5)</span></div>
-        <div class="nota azul">O cronômetro começa em 10 minutos. Toque no número para mudar o tempo, por exemplo 25 para a temática. Ele avisa quando faltam 2 minutos e quando o tempo se esgota.</div>
-        `},
-      B.partilhas(),
-      B.principios(),
+      {k:"Temática", t:"Início da Temática", html:`<div class="fala"><p>Vamos iniciar nossa temática. Gostaríamos de agradecer sua presença por ter aceito nosso convite. A partilha será de 30 minutos. Boa partilha!</p></div>
+        <div class="acoes-passo"><button class="pill" data-placa="5min">Faltam 5 minutos</button><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button></div>`},
+      {k:"Temática", t:"Perguntas e respostas", html:`<div class="fala"><p>Agora é o momento de perguntas e respostas.</p></div>
+        <div class="avisos qa">
+          <div class="aviso"><p><strong>Pergunta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill claro" data-timer="3">Iniciar 3 minutos</button><button class="pill" data-placa="1min">Falta 1 minuto</button><button class="pill rosa" data-placa="fim-curto">Seu tempo acabou</button></div></div>
+          <div class="aviso"><p><strong>Resposta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill claro" data-timer="3">Iniciar 3 minutos</button><button class="pill" data-placa="1min">Falta 1 minuto</button><button class="pill rosa" data-placa="fim-curto">Seu tempo acabou</button></div></div>
+        </div>
+        <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`},
+      {k:"Temática", t:"Momento de agradecimento", azul:true, html:`<div class="fala"><p>O grupo agradece pela oportunidade de construirmos juntos a nossa recuperação. Nada se compara à energia de um grupo de pessoas buscando e alcançando o mesmo propósito.</p><p>Vamos abrir os áudios e agradecer pela partilha!</p></div>`},
       FASE("Melhores Momentos"),
       B.t3(),
       B.conquistas(),
       B.t7(),
       B.servico(),
       B.avisos(),
-      B.retorno("partilhas"),
+      B.partilhas(),
+      B.principios(),
       B.encerramento(true),
       B.t12(),
       B.oracao(true),
@@ -1863,8 +1874,10 @@ function iniciar(){
   $("#status").textContent="Partilha em andamento.";
   tick=setInterval(()=>{
     resta--;
-    if(!avisou && total>120 && resta===120){ avisou=true; mostrar("Faltam 2 minutos","Você ainda tem 2 minutos de partilha. Vá caminhando para o encerramento.","⏳",false); }
-    if(resta<=0){ parar(); resta=0; mostrar("Tempo esgotado","Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.","⌛",true); }
+    const curto = total<=300;                                         // perguntas e respostas (3 min): avisa com 1 minuto
+    const aviso = curto ? 60 : 120;
+    if(!avisou && total>aviso && resta===aviso){ avisou=true; abrirPlaca(curto?"1min":"2min"); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
+    if(resta<=0){ parar(); resta=0; abrirPlaca(curto?"fim-curto":"fim"); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
     render();
   },1000);
   render();
@@ -2443,7 +2456,10 @@ addEventListener("orientationchange",()=>{ if(!$("#slides").hidden) setTimeout(s
 
 /* ---------- placas de tempo ---------- */
 const PLACAS={
+  "5min":{ico:"⏳",t:"Faltam 5 minutos",s:"",fim:false},
   "2min":{ico:"⏳",t:"Faltam 2 minutos",s:"",fim:false},
+  "1min":{ico:"⏳",t:"Falta 1 minuto",s:"",fim:false},
+  "fim-curto":{ico:"⌛",t:"Seu tempo acabou",s:"",fim:true},
   "fim":{ico:"⌛",t:"Seu tempo acabou",s:"Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.",fim:true}
 };
 let placaTelaCheia=false;
