@@ -1041,6 +1041,8 @@ body.com-lateral .lat-bt{display:flex}
 .pc-base{transform-origin:122px 210px}
 .presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
 .fala + .oracao{margin-top:22px}
+.livros{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.livros .pill{font-size:15px}
 .presente.aberto{justify-content:center}
 .principio-ref{margin:6px 0 0;font-size:15px;font-weight:700;color:var(--indigo);text-align:right}
 .presente .principio.sorteado{animation:presAbre .45s ease-out}
@@ -1342,6 +1344,7 @@ const CONFIG = {
 };
 /* ===================================== */
 
+const LIVROS = [["Texto Básico","texto-basico.pdf"],["Só Por Hoje","so-por-hoje.pdf"],["Guias para Trabalhar os Passos","guias-para-trabalhar-os-passos.pdf"],["Vivendo Limpo","vivendo-limpo.pdf"],["Princípios Orientadores","principios-orientadores.pdf"]];
 const ORACAO_SERENIDADE = "Deus, conceda-me serenidade para aceitar as coisas que não posso modificar, coragem para modificar aquelas que posso, e sabedoria para reconhecer a diferença.";
 
 const T1  = "“O nosso bem-estar comum deve vir em primeiro lugar; a recuperação individual depende da unidade de NA.”";
@@ -1540,7 +1543,8 @@ const B = {
   leitura: (titulo, frase, link, botao, op={}) => ({t:titulo, azul:true, html:`
     <div class="fala"><p>${op.fala || `Vamos fazer agora a leitura ${frase}.`}</p></div>
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
-  literatura: () => B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Literatura de NA",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}),
+  literatura: () => { const c=B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Literatura de NA",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
+    <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="assets/livros/${f}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
   meditacao: () => B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária"),
   soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
   retorno: (volta) => ({t:volta==="leitura"?"Retorno à leitura":"Retorno às partilhas", azul:true, html:`
