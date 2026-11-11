@@ -933,14 +933,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .placa{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:24px 24px 56px;text-align:center;cursor:pointer;
   background:radial-gradient(120% 90% at 15% 10%,#D9F3FE 0%,transparent 55%),radial-gradient(120% 90% at 85% 90%,#FCE1EC 0%,transparent 55%),#FFF8FB}
 .placa[hidden]{display:none}
-.placa.fim{background:radial-gradient(120% 90% at 15% 10%,#FCD5E4 0%,transparent 55%),radial-gradient(120% 90% at 85% 90%,#F5A9B8 0%,transparent 60%),#FFEFF5}
+.placa.placa-fim{background:radial-gradient(120% 90% at 15% 10%,#FCD5E4 0%,transparent 55%),radial-gradient(120% 90% at 85% 90%,#F5A9B8 0%,transparent 60%),#FFEFF5}
 .placa-in{max-width:1000px;display:flex;flex-direction:column;align-items:center;animation:ovIn .3s ease-out}
 .placa-logo{width:clamp(56px,min(10vw,12vh),120px)!important;margin:0 0 10px!important}
 .placa-ico{font-size:clamp(36px,min(7vw,9vh),84px);line-height:1}
 .placa h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(30px,min(9.5vw,14vh),140px);line-height:1.05;color:var(--titulo);margin-top:14px;max-width:100%;text-wrap:balance;overflow-wrap:break-word}
 .placa{overflow:auto}
 .placa-in{max-width:min(1000px,100%)}
-.placa.fim h2{color:var(--rosa-forte)}
+.placa.placa-fim h2{color:var(--rosa-forte)}
 .placa p:empty{display:none}
 .placa p{font-size:clamp(18px,min(2.8vw,4vh),34px);line-height:1.4;color:var(--indigo);margin-top:18px;max-width:22em}
 .placa-x{all:unset;position:absolute;top:16px;right:16px;width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:20px;color:var(--indigo);box-shadow:0 6px 18px -6px rgba(23,74,107,.35);cursor:pointer}
@@ -2450,9 +2450,11 @@ let placaTelaCheia=false;
 function abrirPlaca(k){
   const d=PLACAS[k], el=$("#placa"); if(!d) return;
   $("#placa-tit").textContent=d.t; $("#placa-sub").textContent=d.s;
-  el.classList.toggle("fim",d.fim); el.hidden=false;
+  el.classList.toggle("placa-fim",d.fim); el.hidden=false;
   placaTelaCheia=false;
-  try{ if(el.requestFullscreen && !document.fullscreenElement){ placaTelaCheia=true; el.requestFullscreen().catch(()=>{ placaTelaCheia=false; }); } }catch(e){}
+  // a página inteira entra em tela cheia (não só a placa), assim ela ocupa a tela toda em qualquer navegador
+  const doc=document.documentElement;
+  try{ if(doc.requestFullscreen && !document.fullscreenElement && !telaCheia()){ placaTelaCheia=true; doc.requestFullscreen().catch(()=>{ placaTelaCheia=false; }); } }catch(e){}
   try{ navigator.vibrate && navigator.vibrate(200); }catch(e){}
 }
 function fecharPlaca(){
