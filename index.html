@@ -744,6 +744,10 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
 .tela-pill .visor{text-align:center!important}
 .tela-linha{justify-content:center!important}
 .t-dica{text-align:center;font-family:"Inter",sans-serif;font-size:12px;font-weight:600;color:#fff;opacity:.85;margin-bottom:2px;letter-spacing:.02em}
+.convite-modal{position:fixed;inset:0;z-index:70;background:rgba(10,24,40,.78);display:grid;place-items:center;padding:20px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.convite-modal[hidden]{display:none}
+.convite-modal img{max-width:min(92vw,720px);max-height:84vh;width:auto;height:auto;border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.6)}
+.convite-modal .cv-x{position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:var(--indigo);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sombra)}
 /* ficha em tela cheia */
 .ficha[data-ficha]{cursor:pointer;transition:transform .2s,box-shadow .2s}
 .ficha[data-ficha]:hover{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(120,40,110,.45)}
@@ -1253,6 +1257,10 @@ Senha: 000000
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>
   <span id="timer-fab-txt">Cronômetro</span>
 </button>
+<div class="convite-modal" id="convite-modal" role="dialog" aria-label="Convite" hidden>
+  <button type="button" class="cv-x" data-convite-fechar aria-label="Fechar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <img id="convite-img" alt="Convite">
+</div>
 <div class="sheet-bg" id="sheet-bg"></div>
 <div class="sheet tela" id="sheet" role="dialog" aria-label="Cronômetro">
   <div class="tela-pill">
@@ -1538,11 +1546,11 @@ const B = {
     <ul class="lista" style="margin-top:12px">
       <li><span class="n">📌</span>Reunião temática com o tema Perseverança e convidado especial Serginho, dia 14/11 às 19h.</li>
     </ul>
-    <div class="acoes-passo"><a class="pill claro" href="assets/convites/perseveranca.jpg" target="_blank" rel="noopener">💌 Ver convite</a></div>
+    <div class="acoes-passo"><button type="button" class="pill claro" data-convite="assets/convites/perseveranca.jpg">💌 Ver convite</button></div>
     <ul class="lista" style="margin-top:12px">
       <li><span class="n">📌</span>3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições em <a href="https://www.encontemas-diversida.de/" target="_blank" rel="noopener">encontemas-diversida.de</a></li>
     </ul>
-    <div class="acoes-passo"><button class="pill claro" data-copiar="3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições: https://www.encontemas-diversida.de/" data-msg="Aviso copiado">📋 Copiar aviso com link</button><a class="pill claro" href="assets/convites/encontemas.jpg" target="_blank" rel="noopener">💌 Ver convite</a></div>
+    <div class="acoes-passo"><button class="pill claro" data-copiar="3º Encontemas da Diversidade: 27, 28 e 29 de novembro de 2026, na Terra do Saber, em Cajamar (SP). Inscrições: https://www.encontemas-diversida.de/" data-msg="Aviso copiado">📋 Copiar aviso com link</button><button type="button" class="pill claro" data-convite="assets/convites/encontemas.jpg">💌 Ver convite</button></div>
     <div class="fala" style="margin-top:12px"><p>Alguém tem mais algum aviso ou recado da irmandade?</p></div>`}),
   leitura: (titulo, frase, link, botao, op={}) => ({t:titulo, azul:true, html:`
     <div class="fala"><p>${op.fala || `Vamos fazer agora a leitura ${frase}.`}</p></div>
@@ -2494,6 +2502,14 @@ document.addEventListener("click",e=>{
   if(c){ copiar(c.closest(".passo").querySelector("[data-princ-txt]").textContent,"Mensagem copiada"); }
 });
 
+/* ---------- convite em pop-up ---------- */
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-convite]");
+  if(b){ e.preventDefault(); $("#convite-img").src=b.dataset.convite; $("#convite-modal").hidden=false; return; }
+  const m=$("#convite-modal");
+  if(!m.hidden && (e.target.closest("[data-convite-fechar]") || e.target===m)){ m.hidden=true; }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("#convite-modal").hidden){ $("#convite-modal").hidden=true; e.stopPropagation(); } },true);
 /* ---------- start ---------- */
 aplicarAta();
 function rotaPeloHash(){
