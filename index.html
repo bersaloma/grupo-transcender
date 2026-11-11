@@ -1024,9 +1024,9 @@ body.com-lateral .lat-bt{display:flex}
 .presente{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:260px;background:#fff;border-radius:20px;
   padding:18px;box-shadow:0 10px 28px -16px rgba(23,74,107,.4);background-image:radial-gradient(90% 80% at 50% 0%,#FFF1F6 0%,#fff 70%)}
 .pres-caixa{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 10px}
-.pres-caixa svg{width:clamp(260px,42vw,380px);max-width:100%;height:auto;overflow:visible}
+.pres-caixa svg{width:clamp(150px,24vw,210px);height:auto;overflow:visible}
 .pres-dica{font-size:14px;font-weight:800;color:var(--rosa-forte)}
-.pc-tampa{transform-origin:175px 95px;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .6s}
+.pc-tampa{transform-origin:120px 90px;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .6s}
 .pc-brilho{opacity:.55;transition:opacity .4s,transform .4s}
 .pres-caixa:hover .pc-tampa{transform:translateY(-4px) rotate(-2deg)}
 .presente.abrindo .pc-base{animation:pcTreme .5s ease-in-out}
@@ -1039,7 +1039,7 @@ body.com-lateral .lat-bt{display:flex}
 @keyframes borbAsa{to{transform:scaleX(.2)}}
 .presente.aberto .pres-caixa{display:none}
 @keyframes pcTreme{0%,100%{transform:none}20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
-.pc-base{transform-origin:175px 198px}
+.pc-base{transform-origin:122px 210px}
 .presente .principio{cursor:pointer;width:100%;box-shadow:none;background:transparent;padding:6px 8px}
 .presente.aberto{justify-content:center}
 .presente .principio.sorteado{animation:presAbre .45s ease-out}
@@ -1457,33 +1457,34 @@ const B = {
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>
     <div class="presente" data-presente>
       <button class="pres-caixa" data-sortear aria-label="Abrir o presente e sortear uma mensagem">
-        <svg viewBox="0 0 350 214" aria-hidden="true">
-          <ellipse cx="172" cy="204" rx="150" ry="8" fill="rgba(23,74,107,.13)"/>
+        <svg viewBox="0 0 240 230" aria-hidden="true">
+          <ellipse cx="122" cy="214" rx="92" ry="8" fill="rgba(23,74,107,.13)"/>
           <g class="pc-base">
-            <polygon points="30,110 270,110 270,198 30,198" fill="#F8C0D1"/>
-            <polygon points="270,110 320,92 320,180 270,198" fill="#EEA6BD"/>
-            <rect x="142" y="110" width="16" height="88" fill="#7FD3F0"/>
-            <rect x="142" y="110" width="5" height="88" fill="#fff" opacity=".45"/>
-            <polygon points="290,102.8 299,99.6 299,189.6 290,192.8" fill="#62C2E6"/>
-            <rect x="30" y="110" width="240" height="7" fill="#000" opacity=".05"/>
+            <polygon points="40,104 150,104 150,210 40,210" fill="#F8C0D1"/>
+            <polygon points="150,104 204,86 204,192 150,210" fill="#EEA6BD"/>
+            <rect x="116" y="104" width="16" height="106" fill="#7FD3F0"/>
+            <rect x="116" y="104" width="5" height="106" fill="#fff" opacity=".45"/>
+            <polygon points="177,95 186,92 186,198 177,201" fill="#62C2E6"/>
+            <text x="78" y="186" text-anchor="middle" font-family="DM Serif Display,Georgia,serif" font-size="78" fill="#E9B949" stroke="#D49A2A" stroke-width="1.2">?</text>
+            <rect x="40" y="104" width="110" height="7" fill="#000" opacity=".05"/>
           </g>
           <g class="pc-tampa">
-            <polygon points="20,86 70,68 330,68 280,86" fill="#FCD6E2"/>
-            <polygon points="20,86 280,86 280,116 20,116" fill="#FACBDA"/>
-            <polygon points="280,86 330,68 330,98 280,116" fill="#F0B0C4"/>
-            <polygon points="142,86 158,86 208,68 192,68" fill="#7FD3F0"/>
-            <rect x="142" y="86" width="16" height="30" fill="#7FD3F0"/>
-            <rect x="142" y="86" width="5" height="30" fill="#fff" opacity=".45"/>
-            <polygon points="300,78.8 309,75.6 309,105.6 300,108.8" fill="#62C2E6"/>
-            <g transform="translate(29,7)">
-              <path d="M146 70 C 112 30, 70 34, 92 62 C 104 76, 132 74, 146 70 Z" fill="#7FD3F0"/>
-              <path d="M146 70 C 176 26, 222 36, 196 62 C 182 74, 158 74, 146 70 Z" fill="#6CCAEC"/>
-              <path d="M146 70 C 122 46, 96 46, 104 60 C 112 70, 132 70, 146 70 Z" fill="#fff" opacity=".45"/>
-              <path d="M146 70 C 168 44, 196 46, 188 60 C 180 70, 160 70, 146 70 Z" fill="#fff" opacity=".35"/>
-              <ellipse cx="146" cy="71" rx="11" ry="9" fill="#5BCEFA"/>
-            </g>
+            <polygon points="30,80 82,62 214,62 162,80" fill="#FCD6E2"/>
+            <polygon points="30,80 162,80 162,108 30,108" fill="#FACBDA"/>
+            <polygon points="162,80 214,62 214,90 162,108" fill="#F0B0C4"/>
+            <polygon points="112,80 128,80 180,62 164,62" fill="#7FD3F0"/>
+            <rect x="112" y="80" width="16" height="28" fill="#7FD3F0"/>
+            <rect x="112" y="80" width="5" height="28" fill="#fff" opacity=".45"/>
+            <polygon points="183,73 192,70 192,98 183,101" fill="#62C2E6"/>
+            <path d="M146 70 C 112 30, 70 34, 92 62 C 104 76, 132 74, 146 70 Z" fill="#7FD3F0"/>
+            <path d="M146 70 C 176 26, 222 36, 196 62 C 182 74, 158 74, 146 70 Z" fill="#6CCAEC"/>
+            <path d="M146 70 C 122 46, 96 46, 104 60 C 112 70, 132 70, 146 70 Z" fill="#fff" opacity=".45"/>
+            <path d="M146 70 C 168 44, 196 46, 188 60 C 180 70, 160 70, 146 70 Z" fill="#fff" opacity=".35"/>
+            <path d="M140 74 C 128 92, 116 100, 104 104 L 112 110 C 126 102, 138 92, 146 78 Z" fill="#62C2E6"/>
+            <path d="M152 74 C 166 90, 180 96, 192 98 L 186 106 C 172 102, 160 92, 148 78 Z" fill="#62C2E6"/>
+            <ellipse cx="146" cy="71" rx="11" ry="9" fill="#5BCEFA"/>
           </g>
-          <g class="pc-brilho" transform="translate(29,4)">
+          <g class="pc-brilho">
             <path d="M118 14l3.5 9 9 3.5-9 3.5-3.5 9-3.5-9-9-3.5 9-3.5z" fill="#E9B949"/>
             <path d="M150 6l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#F5A9B8"/>
             <circle cx="170" cy="22" r="4" fill="#F5A9B8"/><circle cx="96" cy="30" r="3" fill="#7FD3F0"/>
