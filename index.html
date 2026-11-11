@@ -1045,7 +1045,7 @@ body.com-lateral .lat-gatilho{display:block}
 .presente .principio.sorteado{animation:presAbre .45s ease-out}
 @keyframes presAbre{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
 .pres-tempo{height:4px;border-radius:999px;background:#FCE1EC;margin-top:14px;overflow:hidden}
-.pres-tempo span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#5BCEFA,#F5A9B8);transform-origin:left;animation:presTempo 60s linear forwards}
+.pres-tempo span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#5BCEFA,#F5A9B8);transform-origin:left;animation:presTempo 30s linear forwards}
 @keyframes presTempo{to{transform:scaleX(0)}}
 /* títulos alinhados à esquerda */
 .cab-roteiro{justify-content:start!important;text-align:left!important}
@@ -2481,11 +2481,11 @@ document.addEventListener("click",e=>{
     clearTimeout(pres._fechar);
     if(pres.classList.contains("aberto")) mostrar();
     else { pres.classList.add("abrindo"); setTimeout(()=>{ pres.classList.remove("abrindo"); pres.classList.add("aberto"); mostrar(); },650); }
-    // depois de 1 minuto, a caixa fecha de novo
+    // depois de 30 segundos, a caixa fecha de novo
     pres._fechar=setTimeout(()=>{
       pres.classList.remove("aberto"); box.hidden=true;
       bt.textContent="🎁 Sortear";
-    },60000+650);
+    },30000+650);
     return;
   }
   const c=e.target.closest("[data-princ-copiar]");
