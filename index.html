@@ -104,7 +104,6 @@ a{color:inherit}
 .btn-reuniao .tag{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--azul-forte);position:relative;z-index:1}
 .btn-reuniao .nome{font-family:"DM Serif Display",Georgia,serif;font-size:clamp(26px,5.4vw,36px);line-height:1;color:var(--titulo);position:relative;z-index:1}
 .btn-reuniao .desc{position:relative;z-index:1;padding-right:24px;font-size:15px;font-weight:600;color:var(--indigo-2);line-height:1.35}
-.btn-reuniao{justify-content:center}
 .btn-reuniao .seta{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:14px;color:var(--indigo)}
 
 .atalhos{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:22px auto 0;padding:0 20px}
@@ -1158,15 +1157,23 @@ body.com-lateral .lat-bt{display:flex}
   <nav class="menu" aria-label="Reuniões">
     <button class="btn-reuniao" data-ir="fechada">
       <div class="nome">Reunião Fechada</div>
+      <div class="desc">Reunião só para pessoas adictas, com literatura de NA e partilhas.</div>
+      <span class="seta">Abrir roteiro →</span>
     </button>
     <button class="btn-reuniao" data-ir="estudo">
       <div class="nome">Reunião de Estudo</div>
+      <div class="desc">Estudo de um trecho da literatura de NA, seguido de partilhas.</div>
+      <span class="seta">Abrir roteiro →</span>
     </button>
     <button class="btn-reuniao" data-ir="tematica">
       <div class="nome">Reunião Temática</div>
+      <div class="desc">Um tema conduz as partilhas, com espaço para perguntas.</div>
+      <span class="seta">Abrir roteiro →</span>
     </button>
     <button class="btn-reuniao" data-ir="administrativa">
       <div class="nome">Reunião Administrativa</div>
+      <div class="desc">A reunião em que a consciência de grupo decide os rumos do serviço.</div>
+      <span class="seta">Abrir roteiro →</span>
     </button>
   </nav>
 
