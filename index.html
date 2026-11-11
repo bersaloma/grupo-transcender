@@ -1498,7 +1498,7 @@ const B = {
         <div class="pres-tempo"><span></span></div>
       </div>
     </div>
-    <div class="acoes-passo"><button class="pill rosa" data-sortear>🎁 Sortear</button><button class="pill claro" data-princ-copiar hidden>📋 Copiar</button></div>
+    <div class="acoes-passo"><button class="pill rosa" data-sortear>🎁 Sortear</button></div>
     <p class="principio-fonte">Retiradas da literatura oficial de Narcóticos Anônimos.</p>`}),
   t3: () => ({k:"Melhores momentos", t:"3ª Tradição", html:`
     <div class="citacao">${T3}</div>
@@ -2476,7 +2476,6 @@ document.addEventListener("click",e=>{
       card.querySelector("[data-princ-n]").textContent="Mensagem "+(i+1)+" de "+PRINCIPIOS.length;
       box.hidden=false; box.classList.remove("sorteado"); void box.offsetWidth; box.classList.add("sorteado");
       const barra=box.querySelector(".pres-tempo span"); barra.style.animation="none"; void barra.offsetWidth; barra.style.animation="";
-      card.querySelector("[data-princ-copiar]").hidden=false;
       bt.textContent="🎁 Sortear outra";
     };
     clearTimeout(pres._fechar);
@@ -2485,7 +2484,7 @@ document.addEventListener("click",e=>{
     // depois de 1 minuto, a caixa fecha de novo
     pres._fechar=setTimeout(()=>{
       pres.classList.remove("aberto"); box.hidden=true;
-      card.querySelector("[data-princ-copiar]").hidden=true; bt.textContent="🎁 Sortear";
+      bt.textContent="🎁 Sortear";
     },60000+650);
     return;
   }
