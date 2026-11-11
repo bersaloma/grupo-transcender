@@ -1607,10 +1607,10 @@ const B = {
   encerramento: (resumo) => ({k:"Fim", t:"Encerramento", html:`
     <div class="fala">
       <p>Agradecemos a presença de todas as pessoas. Faremos um breve resumo da ata.</p>
-      <div class="acoes-passo"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>
+      ${resumo?"":`<div class="acoes-passo"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a></div>`}
     </div>${resumo?`
     <div class="resumo-ata"><h4>Resumo da reunião</h4><p data-resumo></p>
-      <div class="resumo-acoes"><button type="button" class="pill claro" data-resumo-copiar>Copiar resumo</button><button type="button" class="pill claro" data-resumo-zerar>Zerar</button></div></div>`:""}`}),
+      <div class="resumo-acoes"><a class="pill js-ata" href="${CONFIG.ATA_URL||"#"}" target="_blank" rel="noopener">📝 Abrir ata</a><button type="button" class="pill claro" data-resumo-copiar>Copiar resumo</button></div></div>`:""}`}),
 };
 
 const din = (itens,cls="") => `<div class="dinamica ${cls}">${itens.map(([b,s])=>`<div class="din"><strong class="din-t">${b}</strong>${s?`<span>${s}</span>`:""}</div>`).join("")}</div>`;
