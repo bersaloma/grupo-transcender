@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Livro · Grupo Transcender</title>
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#174A6B}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#525659;font-family:"Inter",system-ui,sans-serif}
+  iframe{position:fixed;inset:0;width:100%;height:100%;border:0}
+  .aviso-f11{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:10px 12px 10px 14px;box-shadow:0 18px 40px -16px rgba(23,74,107,.5);border:2px solid #5BCEFA;cursor:default;animation:f11In .35s ease-out;max-width:calc(100vw - 24px)}
+  .aviso-f11[hidden]{display:none}
+  .aviso-f11 p{font-size:16px;line-height:1.4;color:var(--indigo);font-weight:700}
+  .aviso-f11 kbd{font-family:inherit;font-size:14px;font-weight:800;background:#EEF6FD;border:2px solid #CFE3F2;border-bottom-width:3px;border-radius:8px;padding:1px 7px;white-space:nowrap}
+  .f11-ico{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:18px;color:#fff;background:linear-gradient(135deg,#5BCEFA,#F5A9B8)}
+  .f11-ok{flex:none;cursor:pointer;border:2px solid #F5A9B8;background:#FCE1EC;color:var(--indigo);font:inherit;font-size:14px;font-weight:800;border-radius:999px;padding:8px 14px}
+  .f11-x{flex:none;cursor:pointer;border:0;background:none;width:34px;height:34px;border-radius:50%;color:var(--indigo);font-size:16px}
+  .f11-x:hover{background:#FAD3DE}
+  @keyframes f11In{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
+</style>
+</head>
+<body>
+<iframe id="pdf" title="Livro"></iframe>
+<div class="aviso-f11" id="aviso-f11" role="status" hidden>
+  <span class="f11-ico" aria-hidden="true">⛶</span>
+  <p>Aperte <kbd id="f11-tecla">F11</kbd> para usar a tela cheia.</p>
+  <button class="f11-ok" id="f11-agora">Ativar agora</button>
+  <button class="f11-x" id="f11-fechar" aria-label="Fechar aviso">✕</button>
+</div>
+<script>
+  const $ = s => document.querySelector(s);
+  const q = new URLSearchParams(location.search);
+  const arq = (q.get("f") || "").replace(/[^a-z0-9.-]/gi, "");
+  const url = "assets/livros/" + arq;
+  if (q.get("t")) document.title = q.get("t") + " · Grupo Transcender";
+  const ehComputador = () => matchMedia("(pointer:fine)").matches && innerWidth > 700;
+  // no celular o leitor de PDF do próprio aparelho funciona melhor
+  if (!arq) document.body.textContent = "Livro não encontrado.";
+  else if (!ehComputador()) location.replace(url);
+  else $("#pdf").src = url;
+  // aviso de tela cheia
+  const f11 = $("#aviso-f11");
+  if (/Mac/i.test(navigator.platform || navigator.userAgent)) $("#f11-tecla").textContent = "Control + Command + F";
+  const telaCheia = () => !!document.fullscreenElement || (innerHeight >= screen.height - 2 && innerWidth >= screen.width - 2);
+  function checarF11(){ f11.hidden = !(ehComputador() && !telaCheia()); }
+  let estava = telaCheia();
+  function mudou(){ const agora = telaCheia(); if (agora) f11.hidden = true; else if (estava) checarF11(); estava = agora; }
+  addEventListener("resize", () => setTimeout(mudou, 150));
+  document.addEventListener("fullscreenchange", () => setTimeout(mudou, 150));
+  $("#f11-fechar").onclick = () => { f11.hidden = true; };
+  $("#f11-agora").onclick = () => { try { document.documentElement.requestFullscreen().catch(() => {}); } catch (x) {} f11.hidden = true; };
+  checarF11();
+</script>
+</body>
+</html>

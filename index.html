@@ -1544,7 +1544,7 @@ const B = {
       <p>Se você se identificou, pode abrir o áudio e se apresentar. Você é a pessoa mais importante desta reunião, e este momento é para te receber.</p>
     </div>
     <div class="nota azul">Havendo ingresso, leia o IP nº 22, Bem-vindo a Narcóticos Anônimos, e entregue a ficha branca. Deixe o link no chat.</div>
-    <div class="acoes-passo"><a class="pill claro" href="assets/livros/ip22.pdf" target="_blank" rel="noopener">📄 Leitura do IP 22</a><button class="pill claro" data-ficha-branca>🤍 Ficha branca</button></div>
+    <div class="acoes-passo"><a class="pill claro" href="livro.html?f=ip22.pdf&t=IP%2022" target="_blank" rel="noopener">📄 Leitura do IP 22</a><button class="pill claro" data-ficha-branca>🤍 Ficha branca</button></div>
     <div class="contadores"><div class="contador" data-cont="ingressos"><span class="ct-rot">Ingressos</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`}),
   t7: () => ({k:"Tradição", t:"7ª Tradição", azul:true, html:`
     <div class="citacao">${T7}</div>
@@ -1580,7 +1580,7 @@ const B = {
     <div class="fala"><p>${op.fala || `Vamos fazer agora a leitura ${frase}.`}</p></div>
     <div class="acoes-passo"><a class="pill rosa js-link" data-link="${link}" href="#" target="_blank" rel="noopener">📖 ${botao}</a>${op.semCopiar?"":`<button class="pill claro" data-copiar="${CONFIG[link]||""}" data-msg="Link copiado">📋 Copiar link</button>`}</div>`}),
   literatura: () => { const c=B.leitura("Leitura da literatura","da literatura de NA","IP22_URL","Leitura dos IP’s",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
-    <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="assets/livros/${f}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
+    <div class="livros">${LIVROS.map(([n,f])=>`<a class="pill claro" href="livro.html?f=${f}&t=${encodeURIComponent(n)}" target="_blank" rel="noopener">📘 ${n}</a>`).join("")}</div>`; return c; },
   meditacao: () => { const c=B.leitura("Leitura da Meditação Diária","da Meditação Diária","MEDITACAO_URL","Meditação Diária",{fala:"Alguém gostaria de fazer a leitura?",semCopiar:true}); c.html+=`
     <div class="contadores"><div class="contador" data-cont="participantes"><span class="ct-rot">Participantes</span><button type="button" class="ct-bt" data-ct="-1" aria-label="Diminuir">−</button><b class="ct-v" data-ct-v>0</b><button type="button" class="ct-bt" data-ct="1" aria-label="Aumentar">+</button></div></div>`; return c; },
   soPorHoje: () => B.leitura("Leitura do Só por Hoje","do Só por Hoje","MEDITACAO_URL","Só por Hoje"),
