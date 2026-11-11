@@ -1860,9 +1860,11 @@ function ir(dest){
   if(dest==="servidores") carregarQuadro();
   if(dest==="diretrizes") carregarDiretrizes();
   if(dest==="ata-adm") abrirAtaAdm();
-  avisoF11(!!ROTEIROS[dest]);
-  document.body.classList.toggle("com-lateral", !!ROTEIROS[dest]);
-  if(ROTEIROS[dest]) latMontar(); else { $("#lateral").classList.remove("aberta"); }
+  const comSlides = !!ROTEIROS[dest] || dest==="diretrizes";
+  slModo = dest==="diretrizes" ? "diretrizes" : "roteiro";
+  avisoF11(comSlides);
+  document.body.classList.toggle("com-lateral", comSlides);
+  if(comSlides) latMontar(); else { $("#lateral").classList.remove("aberta"); }
   // ao escolher um roteiro na página inicial, já abre no modo apresentação (exceto celular em pé)
   // os roteiros só existem como apresentação de slides (celular em pé, deitado e computador)
   if(ROTEIROS[dest]){
@@ -1870,6 +1872,9 @@ function ir(dest){
     if(slRetomar && dest===slRetomar.roteiro) i=slRetomar.i;                       // voltou das fichas/diretrizes
     else if(!(irPorClique && vis==="home")){ const g=slLerPos()[dest]; if(g && Date.now()-g.t<12*3600*1000) i=g.i; }  // recarregou ou voltou
     slRetomar=null; slAbrir(i);
+  } else if(dest==="diretrizes"){                                                  // diretrizes também em slides
+    const g=slLerPos()["diretrizes"]; const i = (g && Date.now()-g.t<12*3600*1000) ? g.i : 0;
+    slAbrir(i);
   } else { $("#slides").hidden=true; document.body.style.overflow=""; }
 }
 
@@ -2015,18 +2020,24 @@ function montarDiretrizes(blocos){
   fecharLista();
   return {intro, secoes};
 }
+var slModo="roteiro";                                                      // modo dos slides: "roteiro" ou "diretrizes"
 const idDir = (i) => "dir-"+(i+1);
 function renderDiretrizes(blocos){
   const {intro, secoes} = montarDiretrizes(blocos);
   if(secoes.length<3) return false;
   $("#dir-intro").innerHTML = intro.map(p=>`<p>${p}</p>`).join("");
   $("#dir-indice").innerHTML = secoes.map((d,i)=>`<a href="#" data-dir="${i}"><span>${i+1}</span>${d.t}</a>`).join("");
-  $("#dir-lista").innerHTML = secoes.map((d,i)=>`
+  $("#dir-lista").innerHTML = (intro.length?`
+  <article class="passo diretriz azul dir-capa" id="dir-0">
+    <div class="passo-head"><h3>Diretrizes de Serviço</h3></div>
+    <div class="dir-txt">${intro.map(p=>`<p>${p}</p>`).join("")}</div>
+  </article>`:"") + secoes.map((d,i)=>`
   <article class="passo diretriz ${i%2?"azul":""}" id="${idDir(i)}">
     <div class="passo-head"><div class="num">${i+1}</div><h3>${d.t}</h3></div>
     <div class="dir-txt">${d.html}</div>
   </article>`).join("");
   if(typeof dirBuscar==="function") dirBuscar(false);
+  if(slModo==="diretrizes" && typeof SL!=="undefined" && !$("#slides").hidden){ const k=slI; slMontar(); latMontar(); slMostrar(Math.min(k,SL.length-1)); }
   return true;
 }
 /* ---------- pesquisa nas diretrizes (como o Ctrl+F) ---------- */
@@ -2443,8 +2454,8 @@ document.addEventListener("fullscreenchange",()=>setTimeout(checarTelaCheia,150)
 
 /* ---------- barra lateral de páginas ---------- */
 function latMontar(){
-  const itens=[...$("#r-passos").children].filter(el=>el.matches(".passo,.fase"));
-  $("#lat-tit").textContent=$("#r-titulo").textContent;
+  const itens=slItens();
+  $("#lat-tit").textContent= slModo==="diretrizes" ? "Diretrizes de Serviço" : $("#r-titulo").textContent;
   let n=0;
   $("#lat-lista").innerHTML=itens.map((el,i)=> el.classList.contains("fase")
     ? `<li class="lat-fase">${el.textContent.trim()}</li>`
@@ -2454,7 +2465,7 @@ let latTimer=null;
 function latAbrir(){ clearTimeout(latTimer); const l=$("#lateral"); l.hidden=false; requestAnimationFrame(()=>l.classList.add("aberta")); latMarcar(); }
 function latFechar(){ clearTimeout(latTimer); latTimer=setTimeout(()=>$("#lateral").classList.remove("aberta"),180); }
 function latMarcar(){
-  const itens=[...$("#r-passos").children].filter(el=>el.matches(".passo,.fase"));
+  const itens=slItens();
   let atualI = !$("#slides").hidden ? slI : itens.findIndex(el=>el.getBoundingClientRect().bottom>innerHeight*0.3);
   $$("#lat-lista [data-lat]").forEach(b=>b.classList.toggle("atual", +b.dataset.lat===atualI));
   const a=$("#lat-lista .atual"); if(a) a.scrollIntoView({block:"nearest"});
@@ -2469,7 +2480,7 @@ document.addEventListener("click",e=>{
   if(b){
     const i=+b.dataset.lat;
     if(!$("#slides").hidden){ slMostrar(i); }
-    else { const el=[...$("#r-passos").children].filter(x=>x.matches(".passo,.fase"))[i]; if(el){ const y=el.getBoundingClientRect().top+scrollY-20; scrollTo({top:y,behavior:"smooth"}); } }
+    else { const el=slItens()[i]; if(el){ const y=el.getBoundingClientRect().top+scrollY-20; scrollTo({top:y,behavior:"smooth"}); } }
     latMarcar(); if(matchMedia("(pointer:coarse)").matches) latFechar();
     return;
   }
@@ -2478,7 +2489,8 @@ document.addEventListener("click",e=>{
 
 /* ---------- modo apresentação ---------- */
 let SL=[], slI=0, slRetomar=null;
-function slMontar(){ SL=[...$("#r-passos").children].filter(el=>el.matches(".passo,.fase")); }
+function slItens(){ return slModo==="diretrizes" ? [...$("#dir-lista").children].filter(el=>el.matches(".passo")) : [...$("#r-passos").children].filter(el=>el.matches(".passo,.fase")); }
+function slMontar(){ SL=slItens(); }
 function slMostrar(i){
   const voltando = i < slI;
   slI=Math.max(0,Math.min(SL.length-1,i));
@@ -2554,10 +2566,11 @@ function slAbrir(inicio){
 }
 function slFechar(){
   try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
+  if(slModo==="diretrizes"){ ir("voltar"); return; }                               // diretrizes voltam para onde estavam (roteiro ou início)
   ir("home");                                                                       // sair da apresentação volta para a página inicial
 }
 function slLerPos(){ try{ return JSON.parse(localStorage.getItem("slide-posicao")||"{}"); }catch(e){ return {}; } }
-function slSalvarPos(){ try{ const p=slLerPos(); p[atual]={i:slI,t:Date.now()}; localStorage.setItem("slide-posicao",JSON.stringify(p)); }catch(e){} }
+function slSalvarPos(){ try{ const p=slLerPos(); p[slModo==="diretrizes"?"diretrizes":atual]={i:slI,t:Date.now()}; localStorage.setItem("slide-posicao",JSON.stringify(p)); }catch(e){} }
 document.addEventListener("click",e=>{
   if(e.target.closest("#slides-fab")){ slAbrir(); return; }
   if(e.target.closest("[data-sl-fechar]")){ slFechar(); return; }
