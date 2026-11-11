@@ -773,6 +773,14 @@ body.topo-on .topo-gatilho{top:auto;bottom:auto;top:calc(var(--topo-h,70px) - 4p
   .rv-item p{font-size:17px}
   .rv-dica{width:100%;text-align:center}
 }
+.dir-busca{position:sticky;top:8px;z-index:20;max-width:848px;margin:14px auto 0;display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #CBE7F7;border-radius:999px;padding:6px 8px 6px 16px;box-shadow:0 10px 24px -14px rgba(23,74,107,.4);color:var(--indigo)}
+@media (max-width:880px){ .dir-busca{margin-left:16px;margin-right:16px} }
+@media (max-width:700px){ .dir-busca{margin-left:62px;margin-right:10px;top:12px;padding-left:12px} .dir-busca svg{display:none} }
+.dir-busca input{flex:1;min-width:0;border:0;outline:none;font:inherit;font-size:16px;color:var(--indigo);background:transparent;padding:6px 0}
+.dir-n{font-size:13px;font-weight:700;color:var(--indigo);white-space:nowrap}
+.dir-nav{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#E3F3FC;color:var(--indigo);font-size:20px;font-weight:800}
+mark.dir-hit{background:#FFE58A;color:inherit;border-radius:3px;padding:0 1px}
+mark.dir-hit.atual{background:#F5A9B8;box-shadow:0 0 0 2px #F5A9B8}
 /* ficha em tela cheia */
 .ficha[data-ficha]{cursor:pointer;transition:transform .2s,box-shadow .2s}
 .ficha[data-ficha]:hover{transform:translateY(-3px);box-shadow:0 18px 36px -14px rgba(120,40,110,.45)}
@@ -1243,6 +1251,13 @@ Senha: 000000
     <div class="logo" role="presentation"></div>
     <h2>Diretrizes de Serviço</h2>
     <p>Grupo Transcender de Narcóticos Anônimos</p>
+  </div>
+  <div class="dir-busca" role="search">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input type="search" id="dir-q" placeholder="Pesquisar palavra-chave" aria-label="Pesquisar palavra-chave nas diretrizes" autocomplete="off">
+    <span class="dir-n" id="dir-n"></span>
+    <button type="button" class="dir-nav" id="dir-ant" aria-label="Resultado anterior">‹</button>
+    <button type="button" class="dir-nav" id="dir-prox" aria-label="Próximo resultado">›</button>
   </div>
   <div class="dir-intro" id="dir-intro"></div>
   <nav class="dir-indice" id="dir-indice" aria-label="Seções"></nav>
@@ -2011,8 +2026,51 @@ function renderDiretrizes(blocos){
     <div class="passo-head"><div class="num">${i+1}</div><h3>${d.t}</h3></div>
     <div class="dir-txt">${d.html}</div>
   </article>`).join("");
+  if(typeof dirBuscar==="function") dirBuscar(false);
   return true;
 }
+/* ---------- pesquisa nas diretrizes (como o Ctrl+F) ---------- */
+let dirHits=[], dirAtual=-1;
+const semAcento = t => t.split("").map(c=>c.normalize("NFD")[0]).join("").toLowerCase();
+function dirLimpar(){
+  document.querySelectorAll("#diretrizes mark.dir-hit").forEach(m=>{ const p=m.parentNode; p.replaceChild(document.createTextNode(m.textContent),m); p.normalize(); });
+  dirHits=[]; dirAtual=-1;
+}
+function dirIr(k,rolar=true){
+  if(!dirHits.length){ $("#dir-n").textContent=$("#dir-q").value.trim().length>=2?"Nada encontrado":""; return; }
+  dirAtual=(k+dirHits.length)%dirHits.length;
+  dirHits.forEach((m,i)=>m.classList.toggle("atual",i===dirAtual));
+  $("#dir-n").textContent=(dirAtual+1)+" de "+dirHits.length;
+  if(rolar) dirHits[dirAtual].scrollIntoView({block:"center",behavior:"smooth"});
+}
+function dirBuscar(rolar=true){
+  dirLimpar();
+  const q=semAcento(($("#dir-q").value||"").trim());
+  if(q.length<2){ $("#dir-n").textContent=""; return; }
+  const raizes=[$("#dir-intro"),$("#dir-lista")];
+  raizes.forEach(r=>{
+    const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT,null), nos=[];
+    while(w.nextNode()) nos.push(w.currentNode);
+    nos.forEach(no=>{
+      const txt=no.nodeValue, base=semAcento(txt); let pos=base.indexOf(q); if(pos<0) return;
+      const frag=document.createDocumentFragment(); let ult=0;
+      while(pos>=0){
+        frag.appendChild(document.createTextNode(txt.slice(ult,pos)));
+        const m=document.createElement("mark"); m.className="dir-hit"; m.textContent=txt.slice(pos,pos+q.length); frag.appendChild(m); dirHits.push(m);
+        ult=pos+q.length; pos=base.indexOf(q,ult);
+      }
+      frag.appendChild(document.createTextNode(txt.slice(ult)));
+      no.parentNode.replaceChild(frag,no);
+    });
+  });
+  dirHits=[...document.querySelectorAll("#diretrizes mark.dir-hit")];
+  dirIr(0,rolar);
+}
+let dirT;
+$("#dir-q").addEventListener("input",()=>{ clearTimeout(dirT); dirT=setTimeout(()=>dirBuscar(true),250); });
+$("#dir-q").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); if(dirHits.length) dirIr(dirAtual+(e.shiftKey?-1:1)); else dirBuscar(true); } });
+$("#dir-prox").onclick=()=>dirIr(dirAtual+1);
+$("#dir-ant").onclick=()=>dirIr(dirAtual-1);
 renderDiretrizes(DIRETRIZES_SALVAS);
 let diretrizesCarregadas=false;
 async function carregarDiretrizes(){
