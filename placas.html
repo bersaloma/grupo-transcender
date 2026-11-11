@@ -18,7 +18,9 @@
   .placa.fim{background:radial-gradient(120% 90% at 15% 10%,#FCD5E4 0%,transparent 55%),radial-gradient(120% 90% at 85% 90%,#F5A9B8 0%,transparent 60%),#FFEFF5}
   .placa-in{max-width:1000px;display:flex;flex-direction:column;align-items:center;animation:entra .3s ease-out}
   .logo{width:clamp(56px,min(10vw,12vh),120px);aspect-ratio:1;margin:0 0 10px;background:url(assets/logo.png) center/contain no-repeat}
-  h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(44px,min(11vw,15vh),150px);line-height:1;color:var(--titulo);margin-top:14px}
+  h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(30px,min(9.5vw,14vh),140px);line-height:1.05;color:var(--titulo);margin-top:14px;max-width:100%;text-wrap:balance;overflow-wrap:break-word}
+  .placa{overflow:auto}
+  .placa-in{max-width:min(1000px,100%)}
   .fim h1{color:var(--rosa-forte)}
   p{font-size:clamp(18px,min(2.8vw,4vh),34px);line-height:1.4;color:var(--indigo);margin-top:18px;max-width:22em}
   p:empty{display:none}

@@ -937,7 +937,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
 .placa-in{max-width:1000px;display:flex;flex-direction:column;align-items:center;animation:ovIn .3s ease-out}
 .placa-logo{width:clamp(56px,min(10vw,12vh),120px)!important;margin:0 0 10px!important}
 .placa-ico{font-size:clamp(36px,min(7vw,9vh),84px);line-height:1}
-.placa h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(44px,min(11vw,15vh),150px);line-height:1;color:var(--titulo);margin-top:14px}
+.placa h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(30px,min(9.5vw,14vh),140px);line-height:1.05;color:var(--titulo);margin-top:14px;max-width:100%;text-wrap:balance;overflow-wrap:break-word}
+.placa{overflow:auto}
+.placa-in{max-width:min(1000px,100%)}
 .placa.fim h2{color:var(--rosa-forte)}
 .placa p:empty{display:none}
 .placa p{font-size:clamp(18px,min(2.8vw,4vh),34px);line-height:1.4;color:var(--indigo);margin-top:18px;max-width:22em}
