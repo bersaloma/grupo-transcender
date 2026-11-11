@@ -54,11 +54,16 @@
   <button class="f11-x" id="f11-fechar" aria-label="Fechar aviso">✕</button>
 </div>
 <script>
-  const PLACAS = [
-    { t: "Faltam 2 minutos", s: "", fim: false },
-    { t: "Seu tempo acabou", s: "Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.", fim: true }
-  ];
-  let atual = new URLSearchParams(location.search).get("p") === "fim" ? 1 : 0;
+  const TODAS = {
+    "5min": { t: "Faltam 5 minutos", s: "", fim: false },
+    "2min": { t: "Faltam 2 minutos", s: "", fim: false },
+    "1min": { t: "Falta 1 minuto", s: "", fim: false },
+    "fim":  { t: "Seu tempo acabou", s: "Agradecemos a sua partilha. Por favor, conclua para que outras pessoas também possam partilhar.", fim: true }
+  };
+  const q = new URLSearchParams(location.search);
+  const PLACAS = (q.get("seq") || "2min,fim").split(",").map(k => TODAS[k]).filter(Boolean);
+  if (!PLACAS.length) PLACAS.push(TODAS["2min"], TODAS["fim"]);
+  let atual = 0;
   const $ = s => document.querySelector(s);
   function mostrar(i){
     atual = (i + PLACAS.length) % PLACAS.length;
@@ -72,8 +77,7 @@
   function dica(){ const d = $("#dica"); d.classList.remove("some"); clearTimeout(timer); timer = setTimeout(() => d.classList.add("some"), 4000); }
   document.addEventListener("click", () => { mostrar(atual + 1); dica(); });
   document.addEventListener("keydown", e => {
-    if (e.key === "1") mostrar(0);
-    else if (e.key === "2") mostrar(1);
+    if (/^[1-9]$/.test(e.key) && +e.key <= PLACAS.length) mostrar(+e.key - 1);
     else if ([" ", "ArrowRight", "ArrowLeft", "Enter"].includes(e.key)) { e.preventDefault(); mostrar(atual + (e.key === "ArrowLeft" ? -1 : 1)); }
     else return;
     dica();

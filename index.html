@@ -1686,7 +1686,8 @@ const ROTEIROS = {
       {t:"Dinâmica da Reunião", azul:true, html: din([["Meditação<br>Diária",""],["Temática<br>30 minutos",""],["Melhores<br>momentos",""]],"tri")},
       B.meditacao(true),
       {k:"Temática", t:"Início da Temática", html:`<div class="fala"><p>Vamos iniciar nossa temática. Gostaríamos de agradecer sua presença por ter aceito nosso convite. A partilha será de 30 minutos. Boa partilha!</p></div>
-        <div class="acoes-passo"><button class="pill" data-placa="5min">Faltam 5 minutos</button><button class="pill" data-placa="2min">Faltam 2 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button></div>`},
+        <div class="acoes-passo"><button class="pill" data-timer="30">Iniciar 30 minutos</button><button class="pill rosa" data-placa="fim">Seu tempo acabou</button><a class="pill claro" href="placas.html?seq=5min,2min,fim" target="_blank" rel="noopener">Abrir placas em nova janela</a></div>
+        <div class="nota azul">O cronômetro mostra as placas sozinho: faltando 5 minutos, faltando 2 minutos e quando o tempo acabar.</div>`},
       {k:"Temática", t:"Perguntas e respostas", html:`<div class="fala"><p>Agora é o momento de perguntas e respostas.</p></div>
         <div class="avisos qa">
           <div class="aviso"><p><strong>Pergunta</strong> · 3 minutos</p><div class="acoes-passo" style="margin-top:0"><button class="pill claro" data-timer="3">Iniciar 3 minutos</button><button class="pill" data-placa="1min">Falta 1 minuto</button><button class="pill rosa" data-placa="fim-curto">Seu tempo acabou</button></div></div>
@@ -1877,8 +1878,9 @@ function iniciar(){
   tick=setInterval(()=>{
     resta--;
     const curto = total<=300;                                         // perguntas e respostas (3 min): avisa com 1 minuto
-    const aviso = curto ? 60 : 120;
-    if(!avisou && total>aviso && resta===aviso){ avisou=true; abrirPlaca(curto?"1min":"2min"); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
+    const longo = total>=1200;                                        // temática (30 min): avisa com 5 e com 2 minutos
+    const avisos = curto ? [[60,"1min"]] : longo ? [[300,"5min"],[120,"2min"]] : [[120,"2min"]];
+    for(const [seg,placa] of avisos){ if(total>seg && resta===seg){ avisou=true; abrirPlaca(placa); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} } }
     if(resta<=0){ parar(); resta=0; abrirPlaca(curto?"fim-curto":"fim"); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
     render();
   },1000);
