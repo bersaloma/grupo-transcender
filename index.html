@@ -833,6 +833,7 @@ mark.dir-hit.atual{background:#F5A9B8;box-shadow:0 0 0 2px #F5A9B8}
 }
 @media (max-width:420px){ .dia-col{grid-template-columns:74px 1fr 1fr} .dia-n{font-size:19px} .slot-nome{font-size:15px} }
 /* tabela semanal: cada célula é um card */
+.tab-tit{margin:10px 8px 14px!important;padding:0!important}
 .tab-wrap{max-width:1060px;margin:16px auto 0;background:#fff;border-radius:22px;box-shadow:var(--sombra);padding:10px}
 .tab-semana{width:100%;border-collapse:separate;border-spacing:6px;table-layout:fixed}
 .tab-semana th,.tab-semana td{border:0;padding:0;vertical-align:top;text-align:left;border-radius:14px}
@@ -2166,8 +2167,8 @@ function renderQuadro(Q, fonte){
   const dias=[...Q.dias].sort((a,b)=>DIAS_ORDEM.indexOf(a[0])-DIAS_ORDEM.indexOf(b[0]));
   const podeEditar=!!CONFIG.QUADRO_API_URL;
   $("#lista-servidores").innerHTML = `
-  <h3 class="quadro-tit">Servidores das Reuniões</h3>
   <div class="tab-wrap">
+  <h3 class="quadro-tit tab-tit">Moderação e Apoio</h3>
   <table class="tab-semana tab-h">
     <thead><tr><th class="canto"></th>${dias.map(([d])=>`<th class="${d===hoje?"hoje":""}">${curto(d)}${d===hoje?`<span class="dia-tag">Hoje</span>`:""}</th>`).join("")}</tr></thead>
     <tbody>
