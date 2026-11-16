@@ -1965,8 +1965,8 @@ function iniciar(){
     const curto = total<=300;                                         // perguntas e respostas (3 min): avisa com 1 minuto
     const longo = total>=1200;                                        // temática (30 min): avisa com 5 e com 2 minutos
     const avisos = curto ? [[60,"1min"]] : longo ? [[300,"5min"],[120,"2min"]] : [[120,"2min"]];
-    for(const [seg,placa] of avisos){ if(total>seg && resta===seg){ avisou=true; abrirPlaca(placa,30000); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} } }
-    if(resta<=0){ parar(); resta=0; abrirPlaca(timerFim || (curto?"fim-curto":"fim"),30000); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
+    for(const [seg,placa] of avisos){ if(total>seg && resta===seg){ avisou=true; abrirPlaca(placa,15000); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} } }
+    if(resta<=0){ parar(); resta=0; abrirPlaca(timerFim || (curto?"fim-curto":"fim"),15000); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} }
     render();
   },1000);
   render();
@@ -1974,7 +1974,7 @@ function iniciar(){
 function parar(){ clearInterval(tick); tick=null; render(); }
 function mostrar(t,s,ico,fim){
   // usa a mesma placa dos botões "Faltam 2 minutos" e "Seu tempo acabou"
-  abrirPlaca(fim ? "fim" : "2min",30000);
+  abrirPlaca(fim ? "fim" : "2min",15000);
   try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){}
 }
 $("#ov-ok").onclick=()=>$("#overlay").classList.remove("on");
