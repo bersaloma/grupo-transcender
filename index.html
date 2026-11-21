@@ -1114,6 +1114,8 @@ body.com-lateral .lat-bt{display:flex}
 .resumo-ata p[data-resumo]{outline:none;border-radius:10px;padding:6px 8px;margin-left:-8px;margin-right:-8px;cursor:text;border:1px dashed transparent}
 .resumo-ata p[data-resumo]:hover,.resumo-ata p[data-resumo]:focus{background:#fff;border-color:#9BD3F0}
 .resumo-dica{display:block;font-size:13px;font-weight:700;color:var(--indigo);margin-top:4px}
+.notas{display:block;width:100%;box-sizing:border-box;margin-top:14px;border:1px solid #CBE7F7;border-radius:18px;padding:14px 16px;font:inherit;font-size:17px;line-height:1.5;color:var(--indigo);background:#fff;resize:vertical;min-height:180px}
+.notas:focus{outline:none;border-color:#7FD3F0;box-shadow:0 0 0 3px #E3F3FC}
 .marcador{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid #CBE7F7;border-radius:18px;padding:10px 14px;margin-top:14px}
 .marcador-in{flex:1;min-width:200px;border:1px solid #CBE7F7;border-radius:999px;padding:9px 14px;font:inherit;font-size:16px;color:var(--indigo)}
 .resumo-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -1174,6 +1176,11 @@ body.com-lateral .lat-bt{display:flex}
     <button class="btn-reuniao" data-ir="administrativa">
       <div class="nome">Reunião Administrativa</div>
       <div class="desc">A reunião em que a consciência de grupo decide os rumos do serviço.</div>
+      <span class="seta">Abrir roteiro →</span>
+    </button>
+    <button class="btn-reuniao" data-ir="gteventos">
+      <div class="nome">Reunião GT de Eventos</div>
+      <div class="desc">O grupo de trabalho que organiza os eventos do Transcender.</div>
       <span class="seta">Abrir roteiro →</span>
     </button>
   </nav>
@@ -1432,6 +1439,7 @@ const CONFIG = {
 /* ===================================== */
 
 const LIVROS = [["Texto Básico","texto-basico.pdf"],["Só Por Hoje","so-por-hoje.pdf"],["Guias para Trabalhar os Passos","guias-para-trabalhar-os-passos.pdf"],["Isto Resulta","isto-resulta.pdf"],["Viver Limpo","vivendo-limpo.pdf"],["Princípios Orientadores","principios-orientadores.pdf"]];
+const ORACAO_SERVICO = `Deus, conceda-nos a sabedoria para servirmos de acordo com os Seus divinos preceitos. Inspire em nós um sentido do Seu propósito. Faça-nos servidores da Sua vontade e conceda-nos um laço de abnegação, para que esta seja verdadeiramente a Sua obra, não a nossa, para que nenhum adicto, em nenhum lugar, precise morrer dos horrores da adicção.`;
 const ORACAO_SERENIDADE = "Deus, conceda-me serenidade para aceitar as coisas que não posso modificar, coragem para modificar aquelas que posso, e sabedoria para reconhecer a diferença.";
 
 const T1  = "“O nosso bem-estar comum deve vir em primeiro lugar; a recuperação individual depende da unidade de NA.”";
@@ -1794,7 +1802,7 @@ const ROTEIROS = {
     passos:[
       abertura(`Esta é a reunião administrativa do Grupo Transcender.`),
       B.oracao(),
-      {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">Deus, conceda-nos a sabedoria para servirmos de acordo com os Seus divinos preceitos. Inspire em nós um sentido do Seu propósito. Faça-nos servidores da Sua vontade e conceda-nos um laço de abnegação, para que esta seja verdadeiramente a Sua obra, não a nossa, para que nenhum adicto, em nenhum lugar, precise morrer dos horrores da adicção.</div>`},
+      {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">${ORACAO_SERVICO}</div>`},
       B.quemSomos(),
       B.acolhimento(),
       B.convivencia(),
@@ -1803,6 +1811,26 @@ const ROTEIROS = {
       {k:"Leitura", t:"Os 12 Conceitos de NA", azul:true, html: revela(CONCEITOS,i=>`${i+1}º Conceito`)},
       {t:"Dinâmica da Reunião", azul:true, html: din([["Relatórios",""],["Moções",""],["Eletivas",""]],"tri") + `<div class="ata-adm"><button class="pill" data-ir="ata-adm">📄 Abrir Ata Administrativa</button></div>`},
       B.encerramento(),
+      B.oracao(true),
+    ]
+  },
+
+  gteventos: {
+    nome:"Reunião GT de Eventos", sub:"Organização dos eventos do grupo.", timer:null,
+    passos:[
+      abertura(`Esta é a reunião do GT de Eventos do Grupo Transcender.`),
+      B.oracao(),
+      {k:"Todas as pessoas", t:"Oração do Serviço", azul:true, html:`<div class="oracao">${ORACAO_SERVICO}</div>`},
+      B.quemSomos(),
+      B.acolhimento(),
+      B.convivencia(),
+      B.usou(),
+      {t:"Dinâmica da Reunião", azul:true, html: din([["Pauta",""],["Discussão",""],["Decisões",""]],"tri")},
+      {k:"Registro", t:"Decisões do evento", html:`<div class="fala"><p>Vamos anotar aqui o que foi decidido nesta reunião.</p></div>
+        <textarea class="notas" data-notas="gt-eventos-decisoes" rows="9" placeholder="Escreva aqui as decisões do evento: datas, horários, responsáveis, tarefas..." aria-label="Decisões do evento"></textarea>
+        <div class="acoes-passo"><button type="button" class="pill claro" data-notas-copiar="gt-eventos-decisoes">📋 Copiar decisões</button></div>
+        <div class="nota azul">As anotações ficam salvas neste aparelho até alguém apagar.</div>`},
+      {k:"Fim", t:"Encerramento", html:`<div class="fala"><p>Agradecemos a presença de todas as pessoas. Antes de encerrar, vamos repassar as decisões do evento.</p></div>`},
       B.oracao(true),
     ]
   }
@@ -2537,7 +2565,7 @@ function slMostrar(i){
   $("#sl-cont").textContent=(slI+1)+" / "+SL.length;
   document.querySelector('[data-sl="-1"]').disabled = slI===0;
   document.querySelector('[data-sl="1"]').disabled = slI===SL.length-1;
-  rascRender(); marcadorRender();
+  rascRender(); marcadorRender(); notasRender();
   $("#sl-busca").hidden = slModo!=="diretrizes"; if(slModo==="diretrizes") slbMarcar();
   { const rv=rvAtivo(); if(rv) rvIr(rv, voltando ? 99 : 0); }
   slAjustar();
@@ -2768,6 +2796,10 @@ document.addEventListener("input",e=>{
   const r=rascLer(); r.resumoEditado=e.target.innerText.trim(); try{ localStorage.setItem(RASC_KEY,JSON.stringify(r)); }catch(x){}
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Enter" && e.target.classList && e.target.classList.contains("conq-in")){ e.preventDefault(); conqAdicionar(e.target.closest(".conq-ata")); } });
+/* anotações livres (GT de Eventos): ficam salvas no aparelho */
+function notasRender(){ document.querySelectorAll("[data-notas]").forEach(el=>{ if(document.activeElement===el) return; let v=""; try{ v=localStorage.getItem(el.dataset.notas)||""; }catch(e){} el.value=v; }); }
+document.addEventListener("input",e=>{ if(e.target.matches && e.target.matches("[data-notas]")){ try{ localStorage.setItem(e.target.dataset.notas,e.target.value); }catch(x){} } });
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-notas-copiar]"); if(!b) return; let v=""; try{ v=localStorage.getItem(b.dataset.notasCopiar)||""; }catch(x){} if(v.trim()) copiar(v,"Decisões copiadas"); else toast("Ainda não há decisões anotadas"); });
 /* marcador de onde a leitura parou (Estudo): fica salvo até ser trocado */
 function marcadorRender(){ let v=""; try{ v=localStorage.getItem("estudo-marcador")||""; }catch(e){} document.querySelectorAll("[data-marcador]").forEach(el=>{ if(document.activeElement!==el) el.value=v; }); }
 document.addEventListener("input",e=>{ if(e.target.matches && e.target.matches("[data-marcador]")){ try{ localStorage.setItem("estudo-marcador",e.target.value); }catch(x){} } });
